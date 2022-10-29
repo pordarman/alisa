@@ -17,7 +17,7 @@ module.exports = {
             if (kayıt.dis) tag.push(`#${kayıt.dis}`)
             tag = tag.join(" - ")
             if (tag) return int.reply({ content: tag }).catch(err => { })
-            else if (int.member.permissions.has("Administrator")) return int.reply({ content: 'Sunucuda tag ayarlı değil. Ayarlamak için **' + (sunucudb.prefix || ".") + 'tag-a** `tagınız` yazabilirsiniz', ephemeral: true }).catch(err => { })
+            else if (int.member.permissions.has("Administrator")) return int.reply({ content: 'Sunucuda tag ayarlı değil. Ayarlamak için **' + (sunucudb.prefix || ayarlar.prefix) + 'tag-a** `tagınız` yazabilirsiniz', ephemeral: true }).catch(err => { })
             else return int.reply({ content: 'Bu sunucuda herhangi bir tag ayarlı değil', ephemeral: true }).catch(err => { })
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })

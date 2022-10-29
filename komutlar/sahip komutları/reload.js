@@ -39,11 +39,11 @@ module.exports = {
           }
         })
 
-        readdirSync(`${klasor}\\slash tr`).forEach(klasorAdları => {
-          readdirSync(`${klasor}\\slash tr\\${klasorAdları}`).forEach(file => {
+        readdirSync(`${klasor}\\slash`).forEach(klasorAdları => {
+          readdirSync(`${klasor}\\slash\\${klasorAdları}`).forEach(file => {
             try {
-              delete require.cache[require.resolve(`${klasor}\\slash tr\\${klasorAdları}\\${file}`)];
-              const command = require(`${klasor}\\slash tr\\${klasorAdları}\\${file}`)
+              delete require.cache[require.resolve(`${klasor}\\slash\\${klasorAdları}\\${file}`)];
+              const command = require(`${klasor}\\slash\\${klasorAdları}\\${file}`)
               switch (klasorAdları) {
                 case "sahip komutları":
                   command.no = true
@@ -55,7 +55,7 @@ module.exports = {
               c.slash.set(command.data.name, command)
               c.slash.commands.push(command.data.toJSON());
             } catch (error) {
-              hatalar.push(`**slash tr\\${klasorAdları}\\${file}** komutu yüklenirken bir hata oluştu!`)
+              hatalar.push(`**slash\\${klasorAdları}\\${file}** komutu yüklenirken bir hata oluştu!`)
             }
           })
         });

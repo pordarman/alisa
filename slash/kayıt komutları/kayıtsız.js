@@ -17,7 +17,7 @@ module.exports = {
             if (yetkili) {
                 if (!intMember.roles.cache.has(yetkili) && !intMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
             } else if (!intMember.permissions.has('Administrator')) return hata('Yönetici', "yetki")
-            const prefix = sunucudb.prefix || "."
+            const prefix = sunucudb.prefix || ayarlar.prefix
             if (sunucudb.kayıt.ayar) return hata(`Şu anda kayıt ayarım kapalı durumda bu yüzden hiçbir kayıt işlemlerini __yapamazsınız__${intMember.permissions.has('Administrator') ? `\n\n• Eğer kayıt ayarımı açmak istiyorsanız **${prefix}ayar aç** yazabilirsiniz` : ""}`)
             let guildMe = int.guild.members.me
             if (!guildMe.permissions.has('ManageRoles')) return hata('Rolleri Yönet', "yetkibot")

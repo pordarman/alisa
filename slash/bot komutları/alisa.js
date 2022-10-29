@@ -14,7 +14,7 @@ module.exports = {
         try {
             const seçenek = int.options.getString("seçenek", true)
             if (seçenek == "kim") {
-                const prefix = sunucudb.prefix || "."
+                const prefix = sunucudb.prefix || ayarlar.prefix
                 const pp = int.client.user.displayAvatarURL()
                 let toplam = Object.values(alisa.sunucular.ekleme)
                 const embed = new EmbedBuilder()
@@ -166,7 +166,7 @@ module.exports = {
                     int.reply({ embeds: [embed] }).catch(err => { })
                 }
             } else if (seçenek == "komut") {
-                const prefix = sunucudb.prefix || "."
+                const prefix = sunucudb.prefix || ayarlar.prefix
                 let toplam = 0
                 const obje = Object.entries(alisa.kullanımlar).sort((a, b) => (b[1].top + (b[1].buton || 0)) - (a[1].top + (a[1].buton || 0))).filter(a => {
                     const komut = int.client.commands.find(b => b.name == a[0])

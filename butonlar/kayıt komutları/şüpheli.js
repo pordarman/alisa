@@ -17,7 +17,7 @@ module.exports = {
                 , member = await int.client.fetchMemberForce(memberid, int)
             if (!member) return hata("Şeyyyy... Sanırım bu kişi artık sunucuda değil şapşik şey seni :(")
             let rols = sunucudb.kayıt.otosrol
-                , prefix = sunucudb.prefix || "."
+                , prefix = sunucudb.prefix || ayarlar.prefix
             if (!rols) return hata(`Şeyyyy... Bu sunucuda herhangi bir __şüpheli__ rolü ayarlanmadığı için bu komutu kullanamazsın şapşik şey seni :(${intMember.permissions.has("Administrator") ? `\n\n• Ama bir şüpheli rolü ayarlamak isterseniz **${prefix}şüpheli-rol @rol** yazabilirsiniz` : ""}`)
             if (member.roles.cache.has(rols)) return hata("Heyyy dur bakalım orada! Bu kişi zaten şüpheliye atılmış durumda!")
             let guildMe = int.guild.members.me

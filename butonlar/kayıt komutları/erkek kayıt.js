@@ -197,11 +197,11 @@ module.exports = {
                     , sahipid = sonradan[1].sahip
                 int.client.butonsure.set(memberid + sunucuid, sahipid)
                 setTimeout(() => int.client.butonsure.delete(memberid + sunucuid), 35000)
-                return await kayıt({ memberid: memberid, member: await int.client.fetchMemberForce(memberid, int), sahipid: sahipid, verilecekRolId: sunucudb.kayıt.erkek, filter: m => m.author.id == sahipid, rolVarMı: sonradan[1].rolVarMı, kayıtsızrolid: sunucudb.kayıt.kayıtsız, prefix: sunucudb.prefix || ".", databaseButon: db.bul(sunucuid, "buton", "diğerleri") || {} })
+                return await kayıt({ memberid: memberid, member: await int.client.fetchMemberForce(memberid, int), sahipid: sahipid, verilecekRolId: sunucudb.kayıt.erkek, filter: m => m.author.id == sahipid, rolVarMı: sonradan[1].rolVarMı, kayıtsızrolid: sunucudb.kayıt.kayıtsız, prefix: sunucudb.prefix || ayarlar.prefix, databaseButon: db.bul(sunucuid, "buton", "diğerleri") || {} })
             }
             let sahipid = int.user.id
             if (int.client.butonsure.some(a => a == sahipid)) return hata(`Heyyy dur bakalım orada! Zaten halihazırda bir kayıt işlemi gerçekleştiriyorsun!`)
-            let prefix = sunucudb.prefix || "."
+            let prefix = sunucudb.prefix || ayarlar.prefix
                 , yetkilirolid = sunucudb.kayıt.yetkili
                 , intMember = int.member
             if (!yetkilirolid) return hata(`Bu sunucuda üyeleri kayıt eden yetkili rolü __ayarlanmamış__${intMember.permissions.has("Administrator") ? `\n\n• Ayarlamak için **${prefix}yetkili-rol @rol** yazabilirsiniz veya her şeyi teker teker ayarlamak yerine **${prefix}kur** yazıp bütün kayıt sistemini tek bir komutla ayarlayabilirsiniz` : ""}`)

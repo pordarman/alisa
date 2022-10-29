@@ -14,7 +14,7 @@ module.exports = {
             let say = sunucudb.say
                 , veri = say.veri
                 , keys = Object.keys(veri)
-                , prefix = sunucudb.prefix || "."
+                , prefix = sunucudb.prefix || ayarlar.prefix
             if (!keys.length) return hata(`Şeyyy... Bu sunucuda **${prefix}say** komutunda gösterilecek hiçbir şey __ayarlanmamış__${int.member.permissions.has("Administrator") ? `\n\n• Eğer say ayarlarını değiştirmek isterseniz **${prefix}say-ayarlar** yazabilirsiniz` : ""}`)
             let e = say.emoji
                 , s

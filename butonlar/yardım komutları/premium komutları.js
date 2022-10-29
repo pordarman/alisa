@@ -40,7 +40,7 @@ module.exports = {
                 , embed = new EmbedBuilder()
                     .setAuthor({ name: int.client.user.tag, iconURL: int.client.user.displayAvatarURL() })
                     .setTitle(baslik)
-                    .setDescription(array.slice(0, 8).map((a, i) => `\`#${(i + 1)}\` ${a}`).join("\n"))
+                    .setDescription(array.slice(0, 8).map((a, i) => `\`#${(i + 1)}\` ${a.content}`).join("\n"))
                     .setThumbnail(int.member.displayAvatarURL())
                     .setColor("#4500a2")
                     .setFooter({ text: `Sayfa 1/${sayfa}` })

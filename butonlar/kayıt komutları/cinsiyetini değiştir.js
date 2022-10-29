@@ -22,7 +22,7 @@ module.exports = {
             if (!member) return hata("Şeyyyy... Sanırım bu kişi artık sunucuda değil şapşik şey seni :(")
             let erkekrol = sunucudb.kayıt.erkek
                 , kızrol = sunucudb.kayıt.kız
-                , prefix = sunucudb.prefix || "."
+                , prefix = sunucudb.prefix || ayarlar.prefix
             if (!erkekrol) return hata(`Şeyyyy... Bu sunucuda herhangi bir erkek rolü ayarlanmadığı için bu komutu kullanamazsın şapşik şey seni :(${intMember.permissions.has("Administrator") ? `\n\n• Ama bir erkek rolü ayarlamak isterseniz **${prefix}erkek-rol @rol** yazabilirsiniz` : ""}`)
             if (!kızrol) return hata(`Şeyyyy... Bu sunucuda herhangi bir kız rolü ayarlanmadığı için bu komutu kullanamazsın şapşik şey seni :(${intMember.permissions.has("Administrator") ? `\n\n• Ama bir kız rolü ayarlamak isterseniz **${prefix}kız-rol @rol** yazabilirsiniz` : ""}`)
             if (erkekrol.every(id => member.roles.cache.has(id))) {

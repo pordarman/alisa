@@ -21,7 +21,7 @@ module.exports = {
                 if (!intMember.roles.cache.has(yetkili) && !intMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
             } else if (!intMember.permissions.has('Administrator')) return hata('Yönetici', "yetki")
             let rol = sunucudb.jail.rol
-                , prefix = sunucudb.prefix || "."
+                , prefix = sunucudb.prefix || ayarlar.prefix
             if (!rol) return hata(`Bu sunucuda herhangi bir jail rolü __ayarlanmamış__${intMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${prefix}jail-rol @rol** yazabilirsiniz` : ""}`)
             let guildMe = int.guild.members.me
             if (!guildMe.permissions.has('ManageRoles')) return hata("Kullanıcı Adlarını Yönet", "yetkibot")

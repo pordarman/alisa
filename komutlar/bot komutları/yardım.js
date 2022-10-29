@@ -110,14 +110,14 @@ module.exports = {
         , dugme = new ActionRowBuilder().addComponents(dugmeTumKomutlar).addComponents(dugmeBotKomutlari).addComponents(dugmeKayitKomutlari).addComponents(dugmeTagrolKomutlari).addComponents(dugmeModerasyonKomutlari)
         , dugme3 = new ActionRowBuilder().addComponents(dugmeJailKomutlari).addComponents(dugmeBilgiKomutlari).addComponents(dugmeEkstraKomutlar).addComponents(dugmePremiumKomutlari)
         , dugme2 = new ActionRowBuilder().addComponents(selectMenu)
-        , commands = msg.client.allCommands(sunucudb)[0]
+        , [commands] = msg.client.allCommands(sunucudb)
         , embed = new EmbedBuilder()
           .setAuthor({ name: msg.client.user.username, iconURL: msg.client.user.displayAvatarURL() })
-          .setDescription(`**${ayarlar.emoji.tum} Tüm komutlar (${commands.length})\n\n${ayarlar.emoji.bot} Botun ana komutları (${commands.filter(a => a.startsWith(ayarlar.emoji.bot)).length})\n${ayarlar.emoji.kayit} Botun kayıt komutları (${commands.filter(a => a.startsWith(ayarlar.emoji.kayit)).length})\n${ayarlar.emoji.tagrol} Botun tagrol komutları (${commands.filter(a => a.startsWith(ayarlar.emoji.tagrol)).length})\n${ayarlar.emoji.mod} Botun moderasyon komutları (${commands.filter(a => a.startsWith(ayarlar.emoji.mod)).length})\n${ayarlar.emoji.jail} Botun jail komutları (${commands.filter(a => a.startsWith(ayarlar.emoji.jail)).length})\n${ayarlar.emoji.bilgi} Botun bilgi komutları (${commands.filter(a => a.startsWith(ayarlar.emoji.bilgi)).length})\n${ayarlar.emoji.ekstra} Botun ekstra komutları (${commands.filter(a => a.startsWith(ayarlar.emoji.ekstra)).length})\n\n${ayarlar.emoji.pre} Botun premium komutları (${commands.filter(a => a.startsWith(ayarlar.emoji.pre)).length})\n\n🚀 Bağlantılarım\n[ [Beni davet et](${ayarlar.davet}) | [Oy ver](https://top.gg/bot/${msg.client.user.id}/vote) | [Destek sunucum](${ayarlar.discord}) ]**`)
+          .setDescription(`**${ayarlar.emoji.tum} Tüm komutlar (${commands.length})\n\n${ayarlar.emoji.bot} Botun ana komutları (${commands.filter(a => a.type == "bot").length})\n${ayarlar.emoji.kayit} Botun kayıt komutları (${commands.filter(a => a.type == "kayıt").length})\n${ayarlar.emoji.tagrol} Botun tagrol komutları (${commands.filter(a => a.type == "tagrol").length})\n${ayarlar.emoji.mod} Botun moderasyon komutları (${commands.filter(a => a.type == "mod").length})\n${ayarlar.emoji.jail} Botun jail komutları (${commands.filter(a => a.type == "jail").length})\n${ayarlar.emoji.bilgi} Botun bilgi komutları (${commands.filter(a => a.type == "bilgi").length})\n${ayarlar.emoji.ekstra} Botun ekstra komutları (${commands.filter(a => a.type == "ekstra").length})\n\n${ayarlar.emoji.pre} Botun premium komutları (${commands.filter(a => a.type == "pre").length})\n\n🚀 Bağlantılarım\n[ [Beni davet et](${ayarlar.davet}) | [Oy ver](https://top.gg/bot/${msg.client.user.id}/vote) | [Destek sunucum](${ayarlar.discord}) ]**`)
           .setThumbnail(pp)
           .setColor('#0099ff')
           .setTimestamp()
-      msg.reply({ embeds: [embed], components: [dugme, dugme3, dugme2] }).catch(err => { })
+      msg.reply({ embeds: [embed], components: [dugme, dugme3, dugme2] }).catch(err => { console.log(err) })
     } catch (e) {
       msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
       msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)

@@ -38,11 +38,11 @@ module.exports = {
                 , embed = new EmbedBuilder()
                     .setAuthor({ name: int.client.user.tag, iconURL: int.client.user.displayAvatarURL() })
                     .setTitle(baslik)
-                    .setDescription(array.slice(0, 8).map((a, i) => `\`#${(i + 1)}\` ${a}`).join("\n"))
+                    .setDescription(array.slice(0, 8).map((a, i) => `\`#${(i + 1)}\` ${a.content}`).join("\n"))
                     .setThumbnail(int.member.displayAvatarURL())
                     .setColor("#4500a2")
                     .setFooter({ text: `Sayfa 1/${sayfa}` })
-            int.update({ embeds: [embed], components: [düğme, int.message.components[2] || int.message.components[1]] }).catch(err => { })
+            int.update({ embeds: [embed], components: [düğme, int.message.components[2] || int.message.components[1]] }).catch(err => { console.log(err) })
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true)
             int.client.hata(module.id.split("\\").slice(5).join("\\"), e)

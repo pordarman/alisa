@@ -5,6 +5,14 @@
     "Botun geliştiricisi",
     "Botun geliştiricisi..."
   ],
+  "prefix": "Botun varsayılan prefixi",
+  "token": "Botun tokeni",
+  "database": "Databasenin versiyonu",
+  "versiyon": "Botun versiyonu",
+  "web": "Eğer varsa botun web sitesi linki (Eğer yok ise boş bırakınız)",
+  "davet": "Botun davet linki",
+  "discord": "Destek sunucunuzun davet linki",
+  "webhook": "Shard başlatıldığında veya düştüğünde log kanalına atılacak kanalın webhook urlsi",
   "shard": 2,
   "emoji": {
     "pp": "Botu temsil eden bir emoji",
@@ -67,13 +75,6 @@
       }
     }
   },
-  "database": "Databasenin versiyonu",
-  "versiyon": "Botun versiyonu",
-  "web": "Eğer varsa botun web sitesi linki (Eğer yok ise boş bırakınız)",
-  "davet": "Botun davet linki",
-  "discord": "Destek sunucunuzun davet linki",
-  "webhook": "Shard başlatıldığında veya düştüğünde log kanalına atılacak kanalın webhook urlsi",
-  "token": "Botun tokeni",
   "emojiler": [
     "0 emojisi",
     "1 emojisi",

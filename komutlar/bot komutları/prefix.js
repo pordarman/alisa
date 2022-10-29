@@ -13,15 +13,15 @@ module.exports = {
       if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
       if (!args[0]) return hata("Lütfen yeni prefiximi yazınız")
       const yazı = args.join(" ").toLocaleLowerCase()
-      if ([".", "sıfırla"].includes(yazı)) {
+      if ([ayarlar.prefix, "sıfırla"].includes(yazı)) {
         delete sunucudb.prefix
         const em = new EmbedBuilder()
-          .setTitle('Prefixiniz başarıyla "." olarak değiştirildi')
-          .setDescription('• Yeni prefixiniz **.** oldu')
+          .setTitle(`Prefixiniz başarıyla "${ayarlar.prefix}" olarak değiştirildi`)
+          .setDescription('• Yeni prefixiniz **${ayarlar.prefix}** oldu')
           .addFields(
             {
               name: 'Örnek',
-              value: "```css\n.yardım\n.prefix\n.destek\n@" + msg.client.user.tag + " yardım\n```"
+              value: `\`\`\`css\n${ayarlar.prefix}yardım\n${ayarlar.prefix}prefix\n${ayarlar.prefix}destek\n@${msg.client.user.tag}yardım\n\`\`\``
             }
           )
           .setTimestamp()

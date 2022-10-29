@@ -24,7 +24,7 @@ module.exports = {
                     file = int.client.namePhoto.üye
                     break;
                 case "BOT":
-                    content = `• <@${int.user.id}>, bu butona tıklayarak botu hızlı bir şekilde kayıt edebilirsiniz (Eğer botun ismini değiştirmek isterseniz **${sunucudb.prefix || "."}n <kişi ID> yeni ismi** şeklinde yazarak değiştirebilirsiniz)`
+                    content = `• <@${int.user.id}>, bu butona tıklayarak botu hızlı bir şekilde kayıt edebilirsiniz (Eğer botun ismini değiştirmek isterseniz **${sunucudb.prefix || ayarlar.prefix}n <kişi ID> yeni ismi** şeklinde yazarak değiştirebilirsiniz)`
                     file = int.client.namePhoto.bot
                 case "ŞÜPHELİ":
                     content = `• <@${int.user.id}>, bu butona tıklayarak güvensiz olduğunu anladığınız bir hesabı şüpheli'ye atarbilirsiniz`

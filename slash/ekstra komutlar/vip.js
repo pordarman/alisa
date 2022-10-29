@@ -57,7 +57,7 @@ module.exports = {
 
                 default:
                     let kayıtyetkili = sunucudb.kayıt.vyetkili
-                    , prefix = sunucudb.prefix || "."
+                    , prefix = sunucudb.prefix || ayarlar.prefix
                     if (kayıtyetkili) {
                         if (!intMember.roles.cache.has(kayıtyetkili) && !intMember.permissions.has('Administrator')) return hata(`<@&${kayıtyetkili}> rolüne **veya** Yönetici`, "yetki")
                     } else if (!intMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")

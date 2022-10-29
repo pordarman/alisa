@@ -18,7 +18,7 @@ module.exports = {
                 , member = await int.client.fetchMemberForce(memberid, int)
             if (!member) return hata("Şeyyyy... Sanırım bu kişi artık sunucuda değil şapşik şey seni :(")
             let kayıtsızrolid = sunucudb.kayıt.kayıtsız
-                , prefix = sunucudb.prefix || "."
+                , prefix = sunucudb.prefix || ayarlar.prefix
             if (!kayıtsızrolid) return hata(`Şeyyyy... Bu sunucuda bir kayıtsız rolü ayarlanmadığı için bu komutu kullanamazsın şapşik şey seni :(${intMember.permissions.has("Administrator") ? `\n\n• Ama bir kayıtsız rolü ayarlamak isterseniz **${prefix}alınacak-rol @rol** yazabilirsiniz` : ""}`)
             let rol
             if (sunucudb.kayıt.secenek) rol = sunucudb.kayıt.normal || []

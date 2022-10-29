@@ -90,8 +90,26 @@ module.exports = {
         if (int.isSelectMenu()) {
             let komut = int.client.butonlar.find(a => int.values.find(ins => ins.startsWith(a.name)))
             if (!komut) return;
+            async function slashHataMesaj(yazı, x = false) {
+                const embed = new EmbedBuilder()
+                switch (x) {
+                    case false:
+                        embed.setDescription(`${ayarlar.emoji.np} ${yazı}`).setColor("Red")
+                        break;
+                    case true:
+                        embed.setDescription(`• ${yazı}`).setColor("Red")
+                        break;
+                    case "yetki":
+                        embed.setDescription(`${ayarlar.emoji.np} Bu komutu kullanabilmek için **${yazı}** yetkisine sahip olmalısın şapşik şey seni :(`).setColor("Red")
+                        break;
+                    case "yetkibot":
+                        embed.setDescription(`${ayarlar.emoji.np} Bu komutu kullanabilmek için __benim__ **${yazı}** yetkisine sahip olmam lazım şapşik şey seni :(`).setColor("Red")
+                        break;
+                }
+                return int.reply({ embeds: [embed], ephemeral: true }).catch(err => { })
+            }
             try {
-                return komut.run({ int, sunucudb: int.client.s(sunucuid), alisa, sunucuid, guild: int.guild })
+                return komut.run({ int, sunucudb: int.client.s(sunucuid), hata: slashHataMesaj, alisa, sunucuid, guild: int.guild })
             } catch (e) {
 
             }

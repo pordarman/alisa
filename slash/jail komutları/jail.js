@@ -19,7 +19,7 @@ module.exports = {
                 if (!intMember.roles.cache.has(yetkili) && !intMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
             } else if (!intMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
             let rol = sunucudb.jail.rol
-            if (!rol) return hata(`Bu sunucuda herhangi bir jail rolü __ayarlanmamış__${intMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${sunucudb.prefix || "."}jail-rol @rol** yazabilirsiniz` : ""}`)
+            if (!rol) return hata(`Bu sunucuda herhangi bir jail rolü __ayarlanmamış__${intMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${sunucudb.prefix || ayarlar.prefix}jail-rol @rol** yazabilirsiniz` : ""}`)
             let guildMe = int.guild.members.me
             if (!guildMe.permissions.has('ManageRoles')) return hata("Kullanıcı Adlarını Yönet", "yetkibot")
             if (guild.roles.cache.get(rol).position >= guildMe.roles.highest.position) return hata(`<@&${rol}> adlı rolün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)

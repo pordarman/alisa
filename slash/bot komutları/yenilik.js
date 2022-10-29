@@ -12,7 +12,7 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
-            const prefix = sunucudb.prefix || "."
+            const prefix = sunucudb.prefix || ayarlar.prefix
             const { k, y, h, ts } = alisa.yenilik
             const fields = []
             if (k.length) fields.push({ name: "🆕 Yeni komutlar", value: k.map((a, i) => `**• \`#${i + 1}\`: ${a.replace(/<px>/g, prefix)}**`).join("\n") })

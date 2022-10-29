@@ -8,7 +8,7 @@ module.exports = {
        */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
-            let prefix = sunucudb.prefix || "."
+            let prefix = sunucudb.prefix || ayarlar.prefix
                 , yetkilirolid = sunucudb.kayıt.yetkili
                 , intMember = int.member
             if (!yetkilirolid) return hata(`Bu sunucuda üyeleri kayıt eden yetkili rolü __ayarlanmamış__${intMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${prefix}yetkili-rol @rol** yazabilirsiniz veya her şeyi teker teker ayarlamak yerine **${prefix}kur** yazıp bütün kayıt sistemini tek bir komutla ayarlayabilirsiniz` : ""}`)

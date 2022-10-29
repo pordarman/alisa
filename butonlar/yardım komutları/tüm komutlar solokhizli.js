@@ -25,7 +25,7 @@ module.exports = {
                 , embed = new EmbedBuilder()
                     .setAuthor({ name: int.client.user.tag, iconURL: int.client.user.displayAvatarURL() })
                     .setTitle(baslik)
-                    .setDescription(array.map((a, i) => `\`#${(i + 1)}\` ${a}`).slice((sayı * 8 - 8), (sayı * 8)).join("\n"))
+                    .setDescription(array.map((a, i) => `\`#${(i + 1)}\` ${a.content}`).slice((sayı * 8 - 8), (sayı * 8)).join("\n"))
                     .setThumbnail(int.member.displayAvatarURL())
                     .setColor("#4500a2")
                     .setFooter({ text: `Sayfa ${sayı}/${sayfa}` })

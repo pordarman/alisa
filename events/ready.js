@@ -424,7 +424,7 @@ module.exports = {
             if (!mesaj) return db.sil(guildId, "tagrol mesaj", "diğerleri")
             let guild = client.guilds.cache.get(guildId)
             if (!guild) return db.sil(guildId, "tagrol mesaj", "diğerleri")
-            client.commands.get("tagrol-mesaj").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, hata: () => { }, prefix: (sunucudb.prefix || "."), sonradan: true, guild, msgMember: mesaj.member, guildMe: guild.members.me })
+            client.commands.get("tagrol-mesaj").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, hata: () => { }, prefix: (sunucudb.prefix || ayarlar.prefix), sonradan: true, guild, msgMember: mesaj.member, guildMe: guild.members.me })
         })
         Object.entries(db.buldosya("gözel", "diğerleri")).filter(([guildId]) => client.shardId(guildId) == client.shard.ids[0]).forEach(async ([guildId, object]) => {
             if (object.date < Date.now() - 480000) return db.sil(guildId, "gözel", "diğerleri")
@@ -435,7 +435,7 @@ module.exports = {
             if (!mesaj) return db.sil(guildId, "gözel", "diğerleri")
             let guild = client.guilds.cache.get(guildId)
             if (!guild) return db.sil(guildId, "gözel", "diğerleri")
-            client.commands.get("gözel").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, hata: () => { }, prefix: (sunucudb.prefix || "."), sonradan: true, guild, msgMember: mesaj.member, guildMe: guild.members.me })
+            client.commands.get("gözel").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, hata: () => { }, prefix: (sunucudb.prefix || ayarlar.prefix), sonradan: true, guild, msgMember: mesaj.member, guildMe: guild.members.me })
         })
         Object.entries(db.buldosya("özel", "diğerleri")).filter(([guildId]) => client.shardId(guildId) == client.shard.ids[0]).forEach(async ([guildId, object]) => {
             if (object.date < Date.now() - 480000) return db.sil(guildId, "özel", "diğerleri")
@@ -446,7 +446,7 @@ module.exports = {
             if (!mesaj) return db.sil(guildId, "özel", "diğerleri")
             let guild = client.guilds.cache.get(guildId)
             if (!guild) return db.sil(guildId, "özel", "diğerleri")
-            client.commands.get("özel").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, prefix: (sunucudb.prefix || "."), hata: () => { }, sonradan: true, guild, msgMember: mesaj.member, guildMe: guild.members.me })
+            client.commands.get("özel").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, prefix: (sunucudb.prefix || ayarlar.prefix), hata: () => { }, sonradan: true, guild, msgMember: mesaj.member, guildMe: guild.members.me })
         })
         Object.entries(db.buldosya("kur", "diğerleri")).filter(([guildId]) => client.shardId(guildId) == client.shard.ids[0]).forEach(async ([guildId, object]) => {
             if (object.date < Date.now() - 120000) return db.sil(guildId, "kur", "diğerleri")
@@ -457,7 +457,7 @@ module.exports = {
             if (!mesaj) return db.sil(guildId, "kur", "diğerleri")
             let guild = client.guilds.cache.get(guildId)
             if (!guild) return db.sil(guildId, "kur", "diğerleri")
-            client.commands.get("kur").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, prefix: (sunucudb.prefix || "."), hata: () => { }, sonradan: object, guild, msgMember: mesaj.member, guildMe: guild.members.me })
+            client.commands.get("kur").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, prefix: (sunucudb.prefix || ayarlar.prefix), hata: () => { }, sonradan: object, guild, msgMember: mesaj.member, guildMe: guild.members.me })
         })
         if (client.options.shardCount == client.shard.ids[0] + 1) {
             let snipe = db.buldosya("snipe", "diğerleri")

@@ -100,7 +100,7 @@ module.exports = {
                 }
                 db.yaz("afk", sunucuafk, msg.guildId)
             }
-            let prefix = sunucudb.prefix || "."
+            let prefix = sunucudb.prefix || ayarlar.prefix
                 , clientUserArray = [`<@${msg.client.user.id}>`, `<@!${msg.client.user.id}>`]
             if (clientUserArray.includes(msg.content.trim())) {
                 let karaliste = alisa.kl[sahipid]

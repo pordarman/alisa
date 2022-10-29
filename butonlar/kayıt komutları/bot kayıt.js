@@ -9,7 +9,7 @@ module.exports = {
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
             if (int.client.butonsure.some(a => a == int.user.id)) return hata(`Heyyy dur bakalım orada! Zaten halihazırda bir kayıt işlemi gerçekleştiriyorsun!`)
-            let prefix = sunucudb.prefix || "."
+            let prefix = sunucudb.prefix || ayarlar.prefix
                 , yetkilirolid = sunucudb.kayıt.yetkili
                 , intMember = int.member
             if (yetkilirolid) {

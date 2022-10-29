@@ -1,0 +1,32 @@
+{
+ "kayıtkisiler": {},
+ "son": [],
+ "kayıt": {
+  "bototo": true,
+  "isimler": {},
+  "otoduzeltme": true
+ },
+ "isimler": {},
+ "yasaklitag": {},
+ "premium": {},
+ "kl": {},
+ "sc": {
+  "sayı": 1,
+  "kisi": {}
+ },
+ "jail": {
+  "kisi": {},
+  "son": []
+ },
+ "say": {
+  "veri": {
+   "t": true,
+   "ü": true,
+   "tag": true,
+   "sü": true,
+   "b": true
+  },
+  "emoji": true
+ },
+ "afk": {}
+}

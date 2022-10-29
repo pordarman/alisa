@@ -14,16 +14,16 @@ module.exports = {
         try {
             if (!int.member.permissions.has('Administrator')) return hata("Yönetici", "yetki")
             let yazı = int.options.getString("prefix")
-                , prefix = sunucudb.prefix || "."
-            if (yazı == ".") {
+                , prefix = sunucudb.prefix || ayarlar.prefix
+            if (yazı == ayarlar.prefix) {
                 delete sunucudb.prefix
                 const em = new EmbedBuilder()
-                    .setTitle('Prefixiniz başarıyla "." olarak değiştirildi')
+                    .setTitle(`Prefixiniz başarıyla "${ayarlar.prefix}" olarak değiştirildi`)
                     .setDescription('• Yeni prefixiniz **.** oldu')
                     .addFields(
                         {
                             name: 'Örnek',
-                            value: "```css\n.yardım\n.prefix\n.destek\n@" + int.client.user.tag + " yardım\n```"
+                            value: `\`\`\`css\n${ayarlar.prefix}yardım\n${ayarlar.prefix}prefix\n${ayarlar.prefix}destek\n@${int.client.user.tag}yardım\n\`\`\``
                         }
                     )
                     .setTimestamp()

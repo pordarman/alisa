@@ -18,7 +18,7 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
-            let prefix = sunucudb.prefix || "."
+            let prefix = sunucudb.prefix || ayarlar.prefix
             switch (int.options.getSubcommand(false)) {
                 case "kullan": {
                     let kod = int.options.getString("kod", false)

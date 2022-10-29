@@ -146,7 +146,7 @@ module.exports = {
                     .setColor('Blue')
                     .setFooter({ text: `${int.client.user.username} Kayıt sistemi`, iconURL: int.client.user.displayAvatarURL() })
                     .setTimestamp()
-                funcMsg.reply({ content: `• Kayıt sistemini test etmek için **${sunucudb.prefix || "."}test** yazabilirsiniz!`, embeds: [embed] }).catch(() => { })
+                funcMsg.reply({ content: `• Kayıt sistemini test etmek için **${sunucudb.prefix || ayarlar.prefix}test** yazabilirsiniz!`, embeds: [embed] }).catch(() => { })
                 db.yazdosya(sunucudb, sunucuid)
                 db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
                 db.sil(sunucuid, "kur", "diğerleri")
