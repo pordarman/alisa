@@ -24,7 +24,7 @@ client.sunucudb = {}
 
 
 /* 
-  * Bu isteğe özeldir, botu kullanan sunucuların kaç tanesi cinsiyetle kayıt ediyor kaç tanesi tek üye olarak kayıt ediyor burada saklıyoruz
+  * Botu kullanan sunucuların kaç tanesi cinsiyetle kayıt ediyor kaç tanesi tek üye olarak kayıt ediyor burada saklıyoruz
   */
 client.secenek = new Set()
 
@@ -111,7 +111,7 @@ client.namePhoto = {
 
 
 /* 
-  * Bir webhook kanalı ayarlayınız. Bu kanala botta oluşan hataları atacak
+  * Bir webhook kanalı ayarlayınız. Bu kanal botta oluşan hataları gösterecektir
   */
 try { client.hook = new Discord.WebhookClient({ url: ayarlar.webhook }) } catch (e) { }
 
@@ -123,7 +123,7 @@ client.hata = (dirname, error) => client.hook?.send(`**${dirname}** adlı komut 
 
 
 /* 
-  * Bu konsolda gösterilen bazı hataları giderir lütfen bunu sileyin
+  * Bu konsolda gösterilen bazı hataları giderir lütfen bunu silmeyiniz
   */
 client.setMaxListeners(0)
 
@@ -254,11 +254,34 @@ client.stringToEmojis = (input) => {
 /* 
   * Bu isteğe bağlıdır kaldırabilirsiniz, fakat bunu kullanan birkaç komut var orayı da düzenlemelisiniz
   *
+  * ==================================
   * ./events/ready.js
+  * └> 400. satır, 63. sütun
+  * 
   * ./komutlar/bot komutları/alisa.js
+  * └> 148. satır, 182. sütun
+  *
   * ./komutlar/bot komutları/premium.js
+  * ├> 35. satır, 79. sütun
+  * ├> 38. satır, 89. sütun
+  * ├> 68. satır, 105. sütun
+  * ├> 101. satır, 108. sütun
+  * └> 103. satır, 105. sütun
+  *
+  * ./komutlar/sahip komutları/kl.js
+  * ├> 92. satır, 45. sütun 
+  * └> 96. satır, 45. sütun
+  *
   * ./slash/bot komutları/alisa.js
+  * └> 129. satır, 182. sütun
+  *
   * ./slash/bot komutları/premium.js
+  * ├> 32. satır, 83. sütun
+  * ├> 35. satır, 93. sütun
+  * ├> 83. satır, 116. sütun
+  * ├> 96. satır, 112. sütun
+  * └> 130. satır, 116. sütun
+  * ==================================
   */
 client.getGuildNameOrId = async (id, bool = true) => {
   try {
@@ -280,18 +303,39 @@ client.getGuildNameOrId = async (id, bool = true) => {
   * Bazı yerlerde bu fonksion kullanılıyor. Eğer botun sorunsuz bir şekilde çalışmasını istiyorsanız lütfen aşağıdaki dosyalara giderek uygun kanal ID'lerini yazınız.
   * Eğer yazmazsanız botunuz gerektiği gibi çalışmayacaktır
   * 
-  * ./events/guildCreate.js => 201. satır, 239. sütun
-  * ./events/guildDelete.js => 19. satır, 337. sütun
-  * ./events/messageCreate.js => 75. satır, 53. sütun
-  * ./events/ready.js => 467. satır, 156. sütun
+  * ==================================
+  * ./events/guildCreate.js          
+  * └> 201. satır, 239. sütun        
+  *                                 
+  * ./events/guildDelete.js          
+  * └> 19. satır, 337. sütun
   * 
-  * ./komutlar/geri bildirim.js => 40. satır, 51. sütun
-  * ./komutlar/hata.js => 40. satır, 51. sütun
-  * ./komutlar/öneri.js => 50. satır, 348. sütun
+  * ./events/messageCreate.js
+  * └> 75. satır, 53. sütun
   * 
-  * ./slash/geri bildirim.js => 38. satır, 57. sütun
-  * ./slash/hata.js => 38. satır, 57. sütun
-  * ./slash/öneri.js => 48. satır, 354. sütun
+  * ./events/ready.js =>
+  * └> 467. satır, 156. sütun
+  * 
+  * 
+  * ./komutlar/geri bildirim.js
+  * └> 40. satır, 51. sütun
+  * 
+  * ./komutlar/hata.js
+  * └> 40. satır, 51. sütun
+  * 
+  * ./komutlar/öneri.js
+  * └> 50. satır, 348. sütun
+  * 
+  * 
+  * ./slash/geri bildirim.js
+  * └> 38. satır, 57. sütun
+  * 
+  * ./slash/hata.js
+  * └> 38. satır, 57. sütun
+  * 
+  * ./slash/öneri.js
+  * └> 48. satır, 354. sütun
+  * ==================================
   */
 client.sendChannel = async (object, id, guildId) => {
   try {
