@@ -1,0 +1,19 @@
+{
+  "name": "alisa",
+  "version": "0.0.1",
+  "description": "Alisa botu",
+  "main": "main.js",
+  "scripts": {
+    "test": "node main"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/builders": "^0.13.0",
+    "@discordjs/rest": "^0.4.1",
+    "@discordjs/voice": "^0.8.0",
+    "discord-api-types": "^0.31.2",
+    "discord.js": "^14.6.0",
+    "fs": "^0.0.1-security"
+  }
+}
