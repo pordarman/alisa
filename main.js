@@ -273,7 +273,7 @@ client.stringToEmojis = (input) => {
   * └> 96. satır, 45. sütun
   *
   * ./slash/bot komutları/alisa.js
-  * └>129. satır, 182. sütun
+  * └> 129. satır, 182. sütun
   *
   * ./slash/bot komutları/premium.js
   * ├> 32. satır, 83. sütun
