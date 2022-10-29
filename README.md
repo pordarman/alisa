@@ -142,9 +142,9 @@
 
         isimler: { // Otoisim ve kayıt edildikten sonraki düzenlenecek isimlerin verileri
 
-         giris: "Kayıtsız" // Sunucuya girince düzenlenecek isim (Kısaca otoisim)
+         giris: "Kayıtsız", // Sunucuya girince düzenlenecek isim (Kısaca otoisim)
 
-         kayıt: "<tag> | <isim> - [<yaş>]" // Kayıt edildikten sonra düzenlenecek isim
+         kayıt: "<tag> | <isim> - [<yaş>]", // Kayıt edildikten sonra düzenlenecek isim
 
          kayıtbot: "Bot | <isim>" // Bir bot kayıt edildikten sonra düzenelenecek isim
 
@@ -205,7 +205,7 @@
 
         özel: { // Hoşgeldin mesajının özelleştirilmiş hali
 
-          yazı: "**<sunucuAdı>** adlı sunucuya hoşgeldin sefalar getiridin <üye>...." // Hoşgeldin mesajında yazılacak mesaj
+          yazı: "**<sunucuAdı>** adlı sunucuya hoşgeldin sefalar getiridin <üye>....", // Hoşgeldin mesajında yazılacak mesaj
 
           embed: false, // Mesajın kutulu (embed) olup olmadığını gösterir
 
@@ -222,16 +222,16 @@
 
         kicky: "123456789012345678", // Kick yetkili rol ID'si
 
-        mutey: "123456789012345678" // Mute yetkili rol ID'si
+        mutey: "123456789012345678", // Mute yetkili rol ID'si
 
-        vyetkili: "123456789012345678" // Vip yetkili rol ID'si
+        vyetkili: "123456789012345678", // Vip yetkili rol ID'si
 
 
         /**
          * Şüpheli verileri
          */
 
-        otosrol: "123456789012345678" // Şüpheli üyelere verilecek rolün ID'si
+        otosrol: "123456789012345678", // Şüpheli üyelere verilecek rolün ID'si
 
         otogun: 15, // Kaç gün içinde açılan hesapları şüpheli olarak gösterileceğini gösterir
 
@@ -450,7 +450,7 @@
 
         "123456789012345678": 1662029378409,
 
-        "1234567890123456789": 1662123254911,
+        "1234567890123456789": 1662123254911
 
        },
 
@@ -481,7 +481,7 @@
         * Tagrol verileri
         */
         
-       tag: "♫" // Sunucuya özel tag
+       tag: "♫", // Sunucuya özel tag
 
        dis: "5827", // Sunucuya özel etiket tag
 
@@ -489,7 +489,7 @@
 
        log: "123456789012345678", // Tagrol log kanalının ID'si
 
-       rol: "123456789012345678", // Verilecek rolün ID'si
+       rol: "123456789012345678" // Verilecek rolün ID'si
 
     }
 
@@ -532,7 +532,7 @@
 
           top: 0, // Komutla kullanılan 
 
-          slash: 0, // Slashla kullanılan
+          slash: 0 // Slashla kullanılan
 
         },
 
@@ -542,7 +542,7 @@
 
           slash: 0, // Slashla kullanılan
 
-          buton: 0, // Butonla kullanılan
+          buton: 0 // Butonla kullanılan
 
         }
 
@@ -595,7 +595,7 @@
 
         "2000": 1635168395000, // Bot ile yapılan toplam 2,000 kayıtın zamanı
 
-        "3000": 1638435263000, // Bot ile yapılan toplam 3,000 kayıtın zamanı
+        "3000": 1638435263000 // Bot ile yapılan toplam 3,000 kayıtın zamanı
 
       },
 
@@ -606,7 +606,7 @@
 
        "200": 1653577998365, // Botun ilk kez 200 sunucuya ulaştığı zaman
 
-       "300": 1655749807425, // Botun ilk kez 300 sunucuya ulaştığı zaman
+       "300": 1655749807425 // Botun ilk kez 300 sunucuya ulaştığı zaman
 
       },
 
@@ -619,7 +619,7 @@
 
           "927916511937564752": 1641906252682,
 
-          "912391802198327336": 1637606950133,
+          "912391802198327336": 1637606950133
 
         },
 
@@ -629,7 +629,7 @@
 
          "927916511937564752": 1642758341559,
 
-         "924038140392509450": 1641764373664,
+         "924038140392509450": 1641764373664
 
         }
 
