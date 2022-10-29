@@ -13,7 +13,7 @@
 - Ali: [İnstagram](https://www.instagram.com/ali.celk/) - [Discord](https://discord.com/users/488839097537003521) - [Spotify](https://open.spotify.com/user/215jixxk4morzgq5mpzsmwwqa?si=41e0583b36f9449b)
 
 - Emir: [Biography](https://phantomstorm.cf/) - [İnstagram](https://www.instagram.com/eavsar_emir.js/) - [Discord](https://discord.com/users/817417815396974683)
-- 
+
 # Bilmen gerekenler
 ```javascript
 
