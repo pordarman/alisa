@@ -1,0 +1,518 @@
+{
+ "kullanımlar": {
+  "afk": {
+   "top": 0,
+   "slash": 0
+  },
+  "alınacak rol": {
+   "top": 0,
+   "slash": 0
+  },
+  "alisa": {
+   "top": 0,
+   "slash": 0
+  },
+  "ayar": {
+   "top": 0,
+   "slash": 0
+  },
+  "bilgi": {
+   "top": 0,
+   "slash": 0
+  },
+  "bot oto kayıt": {
+   "top": 0,
+   "slash": 0
+  },
+  "bot rol": {
+   "top": 0,
+   "slash": 0
+  },
+  "bot": {
+   "top": 0,
+   "slash": 0
+  },
+  "davet": {
+   "top": 0,
+   "slash": 0
+  },
+  "değiştir": {
+   "top": 0,
+   "slash": 0
+  },
+  "düello": {
+   "top": 180,
+   "slash": 18
+  },
+  "erkek rol": {
+   "top": 0,
+   "slash": 0
+  },
+  "erkek": {
+   "top": 0,
+   "slash": 0
+  },
+  "fake": {
+   "top": 0,
+   "slash": 0
+  },
+  "geri bildirim": {
+   "top": 0,
+   "slash": 0
+  },
+  "günlük": {
+   "top": 0,
+   "slash": 0
+  },
+  "günlük özel": {
+   "top": 0,
+   "slash": 0
+  },
+  "hata": {
+   "top": 0,
+   "slash": 0
+  },
+  "isim": {
+   "top": 0,
+   "slash": 0
+  },
+  "isimler": {
+   "top": 0,
+   "slash": 0
+  },
+  "kayıt kanal": {
+   "top": 0,
+   "slash": 0
+  },
+  "kayıt log": {
+   "top": 0,
+   "slash": 0
+  },
+  "kayıt rol": {
+   "top": 0,
+   "slash": 0
+  },
+  "kayıt": {
+   "top": 0,
+   "slash": 0
+  },
+  "kbilgi": {
+   "top": 0,
+   "slash": 0
+  },
+  "kız rol": {
+   "top": 0,
+   "slash": 0
+  },
+  "kız": {
+   "top": 0,
+   "slash": 0
+  },
+  "ksil": {
+   "top": 0,
+   "slash": 0
+  },
+  "kullanıcı": {
+   "top": 0,
+   "slash": 0
+  },
+  "kur": {
+   "top": 0,
+   "slash": 0
+  },
+  "öneri": {
+   "top": 0,
+   "slash": 0
+  },
+  "oy": {
+   "top": 0,
+   "slash": 0
+  },
+  "özel": {
+   "top": 0,
+   "slash": 0
+  },
+  "ping": {
+   "top": 0,
+   "slash": 0
+  },
+  "pp": {
+   "top": 0,
+   "slash": 0
+  },
+  "prefix": {
+   "top": 0,
+   "slash": 0
+  },
+  "rank": {
+   "top": 0,
+   "slash": 0
+  },
+  "rolleri al": {
+   "top": 0,
+   "slash": 0
+  },
+  "say": {
+   "top": 0,
+   "slash": 0
+  },
+  "seçenek": {
+   "top": 0,
+   "slash": 0
+  },
+  "sembol": {
+   "top": 0,
+   "slash": 0
+  },
+  "ses": {
+   "top": 0,
+   "slash": 0
+  },
+  "sıra": {
+   "top": 0,
+   "slash": 0
+  },
+  "snipe": {
+   "top": 0,
+   "slash": 0
+  },
+  "son": {
+   "top": 0,
+   "slash": 0
+  },
+  "stat": {
+   "top": 0,
+   "slash": 0
+  },
+  "sunucu toplam": {
+   "top": 0,
+   "slash": 0
+  },
+  "tag": {
+   "top": 0,
+   "slash": 0
+  },
+  "tagrol bilgi": {
+   "top": 0,
+   "slash": 0
+  },
+  "tagrol dis": {
+   "top": 0,
+   "slash": 0
+  },
+  "tagrol kanal": {
+   "top": 0,
+   "slash": 0
+  },
+  "tagrol log": {
+   "top": 0,
+   "slash": 0
+  },
+  "tagrol rol": {
+   "top": 0,
+   "slash": 0
+  },
+  "tagrol ayar": {
+   "top": 0,
+   "slash": 0
+  },
+  "tagrol kişi bilgi": {
+   "top": 0,
+   "slash": 0
+  },
+  "tagrol mesaj": {
+   "top": 0,
+   "slash": 0
+  },
+  "tag söyle": {
+   "top": 0,
+   "slash": 0
+  },
+  "test": {
+   "top": 0,
+   "slash": 0
+  },
+  "yardım": {
+   "top": 0,
+   "slash": 0
+  },
+  "yenilik": {
+   "top": 0,
+   "slash": 0
+  },
+  "zengin": {
+   "top": 0,
+   "slash": 0
+  },
+  "jail bilgi": {
+   "top": 0,
+   "slash": 0
+  },
+  "jail log": {
+   "top": 0,
+   "slash": 0
+  },
+  "jail rol": {
+   "top": 0,
+   "slash": 0
+  },
+  "jail son": {
+   "top": 0,
+   "slash": 0
+  },
+  "unjail": {
+   "top": 0,
+   "slash": 0
+  },
+  "unjailall": {
+   "top": 0,
+   "slash": 0
+  },
+  "jail yetkili": {
+   "top": 0,
+   "slash": 0
+  },
+  "jail": {
+   "top": 0,
+   "slash": 0
+  },
+  "sunucu bilgi": {
+   "top": 0,
+   "slash": 0
+  },
+  "vip": {
+   "top": 0,
+   "slash": 0
+  },
+  "jail sil": {
+   "top": 0,
+   "slash": 0
+  },
+  "jail sıfırla": {
+   "top": 0,
+   "slash": 0
+  },
+  "tempjail": {
+   "top": 0,
+   "slash": 0
+  },
+  "ay": {
+   "top": 0,
+   "slash": 0
+  },
+  "ban": {
+   "top": 0,
+   "slash": 0
+  },
+  "kick": {
+   "top": 0,
+   "slash": 0
+  },
+  "unban": {
+   "top": 0,
+   "slash": 0
+  },
+  "banner": {
+   "top": 0,
+   "slash": 0
+  },
+  "yetkilerim": {
+   "top": 0,
+   "slash": 0
+  },
+  "isimleri düzenle": {
+   "top": 0,
+   "slash": 0
+  },
+  "mute": {
+   "top": 0,
+   "slash": 0
+  },
+  "destek": {
+   "top": 0,
+   "slash": 0
+  },
+  "unmute": {
+   "top": 0,
+   "slash": 0
+  },
+  "oto düzeltme": {
+   "top": 0,
+   "slash": 0
+  },
+  "yaş zorunluluk": {
+   "top": 0,
+   "slash": 0
+  },
+  "yazdır": {
+   "top": 0,
+   "slash": 0
+  },
+  "taglı üyeler": {
+   "top": 0,
+   "slash": 0
+  },
+  "rolsüz": {
+   "top": 0,
+   "slash": 0
+  },
+  "ban yetkili": {
+   "top": 0,
+   "slash": 0
+  },
+  "kick yetkili": {
+   "top": 0,
+   "slash": 0
+  },
+  "sil": {
+   "top": 0,
+   "slash": 0
+  },
+  "mesajları sil": {
+   "top": 0,
+   "slash": 0
+  },
+  "şüpheli oto": {
+   "top": 0,
+   "slash": 0
+  },
+  "şüpheli rol": {
+   "top": 0,
+   "slash": 0
+  },
+  "şüpheli": {
+   "top": 0,
+   "slash": 0
+  },
+  "premium": {
+   "top": 0,
+   "slash": 0
+  },
+  "kişi log": {
+   "top": 0,
+   "slash": 0
+  },
+  "kayıtsızlar": {
+   "top": 0,
+   "slash": 0
+  },
+  "sicil": {
+   "top": 0,
+   "slash": 0
+  },
+  "şüpheli gün": {
+   "top": 0,
+   "slash": 0
+  },
+  "mod log": {
+   "top": 0,
+   "slash": 0
+  },
+  "say ayarlar": {
+   "top": 0,
+   "slash": 0
+  },
+  "mute yetkili": {
+   "top": 0,
+   "slash": 0
+  },
+  "yetkili rol": {
+   "top": 0,
+   "slash": 0
+  },
+  "yaş": {
+   "top": 0,
+   "slash": 0
+  },
+  "sıfırla": {
+   "top": 0,
+   "slash": 0
+  },
+  "sor": {
+   "top": 0,
+   "slash": 0
+  },
+  "partner": {
+   "top": 0,
+   "slash": 0
+  },
+  "yaş sınır": {
+   "top": 0,
+   "slash": 0
+  },
+  "yetkili": {
+   "top": 0,
+   "slash": 0
+  },
+  "tagrol sıfırla": {
+   "top": 0,
+   "slash": 0
+  },
+  "deneme": {
+   "top": 0,
+   "slash": 0
+  },
+  "eval": {
+   "top": 0,
+   "slash": 0
+  },
+  "insta": {
+   "top": 0,
+   "slash": 0
+  },
+  "kara liste": {
+   "top": 0,
+   "slash": 0
+  },
+  "reload": {
+   "top": 0,
+   "slash": 0
+  },
+  "sahip say": {
+   "top": 0,
+   "slash": 0
+  },
+  "shard": {
+   "top": 0,
+   "slash": 0
+  },
+  "sid": {
+   "top": 0,
+   "slash": 0
+  },
+  "sahip kişi": {
+   "top": 0,
+   "slash": 0
+  },
+  "uptime": {
+   "top": 0,
+   "slash": 0
+  },
+  "yadd": {
+   "top": 0,
+   "slash": 0
+  },
+  "yt bilgi": {
+   "top": 0,
+   "slash": 0
+  }
+ },
+ "kisiler": {},
+ "kl": {},
+ "sunucular": {
+  "ekleme": {},
+  "çıkarma": {}
+ },
+ "starih": {},
+ "kurallar": [],
+ "skullanımlar": {},
+ "öneri": {},
+ "kayıtsayı": {},
+ "yenilik": {
+  "y": [],
+  "h": [],
+  "ts": "29/10/2022 10:23:35"
+ },
+ "klserver": [],
+ "lastUptime": 1667028214075
+}
