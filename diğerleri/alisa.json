@@ -40,10 +40,6 @@
    "top": 0,
    "slash": 0
   },
-  "düello": {
-   "top": 180,
-   "slash": 18
-  },
   "erkek rol": {
    "top": 0,
    "slash": 0
@@ -233,7 +229,7 @@
    "slash": 0
   },
   "yardım": {
-   "top": 1,
+   "top": 0,
    "slash": 0
   },
   "yenilik": {
@@ -493,21 +489,15 @@
    "slash": 0
   }
  },
- "kisiler": {
-  "488839097537003521": 10
- },
+ "kisiler": {},
  "kl": {},
  "sunucular": {
   "ekleme": {},
   "çıkarma": {}
  },
  "starih": {},
- "kurallar": [
-  "488839097537003521"
- ],
- "skullanımlar": {
-  "809907353968836629": 10
- },
+ "kurallar": [],
+ "skullanımlar": {},
  "öneri": {},
  "kayıtsayı": {},
  "yenilik": {
