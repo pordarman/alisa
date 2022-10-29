@@ -125,7 +125,7 @@
 
         bototo: true, // Botunların otomatik olarak kayıt edilip edilmeyeceğini gösterir
 
-        otoduzeltme: true // Birisini kayıt ederken girilen isimlerin ilk harflerinin büyük olup olmayacağını gösterir
+        otoduzeltme: true, // Birisini kayıt ederken girilen isimlerin ilk harflerinin büyük olup olmayacağını gösterir
 
         ayar: false, // Kayıt ayarının açık mı kapalı mı olduğunu gösterir (eğer true ise kayıt yapamazsınız)
 
