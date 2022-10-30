@@ -39,7 +39,7 @@ module.exports = {
                     , kayıtsızrolalid = sunucudb.kayıt.kayıtsız
                     , memberEdit = {}
                     , jailRole = sunucudb.jail.rol
-                    , jailGuild = db.bul(sunucuid, "jail", "diğerleri") || {}
+                    , jailGuild = db.bul(sunucuid, "jail", "diğerleri")
                 if (jailRole && jailGuild[mid]) memberEdit.roles = [jailRole]
                 else if (kayıtsızrolalid && !(botkontrolvarmı && botMu)) memberEdit.roles = [kayıtsızrolalid, ...m.roles.cache.filter(a => a.id != kayıtsızrolalid).map(a => a.id)]
                 if (!botMu) {
@@ -80,7 +80,7 @@ module.exports = {
                         if (girişisim) isim = girişisim.replace(/<tag>/g, (kontroltag ? kontroltag.slice(0, -1) : "")).replace(/<isim>/g, m.user.username).slice(0, 32)
                         else isim = `${kontroltag || ""}${m.user.username}`.slice(0, 32)
                         if (m.displayName != isim) memberEdit.nick = isim
-                        if (Object.keys(memberEdit).length) await m.edit(memberEdit).catch(err => {
+                        if (["roles", "nick"].some(a => a in memberEdit)) await m.edit(memberEdit).catch(err => {
                             let hatanınSebepleri = []
                             if (!guildşeysi.members.me.permissions.has("ManageRoles")) hatanınSebepleri.push("• Benim **Rolleri Yönet** yetkim yok!")
                             if (!guildşeysi.members.me.permissions.has("ManageNicknames")) hatanınSebepleri.push("• Benim **Kullanıcı Adlarını Yönet** yetkim yok")
