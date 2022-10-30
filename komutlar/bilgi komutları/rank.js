@@ -31,7 +31,7 @@ module.exports = {
                             else gösterge += ayarlar.emoji.bar.dolu.orta
                         } else if (i === 1) gösterge += ayarlar.emoji.bar.bos.bas
                         else if (i === 15) gösterge += ayarlar.emoji.bar.bos.son
-                        else gösterge += ayarlar.emoji.bar.bos.son
+                        else gösterge += ayarlar.emoji.bar.bos.orta
                     }
                 } else {
                     for (let i = 1; i < 16; i++) {
@@ -41,7 +41,7 @@ module.exports = {
                             else gösterge += ayarlar.emoji.bar.dolu.orta
                         } else if (i === 1) gösterge += ayarlar.emoji.bar.bos.bas
                         else if (i === 15) gösterge += ayarlar.emoji.bar.bos.son
-                        else gösterge += ayarlar.emoji.bar.bos.son
+                        else gösterge += ayarlar.emoji.bar.bos.orta
                     }
                 }
             }
