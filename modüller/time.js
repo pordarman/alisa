@@ -84,7 +84,16 @@ const search = (input) => {
 
 class Time {
     constructor() { }
-
+    
+    
+    /**
+     * Time modülünün versiyonu
+     * @returns {String}
+     */
+    
+    get version() {
+    return "1.0.3"
+    }
 
 
     /**

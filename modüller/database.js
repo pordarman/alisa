@@ -1,5 +1,4 @@
 const fs = require('fs')
-const { join } = require('path')
 const guildDatabase = {
   kayıtkisiler: {},
   son: [],
@@ -17,6 +16,10 @@ const guildDatabase = {
 class DB {
 
   constructor() { }
+  
+  get version() {
+    return "3.2.0"
+  }
 
   yaz(veri, değer, dosyaAdı = "database", klasorAdı = "database") {
     const dosya = JSON.parse(fs.readFileSync(`${klasorAdı}/${dosyaAdı}.json`, 'utf8'))
@@ -74,9 +77,8 @@ class DB {
     return fs.writeFileSync(`${klasorAdı}/${dosyaAdı}.json`, "{}")
   }
 
-  ping(sayı = 1) {
+  ping() {
     let pingşeysi = Date.now()
-    for (let i = 0; i < sayı; i++) {
       const obje = { id: "<@5465465443543543>", kk: "<@546546544354343534543>", r: "<@&5465465443543543>, <@&5465465443543543>, <@&5465465443543543>", z: (pingşeysi / 1000).toFixed(0) }
       this.yaz("ilk", [obje, obje, obje, obje, obje])
       this.yaz("ilk2", [obje, obje, obje, obje, obje])
@@ -90,7 +92,6 @@ class DB {
       this.sil("kız")
     }
     return (Date.now() - pingşeysi)
-  }
 }
 
 module.exports = new DB()

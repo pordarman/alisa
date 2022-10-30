@@ -17,7 +17,7 @@ module.exports = {
 			tag = tag.join(" - ")
             if (tag) return msg.reply({ content: tag }).catch(err => { })
             else msg.react(ayarlar.emoji.np)
-            if (msgMember.permissions.has('Administrator')) return msg.reply({ content: `Sunucuda tag ayarlı değil. Ayarlamak için **#{prefix}tag-a** \`tagınız\` yazabilirsiniz` }).then(a => setTimeout(() => a.delete().catch(err => { }), 15 * 1000)).catch(err => { })
+            if (msgMember.permissions.has('Administrator')) return msg.reply({ content: `Sunucuda tag ayarlı değil. Ayarlamak için **${prefix}tag-a** \`tagınız\` yazabilirsiniz` }).then(a => setTimeout(() => a.delete().catch(err => { }), 15 * 1000)).catch(err => { })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
             msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
