@@ -256,7 +256,7 @@ module.exports = {
                     } else return giriş([new EmbedBuilder().setTitle("Bilgilendirme").setDescription("Bu sunucuda herhangi bir bot rolü ayarlanmadığı için botu otomatik olarak kayıt edemedim").setColor("Blue").setTimestamp()])
                 } else {
                     let embeds = []
-                    if (Object.keys(memberEdit).length) await m.edit(memberEdit).catch(err => {
+                    if (["roles", "nick"].some(a => a in memberEdit)) await m.edit(memberEdit).catch(err => {
                         let hatanınSebepleri = []
                         if (!guildşeysi.members.me.permissions.has("ManageRoles")) hatanınSebepleri.push("• Benim **Rolleri Yönet** yetkim yok!")
                         if (guildşeysi.roles.cache.get(kayıtsızrolalid)?.position >= guildşeysi.members.me.roles.highest?.position) hatanınSebepleri.push(`• Kayıtsız rolü olan <@&${kayıtsızrolalid}> adlı rolün sırası benim rolümün sırasından yüksek!`)
