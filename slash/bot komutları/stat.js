@@ -52,7 +52,7 @@ module.exports = {
                     },
                     {
                         name: "VERSİYONLAR",
-                        value: `🎛️ **Node.js versiyon:**  ${process.version}\n🔨 **Discord.js versiyon:**  v${version}\n📒 **Database versiyon:**  v${ayarlar.database}\n${ayarlar.emoji.pp} **${int.client.user.username} versiyon:**  ${ayarlar.versiyon}`,
+                        value: `🎛️ **Node.js versiyon:**   v${process.versions.node}\n🔨 **Discord.js versiyon:**  v${version}\n📒 **Database versiyon:**  v${db.version}\n${ayarlar.emoji.pp} **${int.client.user.username} versiyon:**  v${ayarlar.versiyon}`,
                         inline: true
                     },
                     {
