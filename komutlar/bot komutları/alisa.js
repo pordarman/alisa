@@ -192,7 +192,7 @@ module.exports = {
                         , toplam = Object.values(alisa.sunucular.ekleme)
                     const embed = new EmbedBuilder()
                         .setAuthor({ name: msg.client.user.username + " kimdir?", iconURL: pp })
-                        .setDescription(`• ${msg.client.user.username} **<t:${(msg.client.user.createdTimestamp / 1000).toFixed(0)}:F>** tarihinde tatlı mı tatlı bir bot olarak oluşturuldu.\n\n• ${msg.client.user.username} aslında ilk public botumun yardımcısı olarak oluşturulmuştu fakat sonradan bu botla uğraşmaktan daha çok zevk aldığımı fark ettim ve ilk botumu kapattım.\n\n• Bota hemen hemen her gün farklı bir özellik veya optimizasyon getiriyorum ki bot hızını asla yitirmesin.\n\n• Ayrıca sizin verdiğiniz öneriler sayesinde bota birçok yeni ve gelişmiş özellikler getiriyoruz ki botun birçok komutu öneriler sayesinde geldi. **(${prefix}ses komutu, jail sistemi, tagrol sistemi vb.)**\n\n• Son 24 saatte **${toplam.filter(a => a > Date.now() - 86400000).length.toLocaleString().replace(/\./g, ",")}**, toplamda **${toplam.length}** sunucuya eklendim!\n• Kurallarımızı toplamda **${alisa.kurallar.length}** kişi kabul etti!`)
+                        .setDescription(`• *Botun çıkış tarihi ve botun amacı*`)
                         .setImage("https://media.giphy.com/media/W5eV84IFjKpAnwYPKc/giphy.gif")
                         .setThumbnail(pp)
                         .setColor("#9e02e2")
