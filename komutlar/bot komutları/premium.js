@@ -147,12 +147,12 @@ module.exports = {
             case "özellikler":
             case "özellik": {
                 let pp = msg.client.user.displayAvatarURL()
-                return msg.reply({ embeds: [new EmbedBuilder().setAuthor({ name: msg.client.user.username, iconURL: pp }).setDescription(`• Fiyat bilgisini öğrenmek için **${prefix}pre fiyat** yazabilirsiniz\n\n• Heyy görüyorum ki premium almayı düşünüyorsun o halde tam da doğru yere geldin\n\n__**• Hemen sana premium özelliklerini kısaca anlatıyım**__\n ├> Hiçbir komutta bekleme süresi olmadan istediğiniz gibi kullanabilirsiniz\n ├> Premium'a özel bir sürü komutla beraber sunucunuzu daha güzel bir yer haline getirebilirsiniz\n ├> Bota gelecek özellikleri diğer kullanıcılardan daha önce görebilirsiniz\n ├> Premiumunuz bittikten sonra hiçbir veriniz silinmez ve yeniden premium aldığınızda hiçbir şey ayarlamadan kullanabilirsiniz\n ├> Destek sunucumda özel bir role sahip olursunuz :3\n └> Ve eğer 1 hafta içinde beğenmezseniz paranız anında iade edilir!\n\n• Eğer premium almak istiyorsanız __**[Destek Sunucuma](${ayarlar.discord})**__ gelip bilet açmanız yeterlidir\n\n• Ve en önemlisi *seni seviyorum..* 💗`).setColor("#9e02e2").setTimestamp().setThumbnail(pp)] }).catch(err => { })
+                return msg.reply({ embeds: [new EmbedBuilder().setAuthor({ name: msg.client.user.username, iconURL: pp }).setDescription(`• *Botun premium sistemi özellikleri*`).setColor("#9e02e2").setTimestamp().setThumbnail(pp)] }).catch(err => { })
             }
             case "fiyat":
             case "fiyatlandırma": {
                 let pp = msg.client.user.displayAvatarURL()
-                return msg.reply({ embeds: [new EmbedBuilder().setAuthor({ name: msg.client.user.username, iconURL: pp }).setDescription(`${pre ? "• Heyyy görüyorum ki bu sunucuda premium zaten aktif edilmiş durumda!" : ""}• Premium özelliklerini öğrenmek için **${prefix}pre özellikler** yazabilirsiniz\n\n• Eğer 1 hafta içinde beğenmezseniz paraniz iade!\n\n• **1 aylık =>** __10__ Türk Lirası 💵\n• **3 aylık =>** __25__ Türk Lirası 💵\n• **6 aylık =>** __45__ Türk Lirası 💵\n• **Sınırsız =>** __80__ Türk Lirası 💵\n\n• Ödeme olarak sadece **Papara, İninal ve IBAN** kabul ediyoruz\n\n• Eğer premium almak istiyorsanız __**[Destek Sunucuma](${ayarlar.discord})**__ gelip bilet açmanız yeterlidir `).setColor("#9e02e2").setTimestamp().setThumbnail(pp)] }).catch(err => { })
+                return msg.reply({ embeds: [new EmbedBuilder().setAuthor({ name: msg.client.user.username, iconURL: pp }).setDescription(`• *Botun premium fiyatlandırma bilgileri*`).setColor("#9e02e2").setTimestamp().setThumbnail(pp)] }).catch(err => { })
             }
             case "oluştur":
             case "ekle": {
