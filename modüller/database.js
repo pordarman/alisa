@@ -16,7 +16,7 @@ const guildDatabase = {
 class DB {
 
   constructor() { }
-  
+
   get version() {
     return "3.2.0"
   }
@@ -79,20 +79,20 @@ class DB {
 
   ping() {
     let pingşeysi = Date.now()
-      const obje = { id: "<@5465465443543543>", kk: "<@546546544354343534543>", r: "<@&5465465443543543>, <@&5465465443543543>, <@&5465465443543543>", z: (pingşeysi / 1000).toFixed(0) }
-      this.yaz("ilk", [obje, obje, obje, obje, obje])
-      this.yaz("ilk2", [obje, obje, obje, obje, obje])
-      const ilk = this.bul("ilk")
-      ilk.push(obje)
-      const ilk2 = this.bul("ilk2")
-      ilk2.push(obje)
-      this.topla("kız", 1)
-      this.sil("ilk")
-      this.sil("ilk2")
-      this.sil("kız")
+    const obje = { id: "<@5465465443543543>", kk: "<@546546544354343534543>", r: "<@&5465465443543543>, <@&5465465443543543>, <@&5465465443543543>", z: (pingşeysi / 1000).toFixed(0) }
+    this.yaz("ilk", [obje, obje, obje, obje, obje])
+    this.yaz("ilk2", [obje, obje, obje, obje, obje])
+    const ilk = this.bul("ilk")
+    ilk.push(obje)
+    const ilk2 = this.bul("ilk2")
+    ilk2.push(obje)
+    this.topla("kız", 1)
+    this.sil("ilk")
+    this.sil("ilk2")
+    this.sil("kız")
     return (Date.now() - pingşeysi)
   }
-  
+
 }
 
 module.exports = new DB()
