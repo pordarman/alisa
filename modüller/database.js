@@ -91,6 +91,8 @@ class DB {
       this.sil("ilk2")
       this.sil("kız")
     return (Date.now() - pingşeysi)
+  }
+  
 }
 
 module.exports = new DB()
