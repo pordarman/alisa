@@ -90,7 +90,6 @@ class DB {
       this.sil("ilk")
       this.sil("ilk2")
       this.sil("kız")
-    }
     return (Date.now() - pingşeysi)
 }
 
