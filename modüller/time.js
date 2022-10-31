@@ -127,7 +127,7 @@ class Time {
          * console.log("Bir")
          * await Time.wait("10 saniye")
          * console.log("İki") // 10 saniye sonra yazdı
-         * @returns {Boolean}
+         * @returns {Promise<Boolean>}
          */
 
     async wait(ms) {
