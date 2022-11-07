@@ -393,8 +393,8 @@ module.exports = {
             Time.setTimeout(async () => {
                 let dosya = db.buldosya("premium", "diğerleri")
                     , isim = guildId + " - " + Date.now()
+                dosya[isim] = dosya[guildId]
                 delete dosya[guildId]
-                dosya[isim] = object
                 db.yazdosya(dosya, "premium", "diğerleri")
                     , kisi = await client.fetchUserForce(object.author)
                 kisi.send(`• Heyy bakıyorum ki ${await client.getGuildNameOrId(guildId)} sunucunun premiumu bitmiş gibi görünüyor :(\n\n• Eğer premium'dan memnun kaldıysanız ya da yeniden satın almak isterseniz destek sunucuma gelebilirsiniz!!\n\n• ${ayarlar.discord}`).catch(err => { })
