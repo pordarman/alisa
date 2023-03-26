@@ -4,6 +4,7 @@
 - [./ayarlar.json](https://github.com/pordarman/alisa/blob/main/ayarlar.json) dosyasına gidip doldurulması gereken alanları lütfen doldurunuz yoksa bot çalışmaz!
 - Botun kodlarında herhangi bir hata gördüğünüzde [instagram'dan](https://www.instagram.com/ali.celk/) veya [discord](https://discord.com/users/488839097537003521) üzerinden bizimle iletişime geçebilirsiniz.
 - Bu altyapının bizden izinsiz çoğaltılması, taklit edilmesi, paylaşılması vb. gibi şeyler yasaktır!
+- Alisa isminin, profil resminin ve diğer kişisel bilgilerin taklit edilmesi, kullanılması yasaktır! 
 - Bir de eğer altyapıyı beğendiyseniz bi yıldız atarak bize destek olabilir misiniz :)
 
 ## Kaynak dosyası
