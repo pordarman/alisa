@@ -1,4 +1,4 @@
-require("./modüller/database").yaz("lastUptime", Date.now(), "alisa", "diğerleri")
+require("./modüller/database").yaz("lastUptime", Date.now(), "alisa", "diğerleri");
 const { ShardingManager, WebhookClient, EmbedBuilder } = require('discord.js');
 let { token, p, shard: totalShards, webhook: url } = require("./ayarlar.json")
     , kullanıcıAdı = "Botun kullanıcı adı"

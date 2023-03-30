@@ -1,11 +1,11 @@
 ## Alisa Bot
 # Botu başlatmadan önce
 
-- [./ayarlar.json](https://github.com/pordarman/alisa/blob/main/ayarlar.json) dosyasına gidip doldurulması gereken alanları lütfen doldurunuz yoksa bot çalışmaz!
-- Botun kodlarında herhangi bir hata gördüğünüzde [instagram'dan](https://www.instagram.com/ali.celk/) veya [discord](https://discord.com/users/488839097537003521) üzerinden bizimle iletişime geçebilirsiniz.
+- Lütfen [./ayarlar.json](https://github.com/pordarman/alisa/blob/main/ayarlar.json) dosyasına gidip doldurulması gereken alanları lütfen doldurunuz yoksa bot çalışmaz!
+- Botun kodlarında herhangi bir hata gördüğünüzde [instagram'dan](https://www.instagram.com/ali.celk/) veya [discord](https://discord.gg/y9cFYz4V8n) üzerinden bizimle iletişime geçebilirsiniz.
 - Bu altyapının bizden izinsiz çoğaltılması, taklit edilmesi, paylaşılması vb. gibi şeyler yasaktır!
-- Alisa isminin, profil resminin ve diğer kişisel bilgilerin taklit edilmesi, kullanılması yasaktır! 
-- Bir de eğer altyapıyı beğendiyseniz bi yıldız atarak bize destek olabilir misiniz :)
+- Alisa isminin, profil resminin ve diğer kişisel bilgilerin bizden izinsiz kullanılması, taklit edilmesi, kullanılması yasaktır! 
+- Eğer altyapıyı beğendiyseniz bir yıldız atarak bize destek olabilirsiniz :)
 
 ## Kaynak dosyası
 
@@ -29,8 +29,10 @@
 /**
  * Şimdi botu çalıştırmadan önce bilmen gereken bazı şeyler var.
  * 
- * Ben bu botu tasarlerken her şeyi kendimce yazdım o yüzden bazı şeyleri anlamayabilirsin bunda bir sıkıntı yok.
- * Şimdi ben botu tasarlarken, sunucuların verilerini kaydederken hep kendime göre yazdım fakat şimdi bunu herkese açık olarak paylaşacağım için bunları da açıklamam gerekiyor.
+ * Ben bu botu tasarlarken her şeyi kendime göre yazdım o yüzden bazı şeyleri anlamayabilirsin bunda bir sıkıntı yok.
+ * 
+ * Şimdi botun sunucu verilerini kaydetmesi biraz karışık o yüzden sunucu verilerin kaydedilmesini detaylıca anlatacağım.
+ * 
  */
 
 
@@ -42,6 +44,10 @@
  * DİKKAT!!!
  */
 
+
+/**
+ * Eğer hazırsanız başlayalım :)
+ * /
 
 /**
  * Şimdi birincisi: Sunucu verilerin kaydedilmesi
@@ -87,21 +93,21 @@
 
             ilk: { // İlk kayıt ettiği kişinin verileri
 
-             kk: "<@123456789012345678>", // Kayıt ettiği kişi
+               kk: "<@123456789012345678>", // Kayıt ettiği kişi
 
-             r: "<@&123456789012345678>, <@&1234567890123456789>", // Verilen roller
+               r: "<@&123456789012345678>, <@&1234567890123456789>", // Verilen roller
 
-             z: "<t:1619967153:F>" // Kayıt zamanı
+               z: "<t:1619967153:F>" // Kayıt zamanı
 
             },
 
             son: { // İlk kayıt ettiği kişinin verileri
 
-             kk: "<@123456789012345678>", // Kayıt ettiği kişi
+               kk: "<@123456789012345678>", // Kayıt ettiği kişi
 
-             r: "<@&123456789012345678>, <@&1234567890123456789>", // Verilen roller
+               r: "<@&123456789012345678>, <@&1234567890123456789>", // Verilen roller
 
-             z: "<t:1619967153:F>" // Kayıt zamanı
+               z: "<t:1619967153:F>" // Kayıt zamanı
 
             },
 
@@ -280,7 +286,10 @@
 
        premium: { // Premium komutlarının verileri
 
-        yetkili: ["123456789012345678", "1234567890123456789"], // Yetkili rollerinin ID'leri (Bu rolleri adminler ekliyor)
+        yetkili: [ // Yetkili rollerinin ID'leri (Bu rolleri adminler ekliyor)
+           "123456789012345678",
+           "1234567890123456789"
+        ],
 
         partner: "123456789012345678" // Partner rolünün ID'si
 
@@ -423,12 +432,12 @@
    } 
 
 /**
- * • Şimdi ilk bakıldığında pek bir şey anlaşılmıyor gözükebilir fakat anlatıktan sonra ne kadar rahat olduğunu siz de göreceksiniz.
+ * Şimdi ilk bakıldığında pek bir şey anlaşılmıyor gözükebilir fakat anladıktan sonra ne kadar rahat olduğunu siz de göreceksiniz.
  * 
- * • Yalnız bu kadar uzun olduğunu ben de şimdi fark ettim LKFDNGSFDŞKLGNFSDLŞGKSFD işiniz biraz zor gibi ama olsun öğrenmek için bolca zamanınız olacak
+ * Yalnız bu kadar uzun olduğunu ben de şimdi fark ettim LKFDNGSFDŞKLGNFSDLŞGKSFD işiniz biraz zor gibi ama olsun öğrenmek için bolca zamanınız olacak
  * 
  * 
- * • Sunucunun bütün verileri eğer sunucu sahibi isterse tek komutla silebilir. (afk bilgileri hariç)
+ * Sunucunun bütün verileri eğer sunucu sahibi isterse tek komutla silebilir. (afk bilgileri hariç)
  */
 
 
@@ -788,9 +797,10 @@
 /**
  * Buraya kadar okuduğunuz için teşekkür ederim 💗
  * 
- * Bu bot artık sizin istediğinizi yapabilirsiniz bunda özgürsünüz fakat sizden bir ricam olacak.
+ * Bu bot artık sizin istediğinizi yapabilirsiniz bunda özgürsünüz fakat sizden birkaç ricam olacak.
  * 
- * Beni unutmayın olur mu :)
+ * • Alisa'nın ismini, profil fotoğrafını ve diğer kişisel bilgilerini benden izinsiz kullanmayınız
+ * • Bir de beni unutmayın olur mu :)
  * 
  * 
  * Sizleri seviyorum...
