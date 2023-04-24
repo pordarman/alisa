@@ -414,7 +414,6 @@ readdirSync(`${__dirname}\\komutlar`).forEach(klasorAdları => {
         command.pre = true
         break;
     }
-    komutIsmiVarMiYokMu[command.name] = { top: 0, slash: 0 }
     if (!Array.isArray(command.kod)) command.kod = [command.kod]
     command.kod.forEach((a, i) => command.kod.unshift(command.kod[i + i].toLocaleUpperCase().replace(/[ÇĞÖÜŞ]/g, e => obje[e]).toLocaleLowerCase()))
     command.kod = [...new Set(command.kod)]
