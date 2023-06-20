@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
     name: "partner",
-    kod: "partner",
+    aliases: "partner",
     pre: true,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
@@ -14,28 +14,37 @@ module.exports = {
             if (msgMember.permissions.has("Administrator")) {
                 switch (secenek) {
                     case "ayarla": {
+
+                        // Kontroller
                         let rol = msg.mentions.roles.first() || guild.roles.cache.get(args[1])
                         if (!rol) return hata(`Lütfen bir rol etiketleyiniz veya ID'sini giriniz\n\n**Örnek**\n• ${prefix}partner ayarla @rol\n• ${prefix}partner ayarla ROLID`)
                         if (rol.managed) return hata(`Etiketlediğiniz rol bir bot rolü. Lütfen başka bir rol etiketleyiniz`)
                         if (rol.id == sunucudb.premium.partner) return hata(`Etiketlediğiniz rol zaten parter yetkilisi rolü olarak ayarlanmış durumda`)
+                      
                         sunucudb.premium.partner = rol.id
                         hata(`Partner yetkilisi rolü başarıyla <@&${rol.id}> olarak ayarlandı`, "b")
                         db.yazdosya(sunucudb, sunucuid)
                         return;
                     }
                     case "sıfırla": {
+
+                        // Kontroller
                         let rol = sunucudb.premium.partner
                         if (!rol) return hata(`Partner yetkilisi rolü zaten sıfırlanmış durumda`)
+                       
                         delete sunucudb.premium.partner
                         hata(`Partner yetkilisi rolü başarıyla sıfırlandı`, "b")
                         db.yazdosya(sunucudb, sunucuid)
                         return;
                     }
                     case "etiket": {
+
+                        // Kontroller
                         let rol = sunucudb.premium.partner
                         if (!rol) return hata(`Bu sunucuda herhangi bir partner yetkilisi rolü ayarlı değil\n\n• Ayarlamak için **${prefix}partner ayarla @rol** yazabilirsiniz`)
                         let kisiler = (await msg.client.getMembers(msg)).filter(a => !a.user.bot && a.roles.cache.has(rol))
                         if (kisiler.size == 0) return hata(`Şeyyy.. Partner yetkilisi rolüne kimse sahip değil şapşik şey seni :(`)
+                    
                         let sayfa = Math.ceil(kisiler.size / 50)
                             , map = kisiler.map(a => `<@${a.id}>`)
                         if (sayfa == 1) return msg.reply(`• <@&${rol}>\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n• **Partner yetkilileri (__${kisiler.size}__)**\n• ${map.join(" | ")}`).catch(err => { })
@@ -45,10 +54,13 @@ module.exports = {
                         }
                     }
                     case "gör": {
+
+                        // Kontroller
                         let rol = sunucudb.premium.partner
                         if (!rol) return hata(`Bu sunucuda herhangi bir partner yetkilisi rolü ayarlı değil\n\n• Ayarlamak için **${prefix}partner ayarla @rol** yazabilirsiniz`)
                         let kisiler = (await msg.client.getMembers(msg)).filter(a => !a.user.bot && a.roles.cache.has(rol))
                         if (kisiler.size == 0) return hata(`Şeyyy.. Partner yetkilisi rolüne kimse sahip değil şapşik şey seni :(`)
+                      
                         let sayfa = Math.ceil(kisiler.size / 50)
                             , map = kisiler.map(a => `<@${a.id}>`)
                             , role = guild.roles.cache.get(rol)
@@ -59,8 +71,11 @@ module.exports = {
                         }
                     }
                     case "rol": {
+
+                        // Kontroller
                         let rol = sunucudb.premium.partner
                         if (!rol) return hata(`Bu sunucuda herhangi bir partner yetkilisi rolü ayarlı değil\n\n• Ayarlamak için **${prefix}partner ayarla @rol** yazabilirsiniz`)
+                      
                         return msg.reply({ content: `<@&${rol}> - (Bu role sahip olanlara bildirim __gitmedi__)`, allowedMentions: { roles: false } }).catch(err => { })
                     }
                     default:

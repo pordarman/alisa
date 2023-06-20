@@ -4,13 +4,16 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "yetkili rol",
-  kod: "yetkili-rol",
+  aliases: "yetkili-rol",
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
-      if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")      
+
+      // Kontroller
+      if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki") 
+
       if (args[0] === "sıfırla") {
         if (!sunucudb.kayıt.yetkili) return hata('Yeni gelen üyeleri kayıt edecek rol zaten sıfırlanmış durumda')
         delete sunucudb.kayıt.yetkili
@@ -27,6 +30,7 @@ module.exports = {
       if ((sunucudb.kayıt.erkek || []).includes(rolid)) return hata(`Etiketlediğiniz rol bu sunucudaki erkeklere verilecek olan rol. Lütfen başka bir rol etiketleyiniz`)
       if ((sunucudb.kayıt.kız || []).includes(rolid)) return hata(`Etiketlediğiniz rol bu sunucudaki kızlara verilecek olan rol. Lütfen başka bir rol etiketleyiniz`)
       if ((sunucudb.kayıt.normal || []).includes(rolid)) return hata(`Etiketlediğiniz rol bu sunucudaki üyelere verilecek olan rol. Lütfen başka bir rol etiketleyiniz`)
+      
       sunucudb.kayıt.yetkili = rolid
       hata('Bundan sonra yeni gelen kişileri <@&' + rolid + '> adlı role sahip kişiler kayıt edecek', "b")
       db.yazdosya(sunucudb, sunucuid)

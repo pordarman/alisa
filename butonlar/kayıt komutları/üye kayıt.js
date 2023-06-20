@@ -8,6 +8,8 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sonradan, sunucuid, guild }) {
         try {
+
+            // Eğer bot, kurma sırasında yeniden başlatılırsa kesinti vermemesi için tanımlamaları en başta yapıyoruz
             function UpperKelimeler(str) {
                 if (!sunucudb.kayıt.otoduzeltme) {
                     let sembol = sunucudb.kayıt.sembol
@@ -199,6 +201,8 @@ module.exports = {
                 setTimeout(() => int.client.butonsure.delete(memberid + sunucuid), 35000)
                 return await kayıt({ memberid: memberid, member: await int.client.fetchMemberForce(memberid, int), sahipid: sahipid, verilecekRolId: sunucudb.kayıt.erkek, filter: m => m.author.id == sahipid, rolVarMı: sonradan[1].rolVarMı, kayıtsızrolid: sunucudb.kayıt.kayıtsız, prefix: sunucudb.prefix || ayarlar.prefix, databaseButon: db.bul(sunucuid, "buton", "diğerleri") || {} })
             }
+
+            // Kontroller
             let sahipid = int.user.id
             if (int.client.butonsure.some(a => a == sahipid)) return hata(`Heyyy dur bakalım orada! Zaten halihazırda bir kayıt işlemi gerçekleştiriyorsun!`)
             let prefix = sunucudb.prefix || ayarlar.prefix
@@ -227,6 +231,7 @@ module.exports = {
             let rolVarMı = true
             if (!member.roles.cache.has(kayıtsızrolid)) rolVarMı = false
             if (member.roles.highest.position >= guildMe.roles.highest.position) return hata(`Kayıt etmek istediğiniz kişinin rolünün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+         
             int.client.butonsure.set(memberid + sunucuid, sahipid)
             let databaseButon = db.bul(sunucuid, "buton", "diğerleri") || {}
             int.message.reply({ content: `${ayarlar.emoji.uye} <@${sahipid}>, kayıt etmek istediğiniz <@${memberid}> adlı kişinin sadece ismini ${sunucudb.kayıt.yaszorunlu ? "ve yaşını" : ""} mesaj olarak yazınız` }).then(async ms => {

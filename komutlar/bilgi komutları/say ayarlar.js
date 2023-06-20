@@ -4,13 +4,16 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 10,
     name: "say ayarlar",
-    kod: ["say-ayar", "say-ayarlar"],
+    aliases: ["say-ayar", "say-ayarlar"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
+            
             let secenekler = [
                 `**• ${prefix}say-ayarlar [emojili/emojisiz]**`,
                 `\n**• ${prefix}say-ayarlar [ekle/çıkar] toplam =>**  Sunucudaki üye sayısını gösterir`,

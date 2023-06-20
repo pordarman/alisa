@@ -2,7 +2,7 @@ const { Message, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilde
 const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
-    kod: ["otoisim", "oto-isim"],
+    aliases: ["otoisim", "oto-isim"],
     name: "isimleri düzenle",
     cooldown: 5,
     y: true,

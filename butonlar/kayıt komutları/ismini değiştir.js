@@ -8,6 +8,8 @@ module.exports = {
        */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let yetkilirolid = sunucudb.kayıt.yetkili
                 , intMember = int.member
             if (yetkilirolid) {
@@ -25,8 +27,11 @@ module.exports = {
             const member = await int.client.fetchMemberForce(memberid, int)
             if (!member) return hata("Şeyyyy... Sanırım bu kişi artık sunucuda değil şapşik şey seni :(")
             if (member.roles.highest.position >= guildMe.roles.highest.position) return hata(`İsmini değiştirmek istediğiniz kişinin rolünün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+
             let filter = m => m.author.id == int.user.id
             int.reply({ content: `• 📝 <@${int.user.id}>, ismini değiştimek istediğiniz <@${memberid}> adlı kişinin lütfen **SADECE İSMİNİ** yazınız`, files: [int.client.namePhoto.isim] }).catch(err => { })
+
+            // Üyenin ismini değiştirme          
             await int.channel.awaitMessages({ filter: filter, time: 30000, max: 1 }).then(async message1 => {
                 int.client.butonsure.delete("isim" + memberid + sunucuid)
                 const message = message1.first()

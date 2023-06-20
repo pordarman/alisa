@@ -4,13 +4,16 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "sembol",
-  kod: "sembol",
+  aliases: "sembol",
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
-      if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")      
+
+      // Kontroller
+      if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")   
+         
       const argsseysi = args.join(' ')
       if (!argsseysi) return hata(`Sembol ayarlamak için **${prefix}sembol \`sembolünüz\`**\n\n• Sıfırlamak için ise **${prefix}sembol sıfırla** yazabilirsiniz`, "ne")
       if (argsseysi === "sıfırla") {

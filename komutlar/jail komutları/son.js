@@ -4,18 +4,22 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 60,
     name: "jail son",
-    kod: "jail-son",
+    aliases: "jail-son",
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {            
+
+            // Kontroller
             let yetkili = sunucudb.jail.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
             } else if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
             let kayıtlar2 = sunucudb.jail.son
             if (!kayıtlar2.length) return hata(`Bu sunucuda daha önce hiçbir jail işlemi gerçekleşmediğinden dolayı tablo gösterilemiyor`)
+
+            
             const kişi = msg.mentions.members.first() || await msg.client.fetchMember(args[0], msg)
             if (kişi) {
                 let kayıtlar = kayıtlar2.filter(a => a.s == kişi.id)

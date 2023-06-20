@@ -4,17 +4,21 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 5,
     name: "zengin",
-    kod: ["zengin", "booster"],
+    aliases: ["zengin", "booster"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!guildMe.permissions.has('ManageNicknames')) return hata("Kullanıcı Adlarını Yönet", "yetkibot")
             if (!msgMember.premiumSinceTimestamp && !msgMember.permissions.has("ChangeNickname")) return hata(" **ya** sunucuya boost basmalısın **ya da** Kullanıcı Adı Değiştir", "yetki")
             if (msgMember.id === guild.ownerId) return hata(`Sunucu sahibinin ismini değiştiremem :(`)
             if (msgMember.roles.highest.position >= guildMe.roles.highest.position) return hata(`Sizin rolünüzün sırası benim rolümün sırasından yüksek olduğu için sizin isminizi değiştiremem`)
             if (!args[0]) return hata(`Lütfen yeni isminizi yazınız`)
+
+
             let tag = sunucudb.kayıt.tag
             , kayıtisim = sunucudb.kayıt.isimler.kayıt
             , isim
@@ -29,6 +33,8 @@ module.exports = {
                 } else isim = kayıtisim.replace(/<isim>/g, yeniisim).replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/ +/g, " ").trim()
             } else isim = `${tag || ""}${yeniisim}`
             if (isim.length > 32) return hata(`Sunucu ismi 32 karakterden fazla olamaz lütfen karakter sayısını düşürünüz ve tekrar deneyiniz`)
+
+            // Üyenin ismini değiştirme
             await msgMember.setNickname(isim).then(() => {
                 msg.react(ayarlar.emoji.p).catch(err => { })
             }).catch(err => {

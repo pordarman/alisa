@@ -4,7 +4,6 @@ const guildDatabase = {
   son: [],
   kayıt: { bototo: true, isimler: {}, otoduzeltme: true },
   isimler: {},
-  yasaklitag: {},
   premium: {},
   kl: {},
   sc: { sayı: 1, kisi: {} },

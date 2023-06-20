@@ -5,12 +5,16 @@ const Time = require("../../modüller/time")
 module.exports = {
     cooldown: 15,
     name: "özel",
-    kod: ["ozel", "özel", "özelmesaj", "özelgiriş", "özelgirişmesaj"],
+    aliases: ["ozel", "özel", "özelmesaj", "özelgiriş", "özelgirişmesaj"],
     /**
      * @param {import("../../typedef").exportsRunCommands} param0
      */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, sonradan, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
+            if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
+            
             async function yaz() {
                 var filter = m => m.author.id === msg.author.id
                 await msg.channel?.awaitMessages({ filter: filter, max: 1, time: 1000 * 60 * 8 }).then(a => {
@@ -39,7 +43,6 @@ module.exports = {
                 })
             }
             if (sonradan) return await yaz()
-            if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
             if (db.bul(sunucuid, "özel", "diğerleri")) return hata(`Heyy dur bakalım orada! Şu anda başka bir yetkili özel mesajı ayarlıyor!`)
             db.yaz(sunucuid, { channelId: msg.channelId, messageId: msg.id, authorId: msg.author.id, date: Date.now() }, "özel", "diğerleri")
             const kisi = guild.memberCount

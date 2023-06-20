@@ -2,15 +2,20 @@ const { Message, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilde
 const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
-    kod: ["test", "deneme"],
+    aliases: ["test", "deneme"],
     name: "test",
     cooldown: 30,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+
+            // Kontroller
             if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
+
+
             msg.reply({ embeds: [new EmbedBuilder().setDescription(`• Veriler kontrol ediliyor, lütfen biraz bekleyiniz... `).setColor("Orange")] }).then(async mesaj => {
                 let embed = new EmbedBuilder().setTitle("Sanki biraz yapılması gereken şeyler var gibi?").setColor("Blue").setTimestamp()
                     , rolhatalar = []

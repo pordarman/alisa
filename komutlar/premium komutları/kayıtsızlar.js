@@ -3,19 +3,22 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
     name: "kayıtsızlar",
-    kod: ["kayıtsızlar", "kayıtsız-etiketle", "kayıtsızetiket", "kayıtsızlarıetiketle"],
+    aliases: ["kayıtsızlar", "kayıtsız-etiketle", "kayıtsızetiket", "kayıtsızlarıetiketle"],
     pre: true,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
-        try {            
+        try {      
+            
+            // Kontroller
             let yetkili = sunucudb.kayıt.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
             } else if (!msgMember.permissions.has('Administrator')) return hata('Yönetici', "yetki")
             let kayıtsız = sunucudb.kayıt.kayıtsız
             if (!kayıtsız) return hata(`Bu sunucuda herhangi bir kayıtsız rolü __ayarlanmamış__${msgMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${prefix}alınacak-rol @rol** yazabilirsiniz` : ""}`)
+            
             let rol
             if (sunucudb.kayıt.secenek) rol = sunucudb.kayıt.normal || []
             else rol = [...(sunucudb.kayıt.erkek || []), ...(sunucudb.kayıt.kız || [])]

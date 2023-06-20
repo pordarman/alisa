@@ -4,16 +4,18 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 10,
   name: "say",
-  kod: "say",
+  aliases: "say",
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
+
+      // Kontroller
       let say = sunucudb.say
         , veri = say.veri
-        , keys = Object.keys(veri)
-      if (!keys.length) return hata(`Şeyyy... Bu sunucuda **${prefix}say** komutunda gösterilecek hiçbir şey __ayarlanmamış__${msgMember.permissions.has("Administrator") ? `\n\n• Eğer say ayarlarını değiştirmek isterseniz **${prefix}say-ayarlar** yazabilirsiniz` : ""}`)
+      if (!Object.keys(veri).length) return hata(`Şeyyy... Bu sunucuda **${prefix}say** komutunda gösterilecek hiçbir şey __ayarlanmamış__${msgMember.permissions.has("Administrator") ? `\n\n• Eğer say ayarlarını değiştirmek isterseniz **${prefix}say-ayarlar** yazabilirsiniz` : ""}`)
+      
       let e = say.emoji
         , s
         , kayıt = sunucudb.kayıt

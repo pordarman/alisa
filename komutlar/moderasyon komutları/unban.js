@@ -3,13 +3,15 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
     name: "unban",
-    kod: "unban",
+    aliases: "unban",
     cooldown: 3,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             let banYetkili = sunucudb.kayıt.bany
             if (banYetkili) {
                 if (!msgMember.roles.cache.has(banYetkili) && !msgMember.permissions.has('BanMembers')) return hata(`<@&${banYetkili}> rolüne **veya** Üyeleri Yasakla`, "yetki")
@@ -19,6 +21,8 @@ module.exports = {
             if (!member) return hata(`Lütfen yasaklanmasının kaldırılmasını istediğiniz kişinin ID\'sini, tag\'ını veya kullanıcı adını giriniz\n**BüYüK kÜçÜk HaRfLeRe DuYaRlIdIr**`)
             const uye = (await guild.bans.fetch()).find(a => [a.user.id, `<@!${a.user.id}>`, `<@${a.user.id}>`, a.user.tag, a.user.username].includes(member))
             if (!uye) return hata(`Yazdığınız ID veya isimle yasaklanmış bir üye bulamadım`)
+
+            // Üyenin sunucudaki banını kaldırma
             await guild.members.unban(uye.user.id).then(member => {
                 msg.reply({ content: `${ayarlar.emoji.p} **${uye.user.tag} - (${uye.user.id})** adlı kişinin yasaklanması başarıyla kaldırıldı!\n📝 **Yasaklanma sebebi:**  ${uye.reason || "Sebep belirtilmemiş"}`, allowedMentions: { roles: false, users: false, repliedUser: true } }).catch(err => { })
                 let modLog = sunucudb.kayıt.modl

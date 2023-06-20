@@ -5,12 +5,14 @@ const Time = require("../../modüller/time")
 module.exports = {
     cooldown: 3,
     name: "tempjail",
-    kod: ["tempjail", "temp-jail"],
+    aliases: ["tempjail", "temp-jail"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             let yetkili = sunucudb.jail.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
@@ -23,6 +25,8 @@ module.exports = {
             let member = msg.mentions.members.first() || await msg.client.fetchMember(j, msg)
             if (!member) return hata(Time.isNull(member) ? "Görünen o ki etiketlediğiniz kişi sunucuda değil ya da başka bir şeyin ID'sini yazdınız :(" : "Lütfen bir kişiyi etiketleyiniz ya da ID\'sini giriniz")
             if (!member) return hata(`Lütfen süreli jail'e atılmasını istediğiniz kişiyi etiketleyiniz`)
+
+
             let date = Date.now()
                 , sure = date
                 , sebep = j
@@ -38,6 +42,8 @@ module.exports = {
             if (member.roles.cache.has(rol)) return hata(`<@${member.id}> adlı kişi zaten jail'e atılmış durumda`)
             let sunucuJail = db.bul(sunucuid, "jail", "diğerleri") || {}
                 , memberRoles = member.roles.cache.map(a => a.id)
+
+            // Üyeyi süreli jaile atma
             await member.edit({ roles: [rol] }).then(async () => {
                 msg.react(ayarlar.emoji.p).catch(err => { })
                 sunucuJail[member.id] = memberRoles
@@ -53,7 +59,7 @@ module.exports = {
                 const clientPp = msg.client.user.displayAvatarURL()
                 db.yazdosya(sunucudb, sunucuid)
                 Time.setTimeout(async () => {
-                    const sunucudb2 = msg.client.s(sunucuid)
+                    const sunucudb2 = msg.client.guildDatabase(sunucuid)
                     if (!sunucudb2) return;
                     const rolid = sunucudb2.jail.rol
                     if (!rolid) return;

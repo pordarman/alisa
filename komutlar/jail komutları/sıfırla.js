@@ -4,13 +4,16 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 60,
     name: "jail sıfırla",
-    kod: ["jail-sifirla", "jail-sıfırla"],
+    aliases: ["jail-sifirla", "jail-sıfırla"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
+            
             const embed = new EmbedBuilder()
                 .setTitle('Dikkat')
                 .setDescription('Tüm jail ayarlarını, ayarlanmış rolleri ve kanalları, jail bilgilerini, sıfırlamak/silmek istediğinizden emin misiniz? \nEğer silmek istiyorsanız **evet** istemiyorsanız **hayır** yazınız')

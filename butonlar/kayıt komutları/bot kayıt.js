@@ -8,6 +8,8 @@ module.exports = {
        */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             if (int.client.butonsure.some(a => a == int.user.id)) return hata(`Heyyy dur bakalım orada! Zaten halihazırda bir kayıt işlemi gerçekleştiriyorsun!`)
             let prefix = sunucudb.prefix || ayarlar.prefix
                 , yetkilirolid = sunucudb.kayıt.yetkili
@@ -33,12 +35,15 @@ module.exports = {
             if (botrolid.some(a => member.roles.cache.has(a))) return hata("Kayıt etmek istediğiniz bot zaten daha önceden kayıt edilmiş")
             if (!member.roles.cache.has(kayıtsızrolid)) rolVarMı = false
             if (member.roles.highest.position >= guildMe.roles.highest.position) return hata(`Kayıt etmek istediğiniz botun rolü benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+            
             let tag = sunucudb.kayıt.tag
                 , kayıtisim = sunucudb.kayıt.isimler.kayıtbot
                 , ismi
                 , sadeceisim = member.user.username
             if (kayıtisim) ismi = kayıtisim.replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/<isim>/g, sadeceisim).slice(0, 32)
             else ismi = `${tag || ""}${sadeceisim}`.slice(0, 32)
+
+            // Botu kayıt etme
             await member.edit({ roles: [...botrolid, ...member.roles.cache.filter(a => a.id != kayıtsızrolid).map(a => a.id)], nick: ismi }).then(async () => {
                 let date = Date.now()
                     , kisivarmıdatabasede = alisa.kisiler[sahipid] || 0

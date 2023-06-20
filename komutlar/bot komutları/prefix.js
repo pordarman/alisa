@@ -4,14 +4,17 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "prefix",
-  kod: ["prefix", "pref", "px"],
+  aliases: ["prefix", "pref", "px"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
+
+      // Kontroller
       if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
       if (!args[0]) return hata("Lütfen yeni prefiximi yazınız")
+      
       const yazı = args.join(" ").toLocaleLowerCase()
       if ([ayarlar.prefix, "sıfırla"].includes(yazı)) {
         delete sunucudb.prefix

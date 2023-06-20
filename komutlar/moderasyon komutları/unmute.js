@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
-    kod: "unmute",
+    aliases: "unmute",
     name: "unmute",
     cooldown: 3,
     /**
@@ -11,6 +11,8 @@ module.exports = {
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             let muteYetkili = sunucudb.kayıt.mutey
             if (muteYetkili) {
                 if (!msgMember.roles.cache.has(muteYetkili) && !msgMember.permissions.has('ModerateMembers')) return hata(`<@&${muteYetkili}> rolüne **veya** Üyelere zaman aşımı uygula`, "yetki")
@@ -21,6 +23,8 @@ module.exports = {
             if (!member) return hata(Time.isNull(member) ? "Görünen o ki etiketlediğiniz kişi sunucuda değil ya da başka bir şeyin ID'sini yazdınız :(" : "Lütfen bir kişiyi etiketleyiniz ya da ID\'sini giriniz")
             if (!member.communicationDisabledUntilTimestamp) return hata(`Etiketlediğiniz kişi zaten şu anda susturulmuş değil`)
             if (member.roles.highest.position >= guildMe.roles.highest.position) return hata(`Etiketlediğiniz kişinin rolünün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+            
+            // Üyenin susturmasını kaldırma
             await member.timeout(null, `Mutesini kaldıran yetkili: ${msg.author.tag}`).then(() => {
                 let modLog = sunucudb.kayıt.modl
                 if (modLog) {

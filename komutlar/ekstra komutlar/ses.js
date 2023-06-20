@@ -5,13 +5,16 @@ const DiscordVoice = require('@discordjs/voice')
 module.exports = {
     cooldown: 15,
     name: "ses",
-    kod: ["seskatıl", "ses-katıl", "seskanal", "ses-kanal", "voice", "ses"],
+    aliases: ["seskatıl", "ses-katıl", "seskanal", "ses-kanal", "voice", "ses"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
+            
             if (["çıkar", "kaldır"].includes(args[0])) {
                 if (!db.bul(sunucuid, "ses", "diğerleri")) return hata(`Zaten daha önceden katılmam için bir ses kanalı belirlememişsiniz`)
                 guildMe.voice.disconnect().catch(err => { })

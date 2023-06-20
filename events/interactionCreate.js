@@ -54,14 +54,14 @@ module.exports = {
                 return int.reply({ embeds: [embed], ephemeral: true }).catch(err => { })
             }
             try {
-                return komut.run({ int, sunucudb: int.client.s(sunucuid), alisa, hata: slashHataMesaj, sunucuid, guild: int.guild })
+                return komut.run({ int, sunucudb: int.client.guildDatabase(sunucuid), alisa, hata: slashHataMesaj, sunucuid, guild: int.guild })
             } catch (e) {
 
             }
         }
         if (int.isButton()) {
             if (int.customId.startsWith("NOT_")) return;
-            let komut = int.client.butonlar.find(a => a.name == int.customId || int.customId.startsWith(a.name))
+            let komut = int.client.buttons.find(a => a.name == int.customId || int.customId.startsWith(a.name))
             if (!komut) return;
             async function slashHataMesaj(yazı, x = false) {
                 const embed = new EmbedBuilder()
@@ -82,13 +82,13 @@ module.exports = {
                 return int.reply({ embeds: [embed], ephemeral: true }).catch(err => { })
             }
             try {
-                return komut.run({ int, sunucudb: int.client.s(sunucuid), alisa, hata: slashHataMesaj, sunucuid, guild: int.guild })
+                return komut.run({ int, sunucudb: int.client.guildDatabase(sunucuid), alisa, hata: slashHataMesaj, sunucuid, guild: int.guild })
             } catch (e) {
 
             }
         }
         if (int.isSelectMenu()) {
-            let komut = int.client.butonlar.find(a => int.values.find(ins => ins.startsWith(a.name)))
+            let komut = int.client.buttons.find(a => int.values.find(ins => ins.startsWith(a.name)))
             if (!komut) return;
             async function slashHataMesaj(yazı, x = false) {
                 const embed = new EmbedBuilder()
@@ -109,7 +109,7 @@ module.exports = {
                 return int.reply({ embeds: [embed], ephemeral: true }).catch(err => { })
             }
             try {
-                return komut.run({ int, sunucudb: int.client.s(sunucuid), hata: slashHataMesaj, alisa, sunucuid, guild: int.guild })
+                return komut.run({ int, sunucudb: int.client.guildDatabase(sunucuid), hata: slashHataMesaj, alisa, sunucuid, guild: int.guild })
             } catch (e) {
 
             }

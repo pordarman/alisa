@@ -5,13 +5,15 @@ const Time = require("../../modüller/time")
 module.exports = {
     cooldown: 5,
     name: "fake",
-    kod: ["fake", "sahte", "sahtegiriş", "fakegiriş", "sahte-giriş", "fake-giriş"],
+    aliases: ["fake", "sahte", "sahtegiriş", "fakegiriş", "sahte-giriş", "fake-giriş"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+            // Kontroller
             if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
+            
             let kisi = guild.memberCount + 1
                 , sunucusayısı = kisi.toLocaleString().replace(".", ",")
                 , ao = new Date()

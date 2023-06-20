@@ -11,7 +11,7 @@ module.exports = {
         try {
             if (rol.managed) return;
             let rolsunucuid = rol.guild.id
-                , sunucudb = rol.client.s(rolsunucuid)
+                , sunucudb = rol.client.guildDatabase(rolsunucuid)
                 , roller = []
                 , botrolsilinmeid = sunucudb.kayıt.bot
             if (botrolsilinmeid && botrolsilinmeid.includes(rol.id)) {
@@ -48,7 +48,7 @@ module.exports = {
                 db.yazdosya(sunucudb, rolsunucuid)
                 roller.push(`Üye rolü`)
             }
-            let tagroldb = rol.client.t(rolsunucuid)
+            let tagroldb = rol.client.tagrolDatabase(rolsunucuid)
             if (tagroldb?.rol == rol.id) {
                 delete tagroldb.rol
                 db.yaz(rolsunucuid, tagroldb, "tag rol", "diğerleri")

@@ -8,6 +8,8 @@ module.exports = {
        */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let yetkilirolid = sunucudb.kayıt.yetkili
             , intMember = int.member
             if (yetkilirolid) {
@@ -22,6 +24,8 @@ module.exports = {
             if (member.roles.cache.has(rols)) return hata("Heyyy dur bakalım orada! Bu kişi zaten şüpheliye atılmış durumda!")
             let guildMe = int.guild.members.me
             if (!guildMe.permissions.has("ManageRoles")) return hata("Rolleri Yönet", "yetkibot")
+
+            // Üyeyi şüpheliye atma
             await member.edit({ roles: [rols] }).then(() => {
                 let kl = sunucudb.kl[memberid] || []
                 kl.unshift({ type: "s", author: int.user.id, timestamp: Date.now() })

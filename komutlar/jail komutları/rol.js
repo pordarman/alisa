@@ -4,13 +4,16 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 5,
     name: "jail rol",
-    kod: "jail-rol",
+    aliases: "jail-rol",
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
+
             if (args[0] === "sıfırla") {
                 if (!sunucudb.jail.rol) return hata('Jail rolü zaten sıfırlanmış durumda')
                 delete sunucudb.jail.rol
@@ -24,6 +27,7 @@ module.exports = {
             if (sunucudb.jail.rol === rolid) return hata('Jail rolü zaten etiketlediğiniz rolle aynı')
             if (rol.managed) return hata(`Botların oluşturduğu rolleri başkalarına veremem`)
             if (rolid == sunucudb.jail.yetkili) return hata(`Etiketlediğiniz rol bu sunucudaki jail yetkili rolü. Lütfen başka bir rol etiketleyiniz`)
+            
             sunucudb.jail.rol = rolid
             hata('Bundan sonra jail\'e atılanlara <@&' + rolid + '> adlı rol verilecek', "b")
             db.yazdosya(sunucudb, sunucuid)

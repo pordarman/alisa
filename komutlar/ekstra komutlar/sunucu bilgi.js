@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
-    kod: ["sbilgi", "sunucubilgi", "sunucu-bilgi"],
+    aliases: ["sbilgi", "sunucubilgi", "sunucu-bilgi"],
     cooldown: 60,
     name: "sunucu bilgi",
     /**

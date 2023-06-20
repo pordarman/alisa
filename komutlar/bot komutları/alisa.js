@@ -2,7 +2,7 @@ const { Message, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilde
 const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
-    kod: "alisa",
+    aliases: "alisa",
     cooldown: 10,
     name: "alisa",
     /**
@@ -119,10 +119,10 @@ module.exports = {
                     let toplam = 0
                         , obje = Object.entries(alisa.kullanımlar).sort((a, b) => (b[1].top + (b[1].buton || 0)) - (a[1].top + (a[1].buton || 0))).filter(a => {
                             const komut = msg.client.commands.find(b => b.name == a[0])
-                            return !(!komut || komut.no)
+                            return !(!komut || komut.owner)
                         }).map(a => {
                             let komut = msg.client.commands.find(b => b.name == a[0] && b.y != true)
-                            let yazı = ` ${prefix}${typeof komut.kod == "object" ? komut.kod[0] : komut.kod}`
+                            let yazı = ` ${prefix}${typeof komut.aliases == "object" ? komut.aliases[0] : komut.aliases}`
                             if (yazı.length < 25) yazı = `${yazı}` + " ".repeat((25 - yazı.length))
                             let kackere = a[1].top
                             if (a[1].buton) kackere += a[1].buton

@@ -8,6 +8,8 @@ module.exports = {
        */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let prefix = sunucudb.prefix || ayarlar.prefix
                 , yetkilirolid = sunucudb.kayıt.yetkili
                 , intMember = int.member
@@ -65,8 +67,11 @@ module.exports = {
             if (rolKayıt.some(a => member.roles.cache.has(a))) return hata('Kayıt etmek istediğiniz kişi zaten daha önceden kayıt edilmiş')
             if (!member.roles.cache.has(kayıtsızrolid)) rolVarMı = false
             if (member.roles.highest.position >= guildMe.roles.highest.position) return hata(`Kayıt etmek istediğiniz kişinin rolünün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+
             let tag = sunucudb.kayıt.tag
                 , n = isimler[0].n
+
+            // Üyeyi yeniden kayıt etme
             await member.edit({ roles: [...rol, ...member.roles.cache.filter(a => ![kayıtsızrolid, ...rol].includes(a.id)).map(a => a.id)], nick: n }).then(async () => {
                 let kisivarmıdatabasede = alisa.kisiler[sahipid] || 0
                     , sunucuvarmıdatabasede = alisa.skullanımlar[sunucuid] || 0

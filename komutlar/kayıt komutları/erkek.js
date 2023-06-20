@@ -5,12 +5,14 @@ const Time = require("../../modüller/time")
 module.exports = {
   cooldown: 3,
   name: "erkek",
-  kod: ["e", "erkek"],
+  aliases: ["e", "erkek"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
+
+      // Kontroller
       var yetkilirolid = sunucudb.kayıt.yetkili
       if (!yetkilirolid) return hata(`Bu sunucuda üyeleri kayıt eden yetkili rolü __ayarlanmamış__${msgMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${prefix}yetkili-rol @rol** yazabilirsiniz veya her şeyi teker teker ayarlamak yerine **${prefix}kur** yazıp bütün kayıt sistemini tek bir komutla ayarlayabilirsiniz` : ""}`)
       if (!msgMember.roles.cache.has(yetkilirolid) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkilirolid}> rolüne veya Yönetici`, "yetki")
@@ -35,9 +37,9 @@ module.exports = {
         if (msgMember.permissions.has('Administrator')) return hata('Bir botu erkek olarak kayıt etemezsin şapşik şey seni\n\n• Eğer botu kayıt etmek isterseniz ilk önce **' + prefix + 'bot-rol** ile bir bot rolünü ayarlamalısınız')
         return hata('Bir botu erkek olarak kayıt etemezsin şapşik şey seni\n\n• Eğer botu kayıt etmek isterseniz yetkililere bir bot rolü ayarlamasını söyleyiniz')
       }
-      const memberid = member.user.id
-      const sahipid = msg.author.id
-      const butonsure = msg.client.butonsure.get(memberid + sunucuid)
+      const memberid = member.user.id,
+      sahipid = msg.author.id,
+      butonsure = msg.client.butonsure.get(memberid + sunucuid)
       if (butonsure) {
         if (butonsure == sahipid) return hata("Heyyy dur bakalım orada! Aynı anda hem butonla hem de komutla kayıt edemezsin!")
         return hata("Heyyy dur bakalım orada! Şu anda başkası kayıt işlemini gerçekleştiriyor!")
@@ -90,6 +92,8 @@ module.exports = {
         ismi = `${tag || ""}${UpperKelimeler(sadeceisim)}`
       }
       if (ismi.length > 32) return hata('Sunucu ismi 32 karakterden fazla olamaz lütfen karakter sayısını düşürünüz')
+
+      // Üyeyi erkek olarak kayıt etme
       await member.edit({ roles: [...verilecekRolId, ...member.roles.cache.filter(a => a.id != kayıtsızrolid).map(a => a.id)], nick: ismi }).then(async () => {
         let date = Date.now()
           , date2 = (date / 1000).toFixed(0)

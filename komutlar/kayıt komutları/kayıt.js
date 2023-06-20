@@ -5,12 +5,14 @@ const Time = require("../../modüller/time")
 module.exports = {
   cooldown: 3,
   name: "kayıt",
-  kod: ["kayit", "kayıt"],
+  aliases: ["kayit", "kayıt"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
+
+      // Kontroller
       var yetkilirolid = sunucudb.kayıt.yetkili
       if (!yetkilirolid) return hata(`Bu sunucuda üyeleri kayıt eden yetkili rolü __ayarlanmamış__${msgMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${prefix}yetkili-rol @rol** yazabilirsiniz veya her şeyi teker teker ayarlamak yerine **${prefix}kur** yazıp bütün kayıt sistemini tek bir komutla ayarlayabilirsiniz` : ""}`)
       if (!msgMember.roles.cache.has(yetkilirolid) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkilirolid}> rolüne veya Yönetici`, "yetki")
@@ -89,6 +91,8 @@ module.exports = {
         ismi = `${tag || ""}${UpperKelimeler(sadeceisim)}`
       }
       if (ismi.length > 32) return hata(' • Sunucu ismi 32 karakterden fazla olamaz lütfen karakter sayısını düşürünüz')
+
+      // Üyeyi kayıt etme
       await member.edit({ roles: [...verilecekRolId, ...member.roles.cache.filter(a => a.id != kayıtsızrolid).map(a => a.id)], nick: ismi }).then(async () => {
         const date = Date.now()
         msg.react(ayarlar.emoji.p).catch(err => { })

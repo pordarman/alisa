@@ -4,14 +4,17 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "hata",
-  kod: "hata",
+  aliases: "hata",
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
-      const öneri = args.join(" ")
-      if (!öneri) return hata('Lütfen bottaki bir hatayı yazınız')
+
+      // Kontroller
+      const hata = args.join(" ")
+      if (!hata) return hata('Lütfen bottaki bir hatayı yazınız')
+
       msg.react(ayarlar.emoji.p).catch(err => { })
       msg.reply({ content: `📢 **Hata mesajınız alındı ve sahibime iletildi. Desteğiniz için teşekkürler 💗**` }).catch(err => { })
       const sayı = db.topla(msg.author.id, 1, "hata toplam", "diğerleri", false)
@@ -31,7 +34,7 @@ module.exports = {
           },
           {
             name: "HATA",
-            value: öneri.replace(image, "")
+            value: hata.replace(image, "")
           }
         )
         .setImage(image)

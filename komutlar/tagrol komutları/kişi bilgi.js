@@ -4,14 +4,14 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 5,
     name: "tagrol kişi bilgi",
-    kod: "tag-bilgi",
+    aliases: "tag-bilgi",
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
             let tags = sunucudb.kayıt.tag
-            , tagroldb = msg.client.t(sunucuid, tags)
+            , tagroldb = msg.client.tagrolDatabase(sunucuid, tags)
             , tag = tagroldb.tag || (tags ? tags.slice(0, -1) : undefined)
             , dis = tagroldb.dis || sunucudb.kayıt.dis
             if (!tag && !dis) return hata("Şeyyy.. Bu sunucuda herhangi bir tag ayarlı değil :(")

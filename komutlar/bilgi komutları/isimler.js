@@ -5,12 +5,14 @@ const Time = require("../../modüller/time")
 module.exports = {
     cooldown: 15,
     name: "isimler",
-    kod: "isimler",
+    aliases: "isimler",
     /**
       * @param {import("../../typedef").exportsRunCommands} param0 
       */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             let yetkili = sunucudb.kayıt.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
@@ -19,6 +21,7 @@ module.exports = {
             if (!kişi) return hata(Time.isNull(kişi) ? "Görünen o ki başka bir şeyin ID'sini yazdınız :( Lütfen geçerli bir kişi ID'si giriniz" : "Lütfen bir kişiyi etiketleyiniz ya da ID\'sini giriniz")
             let isimgecmisii = sunucudb.isimler[kişi.id]
             if (!isimgecmisii) return hata(`Etiketlediğiniz kişi daha önceden hiç kayıt edilmediği için tablo gösterilemiyor`)
+            
             const embed = new EmbedBuilder().setAuthor({ name: kişi.tag, iconURL: kişi.displayAvatarURL() }).setColor("Random").setTimestamp()
             let length = isimgecmisii.length
                 , isimgecmisigecmeli = isimgecmisii.map((a, i) => `• \`#${length - i}\` ${a.c} **${a.n}** (${a.r}) (**Kayıt eden:** <@${a.s}>) | <t:${a.z}:F>`), uzunluk = isimgecmisigecmeli.length, sayfa = Math.ceil(uzunluk / 15)

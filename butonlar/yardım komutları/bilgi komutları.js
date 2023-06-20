@@ -8,8 +8,11 @@ module.exports = {
        */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             const id = int.customId.replace(this.name, "")
             if (int.user.id != id) return int.reply({ embeds: [new EmbedBuilder().setDescription(`${int.isButton() ? `<:${int.component.emoji.name}:${int.component.emoji.id}> Butonunu` : ` ${ayarlar.emoji.np} Menüyü`} yalnızca yazan kişi (<@${id}>) kullanabilir`).setColor("DarkRed")], ephemeral: true }).catch(err => { })
+            
             let [array, baslik] = int.client.allCommands(sunucudb, "b")
                 , düğmesağ = new ButtonBuilder()
                     .setStyle(1)

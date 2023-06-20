@@ -2,7 +2,7 @@ const { Message, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilde
 const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
-    kod: ["yaszorunlu", "yaşzorunlu", "yaş-zorunlu", "yaşzorunluluk", "yaş-zorunluluk"],
+    aliases: ["yaszorunlu", "yaşzorunlu", "yaş-zorunlu", "yaşzorunluluk", "yaş-zorunluluk"],
     name: "yaş zorunluluk",
     cooldown: 3,
     /**
@@ -10,7 +10,10 @@ module.exports = {
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
-            if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")            
+            
+            // Kontroller
+            if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")        
+                
             switch (args[0]) {
                 case "aç":
                 case "açık":

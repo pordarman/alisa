@@ -8,6 +8,8 @@ module.exports = {
        */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let yetkilirolid = sunucudb.kayıt.yetkili
                 , intMember = int.member
             if (yetkilirolid) {
@@ -29,11 +31,14 @@ module.exports = {
             if (!guildMe.permissions.has("ManageRoles")) return hata("Rolleri Yönet", "yetkibot")
             if (guild.roles.cache.get(kayıtsızrolid)?.position >= guildMe.roles.highest.position) return hata('Kayıtsız rolü benim rolümün sırasından yüksek olduğu için hiçbir işlem yapamadım')
             if (member.roles.highest.position >= guildMe.roles.highest.position) return hata(`Kayıtsıza atmak istediğiniz kişinin rolünün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+            
             let kontroltag = sunucudb.kayıt.tag
                 , girişisim = sunucudb.kayıt.isimler.giris
                 , isim
             if (girişisim) isim = girişisim.replace(/<tag>/g, (kontroltag ? kontroltag.slice(0, -1) : "")).replace(/<isim>/g, member.user.username).slice(0, 32)
             else isim = `${kontroltag || ""}${member.user.username}`.slice(0, 32);
+            
+            // Üyeyi kayıtsıza atma
             await member.edit({ roles: [kayıtsızrolid], nick: isim }).then(() => {
                 let kl = sunucudb.kl[memberid] || []
                 kl.unshift({ type: "ka", author: int.user.id, timestamp: Date.now() })

@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
-    kod: ["rolsuz", "rolsüz"],
+    aliases: ["rolsuz", "rolsüz"],
     name: "rolsüz",
     cooldown: 3,
     /**
@@ -11,10 +11,13 @@ module.exports = {
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             let yetkilirolid = sunucudb.kayıt.yetkili
             if (yetkilirolid) {
                 if (!msgMember.roles.cache.has(yetkilirolid) && !msgMember.permissions.has("Administrator")) return hata(`<@&${yetkilirolid}> rolüne **veya** Yönetici`, "yetki")
             } else if (!msgMember.permissions.has("Administrator")) return hata(`Yönetici`, "yetki")
+            
             if (["rolver", "ver", "ekle", "rolekle"].includes(args[0])) {
                 if (!guildMe.permissions.has("ManageRoles")) return hata("Rolleri Yönet", "yetkibot")
                 let rol = msg.mentions.roles.first() || guild.roles.cache.get(args[1] || sunucudb.kayıt.kayıtsız)

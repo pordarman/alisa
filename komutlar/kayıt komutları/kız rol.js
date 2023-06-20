@@ -4,12 +4,14 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "kız rol",
-  kod: ["kiz-rol", "kız-rol"],
+  aliases: ["kiz-rol", "kız-rol"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
+
+      // Kontroller
       if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")      
       if (sunucudb.kayıt.secenek) return hata('Kayıt etme seçeneğiniz __**Normal Kayıt**__ olarak ayarlı\n\n• Eğer kız ve erkek olarak kaydetmek isterseniz **' + prefix + 'seç cinsiyet** yazabilirsiniz')
       if (args[0] === "sıfırla") {
@@ -30,6 +32,7 @@ module.exports = {
       if (roles.size > 5) return hata("Hey hey heyyy sence de biraz fazla rol etiketlemedin mi?")
       const yuksekrolfilter = roles.filter(a => a.position >= guildMe.roles.highest.position)
       if (yuksekrolfilter.length) return hata(`Etiketlediğiniz [${yuksekrolfilter.map(a => "<@&" + a + ">").join(" | ")}] adlı rol(ler)'in sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+      
       sunucudb.kayıt.kız = rolmap
       hata(`Bundan sonra kızlara [${roles.map(a => "<@&" + a.id + ">").join(" | ")}] adlı rol(leri) vereceğim`, "b")
       db.yazdosya(sunucudb, sunucuid)

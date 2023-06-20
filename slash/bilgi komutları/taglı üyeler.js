@@ -13,7 +13,7 @@ module.exports = {
    */
   async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
     try {
-      let tagroldb = int.client.t(sunucuid, sunucudb.kayıt.tag)
+      let tagroldb = int.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
         , tag = tagroldb.tag || (sunucudb.kayıt.tag ? sunucudb.kayıt.tag.slice(0, -1) : undefined)
         , dis = tagroldb.dis || sunucudb.kayıt.dis
       if (!tag && !dis) return hata("Şeyyy.. Bu sunucuda herhangi bir tag ayarlı değil :(")

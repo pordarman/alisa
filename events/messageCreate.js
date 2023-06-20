@@ -19,7 +19,7 @@ module.exports = {
             let alisa = db.buldosya("alisa", "diğerleri")
             if (!alisa) return;
             let sahipid = msg.author.id
-                , sunucudb = msg.client.s(guild.id)
+                , sunucudb = msg.client.guildDatabase(guild.id)
                 , sunucuafk = sunucudb.afk
                 , msgMember
             if (Object.keys(sunucuafk).length) {
@@ -134,7 +134,7 @@ module.exports = {
                     return;
                 }
                 const sahiplerVarMi = !ayarlar.sahipler.includes(sahipid)
-                if (komut.no && sahiplerVarMi) return;
+                if (komut.owner && sahiplerVarMi) return;
                 let guildMe = msg.guild.members.me
                 if (!guildMe.permissions.has("EmbedLinks")) return msg.reply("‼️ **Uyarı! Botu kullanabilmek için botun öncelikle `Bağlantı yerleştir` yetkisinin olması gerekir!**").catch(err => { })
                 if (!alisa.kurallar.includes(sahipid)) {
@@ -143,7 +143,7 @@ module.exports = {
                 }
                 let pre = db.bul(guild.id, "premium", "diğerleri")
                 if (komut.pre && !pre && sahiplerVarMi) return msg.reply({ embeds: [new EmbedBuilder().setDescription(`• Şeyyyy... Bu komut sadece premium sunucularına özeldir :(\n\n• Eğer sizin de bir premiumunuz olsun istiyorsanız **Aylık sadece 10 TL** vererek botun bu muhteşem komutlarını sende kullanabilirsin. Daha fazla detay almak için **${prefix}pre** yazabilirsiniz`).setColor("Red")] }).then(m => setTimeout(() => m.delete().catch(err => { }), 15000)).catch(err => { })
-                if (!komut.no) alisa.kullanımlar[komut.name].top += 1
+                if (!komut.owner) alisa.kullanımlar[komut.name].top += 1
                 let kisivarmıdatabasede = alisa.kisiler[sahipid] || 0
                 kisivarmıdatabasede += 1
                 alisa.kisiler[sahipid] = kisivarmıdatabasede

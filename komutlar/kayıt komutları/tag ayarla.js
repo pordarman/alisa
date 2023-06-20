@@ -4,15 +4,18 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "tag",
-  kod: ["tagayarla", "tag-a", "tag-ayarla"],
+  aliases: ["tagayarla", "tag-a", "tag-ayarla"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
+
+      // Kontroller
       if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
-      if (!args[0]) return hata(`Tag ayarlamak için **${prefix}tag-a \`tagınız\`**\n\n• Sıfırlamak için ise **${prefix}tag-a sıfırla** yazabilirsiniz`, "ne")      
-      let tagroldb = msg.client.t(sunucuid, sunucudb.kayıt.tag)
+
+      if (!args[0]) return hata(`Tag ayarlamak için **${prefix}tag-a \`tagınız\`**\n\n• Sıfırlamak için ise **${prefix}tag-a sıfırla** yazabilirsiniz`, "ne")
+      let tagroldb = msg.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
       if (args[0] === "sıfırla") {
         if (!sunucudb.kayıt.tag && !tagroldb.tag) return hata('Üyelere ekleyeceğim tag zaten sıfırlanmış durumda')
         delete sunucudb.kayıt.tag
@@ -28,10 +31,10 @@ module.exports = {
       db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
       sunucudb.kayıt.tag = argsseysi + " "
       let tag = sunucudb.kayıt.tag
-      , sembol = sunucudb.kayıt.sembol
-      , kayıtisim = sunucudb.kayıt.isimler.kayıt
-      , ismi
-      , sadeceisim = "Ali İhsan 19"
+        , sembol = sunucudb.kayıt.sembol
+        , kayıtisim = sunucudb.kayıt.isimler.kayıt
+        , ismi
+        , sadeceisim = "Ali İhsan 19"
       if (kayıtisim) {
         if (kayıtisim.indexOf("<yaş>") != -1) {
           let age = sadeceisim.match(msg.client.regex.fetchAge)

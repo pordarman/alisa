@@ -5,12 +5,14 @@ const Time = require("../../modüller/time")
 module.exports = {
     name: "şüpheli",
     cooldown: 5,
-    kod: ["supheli", "şüpheli"],
+    aliases: ["supheli", "şüpheli"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             let yetkilirolid = sunucudb.kayıt.yetkili
             if (yetkilirolid) {
                 if (!msgMember.roles.cache.has(yetkilirolid) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkilirolid}> rolüne **veya** Yönetici`, "yetki")
@@ -21,6 +23,8 @@ module.exports = {
             if (!member) return hata(Time.isNull(member) ? "Görünen o ki etiketlediğiniz kişi sunucuda değil ya da başka bir şeyin ID'sini yazdınız :(" : "Lütfen bir kişiyi etiketleyiniz ya da ID\'sini giriniz")
             if (member.roles.cache.has(rols)) return hata("Heyyy dur bakalım orada! Bu kişi zaten şüpheliye atılmış durumda!")
             if (!guildMe.permissions.has("ManageRoles")) return hata(`Rolleri Yönet`, "yetkibot")
+
+            // Üyeyi şüpheli olarak atama
             await member.edit({ roles: [rols] }).then(() => {
                 let kl = sunucudb.kl[member.id] || []
                 kl.unshift({ type: "s", author: msg.author.id, timestamp: Date.now() })

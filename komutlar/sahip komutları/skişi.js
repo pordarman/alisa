@@ -2,9 +2,9 @@ const { Message, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilde
 const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
-    kod: "skişi",
+    aliases: "skişi",
     name: "sahip kişi",
-    no: true,
+    owner: true,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */

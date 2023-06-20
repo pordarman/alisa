@@ -8,7 +8,10 @@ module.exports = {
        */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+            
+            // Kontroller
             const id = int.customId.replace(this.name, "").match(/\d+/)[0]
+        
             if (int.user.id != id) return int.reply({ embeds: [new EmbedBuilder().setDescription(`<:${int.component.emoji.name}:${int.component.emoji.id}> Butonunu yalnızca yazan kişi (<@${id}>) kullanabilir`).setColor("DarkRed")], ephemeral: true }).catch(err => { })
             let embeds = int.message.embeds[0]?.footer
             if (!embeds) return;

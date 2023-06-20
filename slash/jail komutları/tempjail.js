@@ -57,7 +57,7 @@ module.exports = {
                 sunucudb.jail.son.unshift({ s: int.user.id, k: member.id, z: date, se: sebep, sure: "⏰", bool: true })
                 const clientPp = int.client.user.displayAvatarURL()
                 Time.setTimeout(async () => {
-                    const sunucudb2 = int.client.s(sunucuid)
+                    const sunucudb2 = int.client.guildDatabase(sunucuid)
                     if (!sunucudb2) return;
                     const rolid = sunucudb2.jail.rol
                     if (!rolid) return;

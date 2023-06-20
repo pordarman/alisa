@@ -5,7 +5,7 @@ const Time = require("../../modüller/time")
 const rastgeleKod = require("../../rastgele kod")
 module.exports = {
     name: "premium",
-    kod: ["premium", "pre"],
+    aliases: ["premium", "pre"],
     cooldown: 3,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
@@ -50,10 +50,10 @@ module.exports = {
                             , kisi = await msg.client.fetchUserForce(veri[1].author)
                         kisi.send(`• Heyy bakıyorum ki **${sunucuAdı || `${veri[0]}** ID'ye sahip**`} **sunucunun premiumu bitmiş gibi görünüyor :(\n\n• Eğer premium'dan memnun kaldıysanız ya da yeniden satın almak isterseniz destek sunucuma gelebilirsiniz!!\n\n• ${ayarlar.discord}`).catch(err => { })
                             ; (await msg.client.fetchUserForce(ayarlar.sahip)).send(`**> PREMİUM BİLGİLENDİRME**\n\n• **${sunucuAdı || "❓ Bilinmeyen sunucu"} - (${veri[0]})** sunucunun premium'u bitmiştir.\n• **Satın alan kişi:** <@${kisi.id}> - ${kisi.tag}\n• **Kullandığı süre:** ${Time.duration(veri[1].totalTime)}`).catch(err => { })
-                        let sunucudb = msg.client.s(veri[0])
-                            , tagroldb = msg.client.t(veri[0], sunucudb.kayıt.tag)
-                            , object = { kayıt: { yassinir: sunucudb.kayıt.yassinir }, premium: sunucudb.premium, tagrol: { dmesaje: tagroldb.dmesaje, dmesajk: tagroldb.dmesajk, mesaje: tagroldb.mesaje, mesajk: tagroldb.mesajk }, yasaklitag: sunucudb.kayıt.yasaklitag }
-                        sunucudb.yasaklitag = {}
+                        let sunucudb = msg.client.guildDatabase(veri[0])
+                            , tagroldb = msg.client.tagrolDatabase(veri[0], sunucudb.kayıt.tag)
+                            , object = { kayıt: { yassinir: sunucudb.kayıt.yassinir }, premium: sunucudb.premium, tagrol: { dmesaje: tagroldb.dmesaje, dmesajk: tagroldb.dmesajk, mesaje: tagroldb.mesaje, mesajk: tagroldb.mesajk } }
+
                         sunucudb.premium = {}
                         delete sunucudb.kayıt.yassinir
                         delete tagroldb.dmesaje
@@ -72,10 +72,10 @@ module.exports = {
                 db.yazdosya(dosya, "premium", "diğerleri")
                 let dosyaDatabase = db.bul(sunucuId, "premium database", "diğerleri")
                 if (dosyaDatabase) {
-                    let sunucudb = msg.client.s(sunucuId)
-                        , tagroldb = msg.client.t(sunucuId, sunucudb.kayıt.tag)
+                    let sunucudb = msg.client.guildDatabase(sunucuId)
+                        , tagroldb = msg.client.tagrolDatabase(sunucuId, sunucudb.kayıt.tag)
                     sunucudb.kayıt.yassinir = dosyaDatabase.kayıt.yassinir
-                    sunucudb.yasaklitag = dosyaDatabase.yasaklitag
+                    
                     tagroldb.mesaje = dosyaDatabase.tagrol.mesaje
                     tagroldb.mesajk = dosyaDatabase.tagrol.mesajk
                     tagroldb.dmesaje = dosyaDatabase.tagrol.dmesaje
@@ -104,10 +104,10 @@ module.exports = {
                 dosya[sunucuId] = { ...kodVarMı[1], isUse: true }
                 delete dosya[kodVarMı[0]]
                 dosya.g.push(sunucuId)
-                let sunucudb = msg.client.s(kodVarMı[0])
-                    , tagroldb = msg.client.t(kodVarMı[0], sunucudb.kayıt.tag)
-                    , object = { kayıt: { yassinir: sunucudb.kayıt.yassinir }, premium: sunucudb.premium, tagrol: { dmesaje: tagroldb.dmesaje, dmesajk: tagroldb.dmesajk, mesaje: tagroldb.mesaje, mesajk: tagroldb.mesajk }, yasaklitag: sunucudb.kayıt.yasaklitag }
-                sunucudb.yasaklitag = {}
+                let sunucudb = msg.client.guildDatabase(kodVarMı[0])
+                    , tagroldb = msg.client.tagrolDatabase(kodVarMı[0], sunucudb.kayıt.tag)
+                    , object = { kayıt: { yassinir: sunucudb.kayıt.yassinir }, premium: sunucudb.premium, tagrol: { dmesaje: tagroldb.dmesaje, dmesajk: tagroldb.dmesajk, mesaje: tagroldb.mesaje, mesajk: tagroldb.mesajk } }
+
                 sunucudb.premium = {}
                 delete sunucudb.kayıt.yassinir
                 delete tagroldb.dmesaje
@@ -120,10 +120,10 @@ module.exports = {
                 db.yazdosya(dosya, "premium", "diğerleri")
                 let dosyaDatabase = db.bul(sunucuId, "premium database", "diğerleri")
                 if (dosyaDatabase) {
-                    let sunucudb = msg.client.s(sunucuId)
-                        , tagroldb = msg.client.t(sunucuId, sunucudb.kayıt.tag)
+                    let sunucudb = msg.client.guildDatabase(sunucuId)
+                        , tagroldb = msg.client.tagrolDatabase(sunucuId, sunucudb.kayıt.tag)
                     sunucudb.kayıt.yassinir = dosyaDatabase.kayıt.yassinir
-                    sunucudb.yasaklitag = dosyaDatabase.yasaklitag
+                    
                     sunucuId.premium = dosyaDatabase.premium
                     tagroldb.mesaje = dosyaDatabase.tagrol.mesaje
                     tagroldb.mesajk = dosyaDatabase.tagrol.mesajk

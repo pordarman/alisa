@@ -5,12 +5,14 @@ const Time = require("../../modüller/time")
 module.exports = {
     cooldown: 60,
     name: "unjailall",
-    kod: "unjailall",
+    aliases: "unjailall",
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {           
+
+            // Kontroller
             let yetkili = sunucudb.jail.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
@@ -22,6 +24,8 @@ module.exports = {
             if (roll.position >= guildMe.roles.highest.position) return hata(`<@&${rol}> adlı rolün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
             const kisiler = roll.members.filter(a => !a.user.bot)
             if (kisiler.size == 0) return hata(`Iıııı görüşüne göre kimse jail'de değil...`)
+
+            
             const dugmevet = new ButtonBuilder()
                 .setStyle(1)
                 .setEmoji(ayarlar.emoji.p)

@@ -5,7 +5,7 @@ const os = require("os")
 module.exports = {
   cooldown: 20,
   name: "stat",
-  kod: "istatistik",
+  aliases: "istatistik",
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */

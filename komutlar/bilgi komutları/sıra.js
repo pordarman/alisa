@@ -4,7 +4,7 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 60,
   name: "sıra",
-  kod: ["sira", "sıra", "sıralama", "top", "liste", "list", "leaderboard", "lb", "topkayıt", "kayıtsıralama", "kayıtsayı", "kayitsayi"],
+  aliases: ["sira", "sıra", "sıralama", "top", "liste", "list", "leaderboard", "lb", "topkayıt", "kayıtsıralama", "kayıtsayı", "kayitsayi"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
@@ -21,7 +21,10 @@ module.exports = {
           if (a[0] == msg.client.user.id) return `• ${msg.client.stringToEmojis(i + 1)} ${ayarlar.emoji.pp} <@${a[0]}> **${a[1].toplam || "0"}** Kayıt sayım **•** Botların rankı olmaz :)`
           return `• ${msg.client.stringToEmojis(i + 1)} <@${a[0]}> **${a[1].toplam || "0"}** Kayıt sayısı **•** ${ranklar[a[1].rank] || "Rankı yok"}`
         })
+
+      // Kontroller
       if (uuu.length == 0) return hata(`Bu sunucuda hiçbir kayıt işlemi gerçekleşmediğinden (ya da sadece botlar kayıt edildiğinden) dolayı tablo gösterilemiyor`)
+      
       let sayfa = Math.ceil(uuu.length / 20),
         discordlogo = guild.iconURL(),
         ms = Date.now() - date,

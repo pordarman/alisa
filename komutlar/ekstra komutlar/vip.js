@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
-    kod: "vip",
+    aliases: "vip",
     name: "vip",
     cooldown: 5,
     type: true,
@@ -17,7 +17,11 @@ module.exports = {
                 case "viprol":
                 case "vrol":
                 case "rol": {
+
+                    // Kontroller
                     if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
+
+
                     if (args[1] === "sıfırla") {
                         if (!sunucudb.kayıt.vrol) return hata("Vip rolü zaten sıfırlanmış durumda")
                         delete sunucudb.kayıt.vrol
@@ -31,6 +35,7 @@ module.exports = {
                     if (sunucudb.kayıt.vrol === rolid) return hata("Vip rolü zaten etiketlediğiniz rolle aynı")
                     if (rol.managed) return hata(`Botların oluşturduğu rolleri başkalarına veremem`)
                     if (rolid == sunucudb.kayıt.vyetkili) return hata(`Etiketlediğiniz rol bu sunucudaki vip yetkili rolü. Lütfen başka bir rol etiketleyiniz`)
+                    
                     sunucudb.kayıt.vrol = rolid
                     hata(`Vip rolü başarıyla <@&${rolid}> olarak ayarlandı`, "b")
                     db.yazdosya(sunucudb, sunucuid)
@@ -39,7 +44,11 @@ module.exports = {
                 case "vipyetkilirol":
                 case "yetkilirol":
                 case "yetkili": {
+
+                    // Kontroller
                     if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
+
+
                     if (args[1] === "sıfırla") {
                         if (!sunucudb.kayıt.vyetkili) return hata("Vip yetkili rolü zaten sıfırlanmış durumda")
                         delete sunucudb.kayıt.vyetkili
@@ -53,17 +62,22 @@ module.exports = {
                     if (sunucudb.kayıt.vyetkili === rolidy) return hata("Vip rolü zaten etiketlediğiniz rolle aynı")
                     if (rol.managed) return hata(`Botların oluşturduğu rolleri başkalarına veremem`)
                     if (rolidy == sunucudb.kayıt.vrol) return hata(`Etiketlediğiniz rol bu sunucudaki vip rolü. Lütfen başka bir rol etiketleyiniz`)
+                    
                     sunucudb.kayıt.vyetkili = rolidy
                     hata("Vip yetkili rolü <@&" + rolidy + "> adlı rol oldu", "b")
                     db.yazdosya(sunucudb, sunucuid)
                     return;
                 }
                 default: {
+
+                    // Kontroller
                     if (!args[0]) return hata(`Bir kişiye vip rolünü vermek için **${prefix}vip @kişi**\n\n• Vip rolünü ayarlamak için **${prefix}vip rol @rol**\n\n• Vip yetkili rolünü ayarlamak için **${prefix}vip yetkili @rol** yazabilirsiniz`)
                     let kayıtyetkili = sunucudb.kayıt.vyetkili
                     if (kayıtyetkili) {
                         if (!msgMember.roles.cache.has(kayıtyetkili) && !msgMember.permissions.has("Administrator")) return hata(`<@&${kayıtyetkili}> rolüne **veya** Yönetici`, "yetki")
                     } else if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
+
+
                     let viprol = sunucudb.kayıt.vrol
                     if (!viprol) return hata(`Bu sunucuda herhangi bir vip rolü __ayarlanmamış__${msgMember.permissions.has("Administrator") ? `\n\n• Ayarlamak için **${prefix}vip-rol ayarla @rol** yazabilirsiniz` : ""}`)
                     if (!guildMe.permissions.has("ManageRoles")) return hata("Rolleri Yönet", "yetkibot")
@@ -72,6 +86,8 @@ module.exports = {
                     if (kisi.bot) return hata("Botlara vip rolünü veremezsin şapşik şey seni :(")
                     if (kisi.roles.cache.has(viprol)) return hata(`Etiketlediğiniz kişide zaten vip rolü bulunuyor`)
                     if (guild.roles.cache.get(viprol).position >= guildMe.roles.highest.position) return hata(`<@&${viprol}> adlı rolün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+                    
+                    // Üyeyi VIP üye yapma
                     await kisi.roles.add(viprol).then(() => msg.react(ayarlar.emoji.p).catch(err => { })).catch(err => {
                         if (err?.code == 50013) return hata(`<@${memberid}> adlı kişinin rollerini düzenlemeye yetkim yetmiyor. Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
                         console.log(err)

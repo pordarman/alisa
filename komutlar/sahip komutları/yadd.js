@@ -3,9 +3,9 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
-    kod: "y",
+    aliases: "y",
     name: "yadd",
-    no: true,
+    owner: true,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */

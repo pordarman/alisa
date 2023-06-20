@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
     name: "yetkili",
-    kod: "yetkili",
+    aliases: "yetkili",
     pre: true,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
@@ -14,28 +14,37 @@ module.exports = {
                 let secenek = args[0]
                 switch (secenek) {
                     case "ayarla": {
+
+                        // Kontroller
                         const roles = msg.client.fetchRoles(args.join(" "), msg)
                         if (!roles.size) return hata(`Lütfen rol(leri) etiketleyiniz veya ID'sini giriniz\n\n**Örnek**\n• ${prefix}yetkili ayarla @rol @rol @rol\n• ${prefix}yetkili ayarla ROLID1 ROLID2 ROLID3`)
                         if (roles.some(a => a.managed)) return hata(`Etiketlediğiniz rol(lerden) birisi bir bot rolü. Lütfen başka bir rol(leri) etiketleyiniz`)
                         if (roles.size > 25) return hata(`Hey hey heyyy sence de biraz fazla rol etiketlemedin mi?`)
+                    
                         sunucudb.premium.yetkili = roles.map(a => a.id)
                         hata(`Yetkili rol(leri) başarıyla [${roles.map(a => `<@&${a.id}>`).join(" | ")}] olarak ayarlandı`, "b")
                         db.yazdosya(sunucudb, sunucuid)
                         return;
                     }
                     case "sıfırla": {
+
+                        // Kontroller
                         let rol = sunucudb.premium.yetkili
                         if (!rol) return hata(`Yetkili rolü zaten sıfırlanmış durumda`)
+                       
                         delete sunucudb.premium.yetkili
                         hata(`Yetkili rolü başarıyla sıfırlandı`, "b")
                         db.yazdosya(sunucudb, sunucuid)
                         return;
                     }
                     case "etiket": {
+
+                        // Kontroller
                         let rol = sunucudb.premium.yetkili
                         if (!rol) return hata(`Bu sunucuda herhangi bir yetkili rolü ayarlı değil\n\n• Ayarlamak için **${prefix}yetkili ayarla @rol @rol @rol** yazabilirsiniz`)
                         let kisiler = (await msg.client.getMembers(msg)).filter(a => !a.user.bot && rol.some(b => a.roles.cache.has(b)))
                         if (kisiler.size == 0) return hata(`Şeyyy.. yetkili rolüne kimse sahip değil şapşik şey seni :(`)
+                      
                         let sayfa = Math.ceil(kisiler.size / 50)
                             , map = kisiler.map(a => `<@${a.id}>`)
                         if (sayfa == 1) return msg.reply(`• ${rol.map(a => `<@&${a}>`).join(", ")}\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n• **Yetkililer (__${kisiler.size}__)**\n• ${map.join(" | ")}`).catch(err => { })
@@ -45,13 +54,15 @@ module.exports = {
                         }
                     }
                     case "gör": {
+
+                        // Kontroller
                         let rol = sunucudb.premium.yetkili
                         if (!rol) return hata(`Bu sunucuda herhangi bir yetkili rolü ayarlı değil\n\n• Ayarlamak için **${prefix}yetkili ayarla @rol** yazabilirsiniz`)
                         let kisiler = (await msg.client.getMembers(msg)).filter(a => !a.user.bot && rol.some(b => a.roles.cache.has(b)))
                         if (kisiler.size == 0) return hata(`Şeyyy.. yetkili rolüne kimse sahip değil şapşik şey seni :(`)
+                       
                         let sayfa = Math.ceil(kisiler.size / 50)
                             , map = kisiler.map(a => `<@${a.id}>`)
-                            , role = guild.roles.cache.get(rol)
                         if (sayfa == 1) return msg.reply({ embeds: [new EmbedBuilder().setDescription(`• ${rol.map(a => `<@&${a}>`).join(", ")}\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n• **Yetkililer (__${kisiler.size}__)**\n• ${map.join(" | ")}`).setColor("Random")], allowedMentions: { roles: false, users: false, repliedUser: true } }).catch(err => { })
                         msg.reply({ embeds: [new EmbedBuilder().setDescription(`• ${rol.map(a => `<@&${a}>`).join(", ")}\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n• **Yetkililer (__${kisiler.size}__)**\n• ${map.slice(0, 50).join(" | ")}`).setColor("Random")], allowedMentions: { roles: false, users: false, repliedUser: true } }).catch(err => { })
                         for (let i = 1; i < sayfa; i++) {
@@ -59,8 +70,11 @@ module.exports = {
                         }
                     }
                     case "rol": {
+
+                        // Kontroller
                         let rol = sunucudb.premium.yetkili
                         if (!rol) return hata(`Bu sunucuda herhangi bir yetkili rolü ayarlı değil\n\n• Ayarlamak için **${prefix}yetkili ayarla @rol** yazabilirsiniz`)
+                     
                         return msg.reply({ content: `${rol.map(a => `<@&${a}>`).join(", ")} - (Bu rol(lere) sahip olanlara bildirim __gitmedi__)`, allowedMentions: { roles: false } }).catch(err => { })
                     }
                     default:

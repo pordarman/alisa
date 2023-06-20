@@ -4,14 +4,17 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "geri bildirim",
-  kod: ["gb", "geribildirim"],
+  aliases: ["gb", "geribildirim"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
-      const öneri = args.join(" ")
-      if (!öneri) return hata('Lütfen bot hakkındaki düşüncelerinizi yazınız')
+
+      // Kontroller
+      const geriBildirim = args.join(" ")
+      if (!geriBildirim) return hata('Lütfen bot hakkındaki düşüncelerinizi yazınız')
+
       msg.react(ayarlar.emoji.p).catch(err => { })
       msg.reply({ content: `📣 **Geri bildiriminiz alındı ve sahibime iletildi. Desteğiniz için teşekkürler 💗**` }).catch(err => { })
       const sayı = db.topla(msg.author.id, 1, "gb toplam", "diğerleri", false)
@@ -31,7 +34,7 @@ module.exports = {
           },
           {
             name: "GERİ BİLDİRİM",
-            value: öneri.replace(image, "")
+            value: geriBildirim.replace(image, "")
           }
         )
         .setImage(image)

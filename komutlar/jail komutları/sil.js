@@ -5,12 +5,14 @@ const Time = require("../../modüller/time")
 module.exports = {
     cooldown: 3,
     name: "jail sil",
-    kod: "jail-sil",
+    aliases: "jail-sil",
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {       
+
+            // Kontroller
             let yetkili = sunucudb.jail.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
@@ -21,6 +23,8 @@ module.exports = {
             if (member.id == msg.author.id) return hata(`Kendi jail bilgini silemezsin şapşik şey seni :)`)
             const den = sunucudb.jail.kisi[member.id]
             if (!den) return hata(`Etiketlediğiniz kişi daha önceden hiç jail'e atılmamış oley 🎉`)
+
+            
             msg.react(ayarlar.emoji.p).catch(err => { })
             delete sunucudb.jail.kisi[member.id]
             msg.reply({ content: `• <@${member.id}> kişisinin jail bilgileri <@${msg.author.id}> tarafından silindi`, allowedMentions: { users: false, repliedUser: true } }).catch(err => { })

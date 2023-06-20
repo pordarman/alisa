@@ -4,8 +4,8 @@ const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
   name: "eval",
-  kod: ["eval", "ev"],
-  no: true,
+  aliases: ["eval", "ev"],
+  owner: true,
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */

@@ -4,14 +4,18 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 15,
     name: "tagrol mesaj",
-    kod: "tagrol-mesaj",
+    aliases: "tagrol-mesaj",
     pre: true,
     /**
      * @param {import("../../typedef").exportsRunCommands} param0
-     */
+    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, sonradan, guild, msgMember, guildMe }) {
         try {
-            let tagroldb = msg.client.t(sunucuid, sunucudb.kayıt.tag)
+
+            // Kontroller
+            if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
+
+            let tagroldb = msg.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
             async function yazmesaje() {
                 db.yaz(sunucuid, { channelId: msg.channelId, messageId: msg.id, authorId: msg.author.id, date: Date.now(), f: "mesaje" }, "tagrol mesaj", "diğerleri")
                 var filter = m => m.author.id === msg.author.id
@@ -168,7 +172,6 @@ module.exports = {
                         return await yazdmesajk()
                 }
             }
-            if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
             if (args[0] == "+") {
                 var tagsize = (await msg.client.getMembers(msg)).filter(a => a.user.username.includes(tagroldb.tag) || a.user.discriminator == tagroldb.dis).size.toString()
                 var taglar = []

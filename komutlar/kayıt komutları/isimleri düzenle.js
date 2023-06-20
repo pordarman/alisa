@@ -2,7 +2,7 @@ const { Message, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilde
 const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
-    kod: ["isim-ozel", "isim-özel", "isimleridüzenle", "idüzenle", "isimdüzenle", "isimd", "isimözel", "özel-isim"],
+    aliases: ["isim-ozel", "isim-özel", "isimleridüzenle", "idüzenle", "isimdüzenle", "isimd", "isimözel", "özel-isim"],
     name: "isimleri düzenle",
     cooldown: 5,
     /**
@@ -10,8 +10,11 @@ module.exports = {
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
             if (!args[0]) return hata(`Yeni gelen kullanıcının ismini düzenlemek için **${prefix}isim-özel giriş**\n• Birisini kayıt ettikten sonraki ismini düzenlemek için **${prefix}isim-özel kayıt**\n\n• Bir __botu__ kayıt ettikten sonraki ismini düzenlemek için **${prefix}isim-özel kayıtbot** yazabilirsiniz`, "ne", 30000)
+            
             if (args[0] == "kayıt") {
                 if (!args[1]) return hata(`Buradaki değişkenleri kullanarak kayıt edilen kişinin ismini daha güzel bir hale getirebilirsin :)\n• Eğer sıfırlamak istiyorsanız **${prefix}isim-özel kayıt sıfırla** yazabilirsiniz\n\n**Değişkenler**\n**• <tag>** => Sunucunun tagını ekler - ( ${sunucudb.kayıt.tag || "Tag yok "})\n**• <isim>** => Girdiğiniz ismi ekler - ( Ali )\n**• <tag>** => Eğer yaşını girdiyseniz yaşını ekler, girmediyseniz hiçbir şey eklemez - ( 19 )\n\n**Örnek**\n• ${prefix}isim-özel kayıt <tag> <isim> [<yaş>]\n• ${prefix}isim-özel kayıt ♫ <isim> | <yaş> <tag>`, "ne", 30000)
                 if (args[1] == "sıfırla") {

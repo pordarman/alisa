@@ -4,14 +4,17 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "öneri",
-  kod: ["oneri", "oner", "öneri", "öner"],
+  aliases: ["oneri", "oner", "öneri", "öner"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
+
+      // Kontroller
       const öneri = args.join(" ")
       if (!öneri) return hata("Lütfen bota gelmesini istediğiniz şeyleri yazınız")
+      
       msg.react(ayarlar.emoji.p).catch(err => { })
       msg.reply({ content: `💬 **Öneriniz alındı ve sahibime iletildi. Desteğiniz için teşekkürler 💗**` }).catch(err => { })
       const sayı = db.topla(msg.author.id, 1, "öneri toplam", "diğerleri", false)

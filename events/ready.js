@@ -294,7 +294,7 @@ module.exports = {
                 if (objectMember.s < Date.now()) {
                     const kanal = client.channels.cache.get(objectMember.k)
                     if (!kanal) return;
-                    let sunucudb = client.s(kanal.guildId)
+                    let sunucudb = client.guildDatabase(kanal.guildId)
                         , kl = sunucudb.kl[memberId] || []
                     kl.unshift({ type: "unmute", author: objectMember.a, timestamp: Date.now() })
                     sunucudb.kl[memberId] = kl
@@ -331,7 +331,7 @@ module.exports = {
                 const kanal = client.channels.cache.get(objectMember.k)
                 if (!kanal) return;
                 Time.setTimeout(async () => {
-                    let sunucudb = client.s(kanal.guildId)
+                    let sunucudb = client.guildDatabase(kanal.guildId)
                         , kl = sunucudb.kl[memberId] || []
                     kl.unshift({ type: "unmute", author: objectMember.a, timestamp: Date.now() })
                     sunucudb.kl[memberId] = kl
@@ -377,13 +377,13 @@ module.exports = {
                 if (objectMember.d < Date.now() - 60000) return delete buttons[guildId][memberid]
                 const kanal = client.channels.cache.get(objectMember.k)
                 if (!kanal) return delete buttons[guildId][memberid];
-                let sunucudb = client.s(guildId)
+                let sunucudb = client.guildDatabase(guildId)
                 const mesaj = (await fetchMessage(kanal, objectMember.id, objectMember.sahip))
                 if (!mesaj) return delete buttons[guildId][memberid]
                 let guild = client.guilds.cache.get(guildId)
                 if (!guild) return delete buttons[guildId][memberid]
                 client.butonsure.set(memberid + guildId, objectMember.sahip)
-                client.butonlar.get(objectMember.t).run({ int: mesaj, sunucudb, pre: premiumDosya[guildId], alisa, hata: () => { }, sonradan: objectMember, guild, sunucuid: guildId })
+                client.buttons.get(objectMember.t).run({ int: mesaj, sunucudb, pre: premiumDosya[guildId], alisa, hata: () => { }, sonradan: objectMember, guild, sunucuid: guildId })
             })
         })
         Object.entries(buttons).filter(([id, value]) => Object.keys(value).length == 0).forEach(([id]) => delete buttons[id])
@@ -399,10 +399,9 @@ module.exports = {
                     , kisi = await client.fetchUserForce(object.author)
                 kisi.send(`• Heyy bakıyorum ki ${await client.getGuildNameOrId(guildId)} sunucunun premiumu bitmiş gibi görünüyor :(\n\n• Eğer premium'dan memnun kaldıysanız ya da yeniden satın almak isterseniz destek sunucuma gelebilirsiniz!!\n\n• ${ayarlar.discord}`).catch(err => { })
                     ; (await client.fetchUserForce(ayarlar.sahip)).send(`**> PREMİUM BİLGİLENDİRME**\n\n• **${client.guilds.cache.get(guildId)?.name || "❓ Bilinmeyen sunucu"} - (${guildId})** sunucunun premium'u bitmiştir.\n• **Satın alan kişi:** <@${kisi.id}> - ${kisi.tag}\n• **Kullandığı süre:** ${Time.duration(object.totalTime)}`).catch(err => { })
-                let sunucudb = client.s(guildId)
-                    , tagroldb = client.t(guildId, sunucudb.kayıt.tag)
-                    , object = { kayıt: { yassinir: sunucudb.kayıt.yassinir }, premium: sunucudb.premium, tagrol: { dmesaje: tagroldb.dmesaje, dmesajk: tagroldb.dmesajk, mesaje: tagroldb.mesaje, mesajk: tagroldb.mesajk }, yasaklitag: sunucudb.kayıt.yasaklitag }
-                sunucudb.yasaklitag = {}
+                let sunucudb = client.guildDatabase(guildId)
+                    , tagroldb = client.tagrolDatabase(guildId, sunucudb.kayıt.tag)
+                    , object = { kayıt: { yassinir: sunucudb.kayıt.yassinir }, premium: sunucudb.premium, tagrol: { dmesaje: tagroldb.dmesaje, dmesajk: tagroldb.dmesajk, mesaje: tagroldb.mesaje, mesajk: tagroldb.mesajk } }
                 sunucudb.premium = {}
                 delete sunucudb.kayıt.yassinir
                 delete tagroldb.dmesaje
@@ -419,7 +418,7 @@ module.exports = {
             if (object.date < Date.now() - 480000) return db.sil(guildId, "tagrol mesaj", "diğerleri")
             const kanal = client.channels.cache.get(object.channelId)
             if (!kanal) return db.sil(guildId, "tagrol mesaj", "diğerleri")
-            let sunucudb = client.s(guildId)
+            let sunucudb = client.guildDatabase(guildId)
             const mesaj = (await fetchMessage(kanal, object.messageId, object.authorId))
             if (!mesaj) return db.sil(guildId, "tagrol mesaj", "diğerleri")
             let guild = client.guilds.cache.get(guildId)
@@ -430,7 +429,7 @@ module.exports = {
             if (object.date < Date.now() - 480000) return db.sil(guildId, "gözel", "diğerleri")
             const kanal = client.channels.cache.get(object.channelId)
             if (!kanal) return db.sil(guildId, "gözel", "diğerleri")
-            let sunucudb = client.s(guildId)
+            let sunucudb = client.guildDatabase(guildId)
             const mesaj = (await fetchMessage(kanal, object.messageId, object.authorId))
             if (!mesaj) return db.sil(guildId, "gözel", "diğerleri")
             let guild = client.guilds.cache.get(guildId)
@@ -441,7 +440,7 @@ module.exports = {
             if (object.date < Date.now() - 480000) return db.sil(guildId, "özel", "diğerleri")
             const kanal = client.channels.cache.get(object.channelId)
             if (!kanal) return db.sil(guildId, "özel", "diğerleri")
-            let sunucudb = client.s(guildId)
+            let sunucudb = client.guildDatabase(guildId)
             const mesaj = (await fetchMessage(kanal, object.messageId, object.authorId))
             if (!mesaj) return db.sil(guildId, "özel", "diğerleri")
             let guild = client.guilds.cache.get(guildId)
@@ -452,7 +451,7 @@ module.exports = {
             if (object.date < Date.now() - 120000) return db.sil(guildId, "kur", "diğerleri")
             const kanal = client.channels.cache.get(object.channelId)
             if (!kanal) return db.sil(guildId, "kur", "diğerleri")
-            let sunucudb = client.s(guildId)
+            let sunucudb = client.guildDatabase(guildId)
             const mesaj = (await fetchMessage(kanal, object.messageId, object.authorId))
             if (!mesaj) return db.sil(guildId, "kur", "diğerleri")
             let guild = client.guilds.cache.get(guildId)

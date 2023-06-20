@@ -85,7 +85,7 @@ module.exports = {
                     delete sunucudb.kayıt.normal
                     int.client.secenek.delete(sunucuid)
                 }
-                let tagroldb = int.client.t(sunucuid)
+                let tagroldb = int.client.tagrolDatabase(sunucuid)
                     , özel = sunucudb.kayıt.özel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"
                     , gözel = sunucudb.kayıt.gözel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"
                     , discordlogo = guild.iconURL()

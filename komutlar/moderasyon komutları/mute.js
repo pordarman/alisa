@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
-    kod: ["sustur", "tempmute", "mute"],
+    aliases: ["sustur", "tempmute", "mute"],
     name: "mute",
     cooldown: 3,
     /**
@@ -11,6 +11,8 @@ module.exports = {
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             let muteYetkili = sunucudb.kayıt.mutey
             if (muteYetkili) {
                 if (!msgMember.roles.cache.has(muteYetkili) && !msgMember.permissions.has('ModerateMembers')) return hata(`<@&${muteYetkili}> rolüne **veya** Üyelere zaman aşımı uygula`, "yetki")
@@ -24,6 +26,7 @@ module.exports = {
             if (member.user.id == guild.ownerId) return hata("Sunucu sahibine mute atamazsın şapşik şey seni :)")
             if (member.permissions.has("Administrator")) return hata(`Şeyyy... **Yönetici** yetkisine sahip birisini susturamazsın şapşik şey seni :(`)
             if (member.roles.highest.position >= guildMe.roles.highest.position) return hata(`Etiketlediğiniz kişinin rolünün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+            
             let sure = 0
                 , sebep = j
                 , saniye = sebep.match(msg.client.regex.getSeconds)
@@ -34,10 +37,15 @@ module.exports = {
             if (dakika) dakika.forEach(sn => sure += sn * 60000)
             if (saat) saat.forEach(sn => sure += sn * 3600000)
             if (gün) gün.forEach(sn => sure += sn * 86400000)
+
+            // Kontroller
             if (!sure) return hata(`Lütfen bir süre giriniz\n\n**Örnek**\n• ${prefix}mute <@${member.id}> 1 gün 5 saat 6 dakika 30 saniye biraz kafanı dinle sen\n• ${prefix}mute <@${member.id}> 30 dakika`, "h", 20000)
             else if (sure < 1000 || sure > 2332800000) return hata(`Lütfen en az 1 saniye en fazla 27 gün arasında bir zaman giriniz`)
             let durationSure = Time.duration({ ms: sure, skipZeros: true })
+            
             sebep = j.replace(/(?<!\d)\d{1,3} ?(saniye|d?akika|saat|g[üu]n|sn|s|m|dk|h|d)/gi, "").replace(new RegExp(`<@!?${member.id}>|${member.id}`, "g"), "").replace(/ +/, " ").trim() || "Sebep belirtilmemiş"
+            
+            // Üyeyi süreli susturma
             await member.timeout(sure, `Mute atan yetkili: ${msg.author.tag} | Süre: ${durationSure} | Sebebi: ${sebep}`).then(() => {
                 msg.reply({ content: `• <@${member.id}> adlı kişi **${durationSure}** boyunca __**${sebep}**__ sebebinden yazı ve ses kanallarından men edildi! **Ceza numarası:** \`#${sunucudb.sc.sayı}\``, allowedMentions: { users: [member.id], repliedUser: true } }).then(message => {
                     let sunucumute = db.bul(sunucuid, "mute", "diğerleri") || {}
@@ -78,7 +86,7 @@ module.exports = {
                         let sunucumute = db.bul(sunucuid, "mute", "diğerleri") || {}
                         if (!sunucumute[member.id]) return;
                         message?.reply({ content: `• <@${member.id}> adlı kişinin susturulması başarıyla kaldırıldı!`, allowedMentions: { users: [member.id], repliedUser: true } })?.catch(err => { })
-                        let kl = msg.client.s(sunucuid).kl[member.id] || []
+                        let kl = msg.client.guildDatabase(sunucuid).kl[member.id] || []
                         kl.unshift({ type: "unmute", author: msg.author.id, timestamp: Date.now() })
                         sunucudb.kl[member.id] = kl
                         delete sunucumute[member.id]

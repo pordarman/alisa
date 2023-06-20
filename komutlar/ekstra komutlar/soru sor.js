@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
     name: "sor",
-    kod: ["sor", "sorusor", "soru", "soru-sor", "konubul", "konu-bul"],
+    aliases: ["sor", "sorusor", "soru", "soru-sor", "konubul", "konu-bul"],
     cooldown: 3,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 

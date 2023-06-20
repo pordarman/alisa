@@ -3,8 +3,8 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
   name: "reload",
-  kod: "r",
-  no: true,
+  aliases: "r",
+  owner: true,
   /**
    * 
    * @param {import("../../typedef").exportsRunCommands} param0 
@@ -18,7 +18,7 @@ module.exports = {
       let a = await msg.client.shard.broadcastEval((c, hatalar) => {
         const db = require("../../../../modüller/database.js")
         const { readdirSync } = require("fs")
-        c.butonlar.clear()
+        c.buttons.clear()
         c.commands.clear()
         delete require.cache[require.resolve(`../../../../diğerleri/tüm komutlar.js`)];
         c.allCommands = require("../../../../diğerleri/tüm komutlar.js")
@@ -46,7 +46,7 @@ module.exports = {
               const command = require(`${klasor}\\slash\\${klasorAdları}\\${file}`)
               switch (klasorAdları) {
                 case "sahip komutları":
-                  command.no = true
+                  command.owner = true
                   break;
                 case "premium komutları":
                   command.pre = true
@@ -65,7 +65,7 @@ module.exports = {
             try {
               delete require.cache[require.resolve(`${klasor}\\butonlar\\${klasorAdları}\\${file}`)];
               const command = require(`${klasor}\\butonlar\\${klasorAdları}\\${file}`)
-              c.butonlar.set(command.name, command)
+              c.buttons.set(command.name, command)
             } catch (error) {
               hatalar.push(`**butonlar\\${klasorAdları}\\${file}** komutu yüklenirken bir hata oluştu!`)
             }
@@ -81,7 +81,7 @@ module.exports = {
               const command = require(`${klasor}\\komutlar\\${klasorAdları}\\${file}`)
               switch (klasorAdları) {
                 case "sahip komutları":
-                  command.no = true
+                  command.owner = true
                   break;
                 case "premium komutları":
                   command.pre = true
@@ -89,14 +89,14 @@ module.exports = {
               }
               if (c.options.shards[0] == 0) {
                 komutIsmiVarMiYokMu = db.bul("kullanımlar", "alisa", "diğerleri")
-                if (command.no) delete komutIsmiVarMiYokMu[command.name]
+                if (command.owner) delete komutIsmiVarMiYokMu[command.name]
                 else if (!komutIsmiVarMiYokMu[command.name]) komutIsmiVarMiYokMu[command.name] = { top: 0, slash: 0 }
-                if (!command.no && !komutIsmiVarMiYokMu[command.name].slash) komutIsmiVarMiYokMu[command.name].slash = 0
+                if (!command.owner && !komutIsmiVarMiYokMu[command.name].slash) komutIsmiVarMiYokMu[command.name].slash = 0
               }
-              if (!Array.isArray(command.kod)) command.kod = [command.kod]
-              command.kod.forEach((a, i) => command.kod.unshift(i == 0 ? a.toLocaleUpperCase().replace(/[ÇĞÖÜŞ]/g, e => obje[e]).toLocaleLowerCase() : command.kod[i + i].toLocaleUpperCase().replace(/[ÇĞÖÜŞ]/g, e => obje[e]).toLocaleLowerCase()))
-              command.kod = [...new Set(command.kod)]
-              command.kod.forEach(x => c.commands.set(x, command))
+              if (!Array.isArray(command.aliases)) command.aliases = [command.aliases]
+              command.aliases.forEach((a, i) => command.aliases.unshift(command.aliases[i + i].toLocaleUpperCase().replace(/[ÇĞÖÜŞ]/g, e => obje[e]).toLocaleLowerCase()))
+              command.aliases = [...new Set(command.aliases)]
+              command.aliases.forEach(x => c.commands.set(x, command))
             } catch (error) {
               hatalar.push(`**komutlar\\${klasorAdları}\\${file}** komutu yüklenirken bir hata oluştu!`)
             }

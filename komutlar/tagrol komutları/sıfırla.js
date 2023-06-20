@@ -4,13 +4,16 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 60,
     name: "tagrol sıfırla",
-    kod: ["tagrolsıfırla", "tagrol-sıfırla"],
+    aliases: ["tagrolsıfırla", "tagrol-sıfırla"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
+            
             const embed = new EmbedBuilder()
                 .setTitle('Dikkat')
                 .setDescription(`Tüm tagrol bilgilerinizi sıfırlamak istediğinizden emin misiniz. Sıfırlamadan önce **${prefix}tagrol-bilgi** yazarak tagrol ayarlarınızı gözden geçirebilirsiniz\n\n• Eğer silmek istiyorsanız **evet**, istemiyorsanız **hayır** yazınız`)
@@ -22,7 +25,7 @@ module.exports = {
             await msg.channel.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(a => {
                 const m = a.first()
                 if (m.content.toLocaleLowerCase() === "evet") {
-                    const tagrol = msg.client.t(sunucuid)
+                    const tagrol = msg.client.tagrolDatabase(sunucuid)
                     tagrol = { kisi: {}, tag: sunucudb.kayıt.tag?.slice(0, -1) }
                     delete sunucudb.kayıt.dis
                     m.reply({ content: "Başarıyla bu sunucudaki tagrol bilgilerinizi sıfırladım" }).catch(() => { })

@@ -4,13 +4,15 @@ const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
     name: "ban",
-    kod: ["forceban", "ban"],
+    aliases: ["forceban", "ban"],
     cooldown: 3,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             let banYetkili = sunucudb.kayıt.bany
             if (banYetkili) {
                 if (!msgMember.roles.cache.has(banYetkili) && !msgMember.permissions.has('BanMembers')) return hata(`<@&${banYetkili}> rolüne **veya** Üyeleri Yasakla`, "yetki")
@@ -25,7 +27,10 @@ module.exports = {
                 if (memberid == guild.ownerId) return hata("Sunucu sahibini sunucudan yasaklayamazsın :(")
                 if (banlanacakuye.roles.highest.position >= guildMe.roles.highest.position) return hata(`Etiketlediğiniz kişinin rolünün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
                 if (banlanacakuye.roles.highest.position >= msgMember.roles.highest.position && msg.author.id != guild.ownerId) return hata("Kendi rolünün sırasından yüksek birisini sunucudan yasaklayamazsın şapşik şey seni :(")
+                
                 let sebep = (ar || "").replace(new RegExp(`<@!?${memberid}>|${memberid}`, "g"), "").replace(/ +/g, " ").trim()
+
+                // Üyeyi sunucudan banlama
                 return await guild.members.ban(memberid, { reason: `Yasaklayan: ${msg.author.tag} | Sebebi: ${sebep || "Sebep belirtilmemiş"}` }).then(user => {
                     let modLog = sunucudb.kayıt.modl
                         , cezaVarMı
@@ -63,6 +68,8 @@ module.exports = {
                 }).catch(err => msg.reply({ content: 'Iıııı şey.. Bir hata oluştu da daha sonra tekrar dener misin?\n```js\n' + err + "```" }).catch(err => { }))
             }
             banlanacakuye = await msg.client.fetchUser(ar)
+
+            // Kontroller
             if (!banlanacakuye) return hata(Time.isNull(banlanacakuye) ? "Görünen o ki başka bir şeyin ID'sini yazdınız :( Lütfen geçerli bir kişi ID'si giriniz" : "Lütfen bir kişiyi etiketleyiniz ya da ID\'sini giriniz")
             memberid = banlanacakuye.id
             if (memberid == msg.author.id) return hata("Kendini sunucudan yasaklayamazsın :(")
@@ -73,6 +80,8 @@ module.exports = {
                 if (member.roles.highest.position >= msgMember.roles.highest.position && msg.author.id != guild.ownerId) return hata("Kendi rolünün sırasından yüksek birisini sunucudan yasaklayamazsın şapşik şey seni :(")
             }
             let sebep = (ar || "").replace(new RegExp(`<@!?${memberid}>|${memberid}`, "g"), "").replace(/ +/g, " ").trim()
+
+            // Üyeyi sunucuda olmadan banlama
             await guild.members.ban(memberid, { reason: `Yasaklayan: ${msg.author.tag} | Sebebi: ${sebep || "Sebep belirtilmemiş"}` }).then(user => {
                 let modLog = sunucudb.kayıt.modl
                     , cezaVarMı

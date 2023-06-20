@@ -5,13 +5,16 @@ const Time = require("../../modüller/time")
 module.exports = {
     cooldown: 5,
     name: "şüpheli gün",
-    kod: ["şüpheli-gün", "süpheligün"],
+    aliases: ["şüpheli-gün", "süpheligün"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
+
             let gun = args[0]
             if (!gun) return hata(`Sunucuya yeni giren kullanıcıların şüpheli olarak gözükebilmesi için gerekli gün sayısını ayarlamak için **${prefix}şüpheli-gün 7**\n\n• Sıfırlamak için ise **${prefix}şühepli-gün sıfırla** yazabilirsiniz`, "ne")            
             if (gun == "sıfırla") {

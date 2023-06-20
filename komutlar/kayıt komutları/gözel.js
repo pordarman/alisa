@@ -4,12 +4,15 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 15,
     name: "günlük özel",
-    kod: ["gozel", "gözel", "günlüközel", "g-özel", "günlük-özel", "özel-günlük", "özelgünlük"],
+    aliases: ["gozel", "gözel", "günlüközel", "g-özel", "günlük-özel", "özel-günlük", "özelgünlük"],
     /**
      * @param {import("../../typedef").exportsRunCommands} param0
      */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, sonradan, guild, msgMember, guildMe }) {
-        try {            
+        try {  
+            // Kontroller          
+            if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
+            
             async function yaz() {
                 var filter = m => m.author.id === msg.author.id
                 await msg.channel?.awaitMessages({ filter: filter, max: 1, time: 1000 * 60 * 8 }).then(a => {
@@ -38,7 +41,6 @@ module.exports = {
                     msg.reply({ content: `⏰ <@${msg.author.id}>, süreniz bitti!` }).catch(() => { })
                 })
             }
-            if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
             let rol
             if (sunucudb.kayıt.secenek) rol = sunucudb.kayıt.normal
             else rol = sunucudb.kayıt.erkek || sunucudb.kayıt.kız

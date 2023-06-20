@@ -5,13 +5,15 @@ const Time = require("../../modüller/time")
 module.exports = {
   cooldown: 5,
   name: "değiştir",
-  kod: ["degistir", "degis", "değiş", "değiştir"],
+  aliases: ["degistir", "degis", "değiş", "değiştir"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
-    try {      
-    let yetkili = sunucudb.kayıt.yetkili
+    try {
+
+      // Kontroller
+      let yetkili = sunucudb.kayıt.yetkili
       if (yetkili) {
         if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
       } else if (!msgMember.permissions.has('Administrator')) return hata('Yönetici', "yetki")
@@ -32,6 +34,8 @@ module.exports = {
       const erkekrolvarmıkiside = erkekroliddegistirsicin.every(a => kişi.roles.cache.has(a))
       const kızrolvarmıkiside = kızroliddegistirsicin.every(a => kişi.roles.cache.has(a))
       if (!erkekrolvarmıkiside && !kızrolvarmıkiside) return hata("Etiketlediğiniz kişide hem erkek rolü hem de kız rolü bulunmuyor!")
+
+      // Cinsiyeti değiştirme
       if (erkekrolvarmıkiside && kızrolvarmıkiside) {
         const düğmeerkek = new ButtonBuilder()
           .setLabel("Erkek")

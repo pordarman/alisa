@@ -5,12 +5,14 @@ const Time = require("../../modüller/time")
 module.exports = {
   cooldown: 3,
   name: "bot",
-  kod: ["b", "bot"],
+  aliases: ["b", "bot"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {      
+
+      // Kontroller
       var yetkilirolid = sunucudb.kayıt.yetkili
       if (yetkilirolid) {
         if (!msgMember.roles.cache.has(yetkilirolid) && !msgMember.permissions.has("Administrator")) return hata(`<@&${yetkilirolid}> rolüne **veya** Yönetici`, "yetki")
@@ -45,6 +47,8 @@ module.exports = {
       if (kayıtisim) ismi = kayıtisim.replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/<isim>/g, sadeceisim)
       else ismi = `${tag || ""}${sadeceisim}`
       if (ismi.length > 32) return hata('Sunucu ismi 32 karakterden fazla olamaz lütfen karakter sayısını düşürünüz')
+
+      // Botu kayıt etme
       await member.edit({ roles: [...botrolid, ...member.roles.cache.filter(a => a.id != kayıtsızrolid).map(a => a.id)], nick: ismi }).then(async () => {
         const date = Date.now()
         msg.react(ayarlar.emoji.p).catch(err => { })

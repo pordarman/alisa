@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
-    kod: ["yaşsınırı", "yaşsınır", "yaş-sınırı", "yaş-sınır"],
+    aliases: ["yaşsınırı", "yaşsınır", "yaş-sınırı", "yaş-sınır"],
     name: "yaş sınır",
     cooldown: 3,
     pre: true,
@@ -12,7 +12,10 @@ module.exports = {
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
+            
             let yas = args[0]
             if (["kapat", "kapalı", "deaktif"].includes(yas)) {
                 if (!sunucudb.kayıt.yassınır) return hata("Bu sunucuda yaş zorunluluğu zaten kapalı durumda")

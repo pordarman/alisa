@@ -4,14 +4,17 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 15,
     name: "rank",
-    kod: "rank",
+    aliases: "rank",
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             const kişi = msg.mentions.members.first() || await msg.client.fetchMember(args[0], msg) || msgMember
             if (kişi.user.bot) return msg.reply({ content: 'Botların rankı olmaz :)' }).catch(err => { })
+            
             let discordlogo = guild.iconURL()
                 , ranklar = ayarlar.ranklar
                 , sayılar = ayarlar.rankSayıları

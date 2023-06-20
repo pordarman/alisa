@@ -4,14 +4,17 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 5,
     name: "tagrol log",
-    kod: "tagrol-log",
+    aliases: "tagrol-log",
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
-            let tagroldb = msg.client.t(sunucuid, sunucudb.kayıt.tag)
+
+            let tagroldb = msg.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
             if (args[0] === "sıfırla") {
                 if (!tagroldb.log) return hata("Tagrol log kanalı zaten sıfırlanmış durumda")
                 delete tagroldb.log
@@ -23,6 +26,7 @@ module.exports = {
             if (!kanal) return hata(`Tagrol log kanalını ayarlamak için **${prefix}tagrol-log #kanal**\n\n• Sıfırlamak için **${prefix}tagrol-log sıfırla** yazabilirsiniz`, "ne")
             if (kanal.type !== 0) return hata("Etiketlediğiniz kanal bir yazı kanalı değil")
             if (tagroldb.log === kanal.id) return hata("Tagrol log kanalı zaten <#" + kanal.id + "> kanalı olarak ayarlı")
+        
             tagroldb.log = kanal.id
             hata('Tagrol log kanalı başarıyla <#' + kanal.id + '> olarak ayarlandı', "b")
             db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")

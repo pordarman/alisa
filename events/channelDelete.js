@@ -11,7 +11,7 @@ module.exports = {
         try {
             if (!ch.guild || ch.type !== 0) return;
             let chsunucuid = ch.guildId
-                , sunucudb = ch.client.s(chsunucuid)
+                , sunucudb = ch.client.guildDatabase(chsunucuid)
                 , kanallar = []
             if (sunucudb.kayıt.kanal == ch.id) {
                 delete sunucudb.kayıt.kanal
@@ -28,7 +28,7 @@ module.exports = {
                 db.yazdosya(sunucudb, chsunucuid)
                 kanallar.push(`Kayıt log kanalı`)
             }
-            let tagroldb = ch.client.t(chsunucuid)
+            let tagroldb = ch.client.tagrolDatabase(chsunucuid)
             if (tagroldb.kanal == ch.id) {
                 delete tagroldb.kanal
                 db.yaz(chsunucuid, tagroldb, "tag rol", "diğerleri")

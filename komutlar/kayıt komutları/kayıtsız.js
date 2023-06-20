@@ -5,12 +5,14 @@ const Time = require("../../modüller/time")
 module.exports = {
   cooldown: 5,
   name: "rolleri al",
-  kod: ["kayitsiz", "kayıtsız"],
+  aliases: ["kayitsiz", "kayıtsız"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
-    try {     
+    try {
+
+      // Kontroller
       let yetkili = sunucudb.kayıt.yetkili
       if (yetkili) {
         if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
@@ -33,24 +35,24 @@ module.exports = {
       else rol = [...(sunucudb.kayıt.erkek || []), ...(sunucudb.kayıt.kız || [])]
       if (kişi.roles.cache.has(kayıtsizrolid) && !rol.some(a => kişi.roles.cache.has(a))) return hata('Etiketlediğiniz kişi zaten kayıtsız alınmış durumda')
       let kontroltag = sunucudb.kayıt.tag
-      , girişisim = sunucudb.kayıt.isimler.giris
-      , isim
+        , girişisim = sunucudb.kayıt.isimler.giris
+        , isim
       if (girişisim) isim = girişisim.replace(/<tag>/g, (kontroltag ? kontroltag.slice(0, -1) : "")).replace(/<isim>/g, kişi.user.username).slice(0, 32)
       else isim = `${kontroltag || ""}${kişi.user.username}`.slice(0, 32);
-      (async () => {
-        await kişi.edit({ roles: [kayıtsizrolid], nick: isim }).then(() => {
-          msg.reply({ content: `• ⚒️ <@${kişi.user.id}> adlı kişiden tüm rolleri alıp başarıyla kayıtsız rolünü verdim`, allowedMentions: { users: false, repliedUser: true } }).catch(err => { })
-          let kl = sunucudb.kl[kişi.id] || []
-          kl.unshift({ type: "ka", author: msg.author.id, timestamp: Date.now() })
-          sunucudb.kl[kişi.id] = kl
-          db.yazdosya(sunucudb, sunucuid)
-          return;
-        }).catch(err => {
-          if (err?.code == 50013) return hata(`<@${memberid}> adlı kişinin ismini ve rollerini düzenlemeye yetkim yetmiyor. Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
-          console.log(err)
-          return msg.reply({ content: 'Iıııı şey.. Bir hata oluştu da daha sonra tekrar dener misin?' }).catch(err => { })
-        })
-      })()
+
+      // Üyeyi kayıtsız yapma
+      await kişi.edit({ roles: [kayıtsizrolid], nick: isim }).then(() => {
+        msg.reply({ content: `• ⚒️ <@${kişi.user.id}> adlı kişiden tüm rolleri alıp başarıyla kayıtsız rolünü verdim`, allowedMentions: { users: false, repliedUser: true } }).catch(err => { })
+        let kl = sunucudb.kl[kişi.id] || []
+        kl.unshift({ type: "ka", author: msg.author.id, timestamp: Date.now() })
+        sunucudb.kl[kişi.id] = kl
+        db.yazdosya(sunucudb, sunucuid)
+        return;
+      }).catch(err => {
+        if (err?.code == 50013) return hata(`<@${memberid}> adlı kişinin ismini ve rollerini düzenlemeye yetkim yetmiyor. Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+        console.log(err)
+        return msg.reply({ content: 'Iıııı şey.. Bir hata oluştu da daha sonra tekrar dener misin?' }).catch(err => { })
+      })
     } catch (e) {
       msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
       msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)

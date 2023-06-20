@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
-    kod: ["del", "mesajlarısil", "sil"],
+    aliases: ["del", "mesajlarısil", "sil"],
     name: "mesajları sil",
     cooldown: 10,
     /**
@@ -11,6 +11,8 @@ module.exports = {
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has("ManageMessages")) return hata("Mesajları Yönet", "yetki")
             if (!guildMe.permissions.has("ManageMessages")) return hata("Mesajları Yönet", "yetkibot")
             let sayı = Number(args[0])
@@ -18,12 +20,15 @@ module.exports = {
             if (sayı == 0) return hata(`0 tane mesajı nasıl siliyim akıllım :)`)
             if (sayı < 1) sayı = -sayı
             if (sayı > 1000) return hata(`Lütfen girdiğiniz sayı değeri __1000'den küçük__ olsun`)
+
             sayı += 1
             let dongu = Math.floor(sayı / 100.01)
             , herDongudeSilinecekMesaj
             , silinenMesaj = 0
             if (sayı > 100) herDongudeSilinecekMesaj = 100
             else herDongudeSilinecekMesaj = sayı
+
+            // Mesajları silme
             async function silinecekMesajlar(sm) {
                 await msg.channel.bulkDelete(sm, true).then(async messages => {
                     let size = messages.size

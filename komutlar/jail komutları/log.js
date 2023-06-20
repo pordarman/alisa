@@ -4,13 +4,16 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "jail log",
-  kod: "jail-log",
+  aliases: "jail-log",
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
+
+      // Kontroller
       if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
+
       const kanal = msg.client.fetchChannel(args.join(" "), msg)
       if (args[0] === "sıfırla") {
         if (!sunucudb.jail.log) return hata("Jail log kanalı zaten sıfırlanmış durumda")
@@ -22,6 +25,7 @@ module.exports = {
       if (!kanal) return hata(`Jail log kanalını ayarlamak için **${prefix}jail-log #kanal**\n\n• Sıfırlamak için ise **${prefix}jail-log sıfırla** yazabilirsiniz`, "ne")
       if (kanal.type !== 0) return hata("Etiketlediğiniz kanal bir yazı kanalı değil")
       if (sunucudb.jail.log === kanal.id) return hata("Jail log kanalı zaten <#" + kanal.id + "> kanalı olarak ayarlı")
+      
       sunucudb.jail.log = kanal.id
       hata('Jail log kanalı başarıyla <#' + kanal.id + '> olarak ayarlandı', "b")
       db.yazdosya(sunucudb, sunucuid)

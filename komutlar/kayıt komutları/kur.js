@@ -4,12 +4,14 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 45,
   name: "kur",
-  kod: ["kkur", "kayıtkur", "kayıt-kur", "kur"],
+  aliases: ["kkur", "kayıtkur", "kayıt-kur", "kur"],
   /**
      * @param {import("../../typedef").exportsRunCommands} param0
      */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, sonradan, guild, msgMember, guildMe }) {
     try {
+
+      // Eğer bot, kurma sırasında yeniden başlatılırsa kesinti vermemesi için tanımlamaları en başta yapıyoruz
       let yazılacaksunucudb = { isimler: {} }
         , filter = m => m.author.id === msg.author.id
         , sure = 0
@@ -89,9 +91,12 @@ module.exports = {
             return son(sonradan.mesajid, msg)
         }
       }
+
+      // Kontroller
       if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
       if (db.bul(sunucuid, "kur", "diğerleri")) return hata("**Kayıt kur işlemi devam ederken tekrar kayıt kur işlemini başlatamazsın!!**").catch(err => { })
       if (!guildMe.permissions.has('Administrator')) return hata(`Yönetici`, "yetkibot")
+
       async function mesajlar(yazı, funcMsg) {
         funcMsg.reply({ content: yazı, allowedMentions: { roles: false, repliedUser: true } }).catch(() => { })
       }
@@ -118,7 +123,7 @@ module.exports = {
           delete sunucudb.kayıt.normal
           msg.client.secenek.delete(sunucuid)
         }
-        let tagroldb = msg.client.t(sunucuid)
+        let tagroldb = msg.client.tagrolDatabase(sunucuid)
           , özel = sunucudb.kayıt.özel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"
           , gözel = sunucudb.kayıt.gözel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"
           , discordlogo = guild.iconURL()

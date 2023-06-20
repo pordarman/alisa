@@ -4,13 +4,16 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 5,
     name: "seçenek",
-    kod: ["secenek", "seç", "seçenek", "tip"],
+    aliases: ["secenek", "seç", "seçenek", "tip"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
+            
             switch (args[0]) {
                 case "cinsiyet":
                 case "cin":

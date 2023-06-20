@@ -8,6 +8,8 @@ module.exports = {
        */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let yetkilirolid = sunucudb.kayıt.yetkili
                 , intMember = int.member
             if (yetkilirolid) {
@@ -25,6 +27,8 @@ module.exports = {
                 , prefix = sunucudb.prefix || ayarlar.prefix
             if (!erkekrol) return hata(`Şeyyyy... Bu sunucuda herhangi bir erkek rolü ayarlanmadığı için bu komutu kullanamazsın şapşik şey seni :(${intMember.permissions.has("Administrator") ? `\n\n• Ama bir erkek rolü ayarlamak isterseniz **${prefix}erkek-rol @rol** yazabilirsiniz` : ""}`)
             if (!kızrol) return hata(`Şeyyyy... Bu sunucuda herhangi bir kız rolü ayarlanmadığı için bu komutu kullanamazsın şapşik şey seni :(${intMember.permissions.has("Administrator") ? `\n\n• Ama bir kız rolü ayarlamak isterseniz **${prefix}kız-rol @rol** yazabilirsiniz` : ""}`)
+            
+            // Üyenin cinsiyetini değiştirme
             if (erkekrol.every(id => member.roles.cache.has(id))) {
                 await member.edit({ roles: [...kızrol, ...member.roles.cache.filter(a => ![...kızrol, ...erkekrol].includes(a.id)).map(a => a.id)] }).then(() => {
                     let kl = sunucudb.kl[memberid] || []

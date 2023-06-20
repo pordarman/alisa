@@ -14,7 +14,7 @@ module.exports = {
                 , sunucuid = guildşeysi.id
                 , botMu = m.user.bot
                 , ms = `<@${m.id}>`
-                , sunucudb = m.client.s(sunucuid)
+                , sunucudb = m.client.guildDatabase(sunucuid)
             if (!botMu) {
                 let kisi = sunucudb.kl[m.id] || []
                 kisi.unshift({ type: "add", timestamp: Date.now() })

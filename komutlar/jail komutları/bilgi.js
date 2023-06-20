@@ -5,12 +5,14 @@ const Time = require("../../modüller/time")
 module.exports = {
     cooldown: 30,
     name: "jail bilgi",
-    kod: "jail-bilgi",
+    aliases: "jail-bilgi",
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {            
+
+            // Kontroller
             let yetkili = sunucudb.jail.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
@@ -19,6 +21,8 @@ module.exports = {
             if (!kisi) return hata(Time.isNull(kisi) ? "Görünen o ki başka bir şeyin ID'sini yazdınız :( Lütfen geçerli bir kişi ID'si giriniz" : "Lütfen bir kişiyi etiketleyiniz ya da ID\'sini giriniz")
             const gecmis = sunucudb.jail.kisi[kisi.id]
             if (!gecmis) return hata(`Etiketlediğiniz kişi daha önceden hiç jail'e atılmamış oley 🎉`)
+
+            
             let pp = kisi.displayAvatarURL()
             , length = gecmis.length
             , sayfa = Math.ceil(length / 8)

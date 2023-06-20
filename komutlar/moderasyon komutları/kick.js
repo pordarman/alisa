@@ -4,13 +4,15 @@ const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
     name: "kick",
-    kod: ["at", "kick"],
+    aliases: ["at", "kick"],
     cooldown: 3,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             let kickYetkili = sunucudb.kayıt.kicky
             if (kickYetkili) {
                 if (!msgMember.roles.cache.has(kickYetkili) && !msgMember.permissions.has('KickMembers')) return hata(`<@&${kickYetkili}> rolüne **veya** Üyeleri At`, "yetki")
@@ -24,7 +26,10 @@ module.exports = {
             if (memberid == guild.ownerId) return hata("Sunucu sahibini sunucudan atamazsın :(")
             if (member.roles.highest.position >= guildMe.roles.highest.position) return hata(`Etiketlediğiniz kişinin rolünün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
             if (member.roles.highest.position >= msgMember.roles.highest.position && msg.author.id != guild.ownerId) return hata("Kendi rolünün sırasından yüksek birisini sunucudan yasaklayamazsın şapşik şey seni :(")
+         
             let sebep = (j || "").replace(new RegExp(`<@!?${memberid}>|${memberid}`, "g"), "").replace(/ +/g, " ").trim()
+            
+            // Üyeyi sunucudan atma
             await member.kick(`Yasaklayan: ${msg.author.tag} | Sebebi: ${sebep || "Sebep belirtilmemiş"}`).then(() => {
                 let modLog = sunucudb.kayıt.modl
                 , cezaVarMı

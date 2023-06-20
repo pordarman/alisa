@@ -3,17 +3,20 @@ const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
     name: "yaş",
-    kod: ["yaş", "yaşekle", "yaşçıkart", "yaşçıkar", "yaşe", "yaşk"],
+    aliases: ["yaş", "yaşekle", "yaşçıkart", "yaşçıkar", "yaşe", "yaşk"],
     pre: true,
     /**
      * @param {import("../../typedef").exportsRunCommands} param0
      */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, sonradan, guild, msgMember, guildMe }) {
         try {            
+
+            // Kontroller
             let yetkili = sunucudb.kayıt.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
             } else if (!msgMember.permissions.has('Administrator')) return hata('Yönetici', "yetki")
+            
             switch (args[0]) {
                 case "yükselt":
                 case "arttır":

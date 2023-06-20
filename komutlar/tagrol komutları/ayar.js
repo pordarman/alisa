@@ -4,14 +4,17 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "tagrol ayar",
-  kod: "tagrol-ayar",
+  aliases: "tagrol-ayar",
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
+
+      // Kontroller
       if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
-      let tagroldb = msg.client.t(sunucuid, sunucudb.kayıt.tag)
+
+      let tagroldb = msg.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
       switch (args[0]) {
         case "aç":
         case "açık":

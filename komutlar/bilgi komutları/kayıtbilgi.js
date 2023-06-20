@@ -4,16 +4,19 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 30,
   name: "bilgi",
-  kod: ["kayitbilgi", "kayıtbilgi"],
+  aliases: ["kayitbilgi", "kayıtbilgi"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
+
+      // Kontroller
       let yetkilirolid = sunucudb.kayıt.yetkili
       if (yetkilirolid) {
         if (!msgMember.roles.cache.has(yetkilirolid) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkilirolid}> rolüne **veya** Yönetici`, "yetki")
       } else if (!msgMember.permissions.has('Administrator')) return hata('Yönetici', "yetki")
+
       let seçenek
         , yazıı
         , özel = sunucudb.kayıt.özel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"

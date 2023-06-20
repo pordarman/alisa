@@ -5,13 +5,15 @@ const Time = require("../../modüller/time")
 module.exports = {
     cooldown: 3,
     name: "jail",
-    kod: "jail",
+    aliases: "jail",
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
-        try {           
-             let yetkili = sunucudb.jail.yetkili
+        try {
+
+            // Kontroller
+            let yetkili = sunucudb.jail.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
             } else if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
@@ -25,13 +27,17 @@ module.exports = {
             if (member.user.bot) return hata(`Botları jaile atamazsın`)
             if (member.id == msg.author.id) return hata(`Kendini jaile atamazsın şapşik şey seni :)`)
             if (member.roles.cache.has(rol)) return hata(`Etiketlediğiniz kişide jail rolü zaten bulunuyor`)
+
+
             let sunucuJail = db.bul(sunucuid, "jail", "diğerleri") || {}
-            , memberRoles = member.roles.cache.map(a => a.id)
+                , memberRoles = member.roles.cache.map(a => a.id)
+
+            // Üyeyi jaile atma
             await member.edit({ roles: [rol] }).then(() => {
                 sunucuJail[member.id] = memberRoles
                 let sebep = j?.replace(new RegExp(`<@!?${member.id}>|${member.id}`, "g"), "")?.replace(/ +/g, " ")?.trim() || undefined
-                , date = Date.now()
-                , kl = sunucudb.kl[member.id] || []
+                    , date = Date.now()
+                    , kl = sunucudb.kl[member.id] || []
                 kl.unshift({ type: "j", author: msg.author.id, timestamp: date, number: sunucudb.sc.sayı })
                 sunucudb.kl[member.id] = kl
                 msg.react(ayarlar.emoji.p).catch(err => { })

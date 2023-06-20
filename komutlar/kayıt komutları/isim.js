@@ -5,12 +5,14 @@ const Time = require("../../modüller/time")
 module.exports = {
   cooldown: 5,
   name: "isim",
-  kod: ["isim", "nick", "nickname", "ad", "adı", "n"],
+  aliases: ["isim", "nick", "nickname", "ad", "adı", "n"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {      
+
+      // Kontroller
       let yetkiliid = sunucudb.kayıt.yetkili
       if (yetkiliid) {
         if (!msgMember.roles.cache.has(yetkiliid) && !msgMember.permissions.has('ManageNicknames')) return hata(`<@&${yetkiliid}> rolüne **veya** Kullanıcı Adlarını Yönet`, "yetki")
@@ -57,6 +59,8 @@ module.exports = {
       }
       if (isim.length > 32) return hata(`Sunucu ismi 32 karakterden fazla olamaz`)
       if (member.nickname === isim) return hata(`<@${memberid}> adlı kişinin ismi yazdığınız isimle aynı zaten`)
+
+      // Üyenin ismini değiştirme
       await member.setNickname(isim).then(() => {
         msg.react(ayarlar.emoji.p).catch(err => { })
         if (!member.user.bot) {

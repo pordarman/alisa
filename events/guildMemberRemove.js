@@ -10,7 +10,7 @@ module.exports = {
     async run(m) {
         if (!m.user.bot) {
             let sunucuid = m.guild.id
-                , sunucudb = m.client.s(sunucuid)
+                , sunucudb = m.client.guildDatabase(sunucuid)
                 , kisi = sunucudb.kl[m.id] || []
             kisi.unshift({ type: "remove", timestamp: Date.now() })
             sunucudb.kl[m.id] = kisi

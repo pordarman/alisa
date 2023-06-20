@@ -4,7 +4,7 @@ const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
     name: "kişi log",
-    kod: ["klog", "kişilog", "kişi-log", "log"],
+    aliases: ["klog", "kişilog", "kişi-log", "log"],
     cooldown: 10,
     pre: true,
     /**
@@ -12,6 +12,8 @@ module.exports = {
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {            
+
+            // Kontroller
             let yetkili = sunucudb.kayıt.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
@@ -20,6 +22,7 @@ module.exports = {
             if (!kisi) return hata(Time.isNull(kisi) ? "Görünen o ki başka bir şeyin ID'sini yazdınız :( Lütfen geçerli bir kişi ID'si giriniz" : "Lütfen bir kişiyi etiketleyiniz ya da ID\'sini giriniz")
             let kisiLog = sunucudb.kl[kisi.id]
             if (!kisiLog) return hata("Etiketlediğiniz kişinin herhangi bir logu bulunmuyor")
+            
             let type = (input) => {
                 switch (input.type) {
                     case "ka":

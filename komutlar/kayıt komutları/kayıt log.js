@@ -4,12 +4,14 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 5,
     name: "kayıt log",
-    kod: ["kayıtlog", "kayıt-log"],
+    aliases: ["kayıtlog", "kayıt-log"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
             if (args[0] === "sıfırla") {
                 if (!sunucudb.kayıt.log) return hata("Kayıt log kanalı zaten sıfırlanmış durumda")
@@ -22,6 +24,7 @@ module.exports = {
             if (!kanal) return hata(`Kayıt log kanalını ayarlamak için **${prefix}kayıtlog #kanal**\n\n• Sıfırlamak için ise **${prefix}kayıtlog sıfırla** yazabilirsiniz`, "ne")
             if (kanal.type !== 0) return hata("Etiketlediğiniz kanal bir yazı kanalı değil")
             if (sunucudb.kayıt.log === kanal.id) return hata("Kayıt log kanalı zaten <#" + kanal.id + "> kanalı olarak ayarlı")
+            
             sunucudb.kayıt.log = kanal.id
             hata('Kayıt log kanalı başarıyla <#' + kanal.id + '> olarak ayarlandı', "b")
             db.yazdosya(sunucudb, sunucuid)

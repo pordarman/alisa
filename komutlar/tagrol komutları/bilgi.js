@@ -4,14 +4,17 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 30,
     name: "tagrol bilgi",
-    kod: "tagrol-bilgi",
+    aliases: "tagrol-bilgi",
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
         try {
+
+            // Kontroller
             if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
-            let tagrol = msg.client.t(sunucuid, sunucudb.kayıt.tag)
+            
+            let tagrol = msg.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
             , ayar = tagrol.ayar ? `Kapalı ${ayarlar.emoji.kapali}` : `Açık ${ayarlar.emoji.acik}`
             , dme = tagrol.dmesaje ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
             , dmk = tagrol.dmesajk ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`

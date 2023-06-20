@@ -4,12 +4,14 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "alınacak rol",
-  kod: ["al", "alınacak-rol", "al-rol", "kayıtsız-rol"],
+  aliases: ["al", "alınacak-rol", "al-rol", "kayıtsız-rol"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
+      
+      // Kontroller
       if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
       if (sunucudb.ayar) return hata('Şu anda kayıt ayarım kapalı durumda eğer ayarlamak istiyorsanız kayıt ayarımı açmalısınız\n\n• Açmak için **' + prefix + 'ayar aç** yazabilirsiniz')
       if (args[0] === "sıfırla") {
@@ -31,6 +33,7 @@ module.exports = {
       if (sunucudb.kayıt.yetkili == rolid) return hata(`Etiketlediğiniz rol bu sunucudaki üyeleri kayıt eden rol. Lütfen başka bir rol etiketleyiniz`)
       if (guildMe.roles.highest.position == rol.position) return hata(`<@&${rolid}> adlı rol benim bu sunucudaki en yüksek rolüm ve bu rolü başkasına veremem! Lütfen başka bir rol etiketleyiniz`)
       if (guildMe.roles.highest.position < rol.position) return hata(`<@&${rolid}> adlı rolün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+      
       sunucudb.kayıt.kayıtsız = rolid
       hata(`Bundan sonra Üyeleri kayıt ettikten sonra onlardan <@&${rolid}> adlı rolü alacağım\n\n• ‼️ **Uyarı!** Bu rol sadece __**kayıt kanalı**__ ayarlı olduğu zaman verilecektir${sunucudb.kayıt.kanal ? "" : `• Kayıt kanalını ayarlamak için **${prefix}kanal #kanal** yazabilirsiniz`}`, "b")
       db.yazdosya(sunucudb, sunucuid)

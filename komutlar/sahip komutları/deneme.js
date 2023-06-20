@@ -3,8 +3,8 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
   name: "deneme",
-  kod: "s-test",
-  no: true,
+  aliases: "s-test",
+  owner: true,
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */

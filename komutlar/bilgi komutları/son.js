@@ -4,14 +4,17 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 60,
   name: "son",
-  kod: "son",
+  aliases: "son",
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
   async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
     try {
+
+      // Kontroller
       var tumKayıtlar = sunucudb.son
       if (!tumKayıtlar.length) return hata(`Bu sunucuda hiçbir kayıt işlemi gerçekleşmediğinden dolayı tablo gösterilemiyor`)
+      
       const kişi = msg.mentions.members.first() || await msg.client.fetchMember(args[0], msg)
       if (kişi) {
         let kayıtlar = tumKayıtlar.filter(a => a.s == kişi.id)
