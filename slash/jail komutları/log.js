@@ -13,16 +13,21 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
-            if (!int.member.permissions.has('Administrator')) return hata("Yönetici", "yetki")            
+
+            // Kontroller
+            if (!int.member.permissions.has('Administrator')) return hata("Yönetici", "yetki")      
+
             if (int.options.getSubcommand(false) == "kanal") {
                 let kanal = int.options.getChannel("kanal", true)
                 if (sunucudb.jail.log === kanal.id) return hata("Jail log kanalı zaten <#" + kanal.id + "> kanalı olarak ayarlı")
+                
                 sunucudb.jail.log = kanal.id
                 hata('Jail log kanalı başarıyla <#' + kanal.id + '> olarak ayarlandı', "b")
                 db.yazdosya(sunucudb, sunucuid)
                 return;
             }
             if (!sunucudb.jail.log) return hata("Jail log kanalı zaten sıfırlanmış durumda")
+            
             delete sunucudb.jail.log
             hata('Jail log kanalı başarıyla sıfırlanmıştır', "b")
             db.yazdosya(sunucudb, sunucuid)

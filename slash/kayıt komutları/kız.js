@@ -14,6 +14,8 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let prefix = sunucudb.prefix || ayarlar.prefix
                 , yetkilirolid = sunucudb.kayıt.yetkili
                 , intMember = int.member
@@ -53,6 +55,7 @@ module.exports = {
             if ([...verilecekRolId, ...erkekrolseysi].some(a => member.roles.cache.has(a))) return hata('Etiketlediğiniz kişi zaten daha önceden kayıt edilmiş')
             if (!member.roles.cache.has(kayıtsızrolid)) rolVarMı = false
             if (member.roles.highest.position >= guildMe.roles.highest.position) return hata(`Etiketlediğiniz kişinin rolünün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+            
             function UpperKelimeler(str) {
                 if (!sunucudb.kayıt.otoduzeltme) {
                     let sembol = sunucudb.kayıt.sembol
@@ -66,6 +69,7 @@ module.exports = {
                 if (sembol) return str.replace(/ /g, " " + sembol)
                 else return str
             }
+
             let tag = sunucudb.kayıt.tag, kayıtisim = sunucudb.kayıt.isimler.kayıt, ismi, sadeceisim = int.options.getString("isim", true)
             if (kayıtisim) {
                 if (kayıtisim.indexOf("<yaş>") != -1) {
@@ -89,7 +93,11 @@ module.exports = {
                 }
                 ismi = `${tag || ""}${UpperKelimeler(sadeceisim)}`
             }
+            
+            // Kontroller
             if (ismi.length > 32) return hata('Sunucu ismi 32 karakterden fazla olamaz lütfen karakter sayısını düşürünüz')
+            
+            // Üyeyi kız olarak kayıt etme
             await member.edit({ roles: [...verilecekRolId, ...member.roles.cache.filter(a => a.id != kayıtsızrolid).map(a => a.id)], nick: ismi }).then(async () => {
                 let date = Date.now()
                     , date2 = (date / 1000).toFixed(0)

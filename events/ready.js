@@ -3,6 +3,8 @@ const db = require("../modüller/database")
 const ayarlar = require("../ayarlar.json")
 const Time = require("../modüller/time")
 const DiscordVoice = require('@discordjs/voice')
+const { REST } = require('@discordjs/rest')
+const { Routes } = require("discord-api-types/v10")
 module.exports = {
     name: "ready",
     /**
@@ -10,6 +12,8 @@ module.exports = {
      * @param {Client} client 
      */
     async run(client) {
+
+        // Gerekli fonksiyonlar
         function ses() {
             Object.entries(db.buldosya("ses", "diğerleri")).filter(([guildId]) => client.shardId(guildId) == client.shard.ids[0]).forEach(([guildId, channelId]) => {
                 const sunucu = client.guilds.cache.get(guildId)
@@ -34,9 +38,10 @@ module.exports = {
             message = channelMessages.find(a => a.author.id == authorId)
             return (message || null)
         }
-        let { REST } = require('@discordjs/rest')
-            , { Routes } = require("discord-api-types/v10")
-            , rest = new REST({ version: '10' }).setToken(client.token)
+
+        // Sunuculardaki rolleri ve kanalları kontrol etme
+        // Eğer bot kapalıyken kayıtlı bir rol veya kanal silindiyse bunu sunucu sahibine ilet ve kayıtlı olan rolün verisini sil
+        let rest = new REST({ version: '10' }).setToken(client.token)
             , tagroldb = db.buldosya("tag rol", "diğerleri")
             , dosyatempjail = db.buldosya("tempjail", "diğerleri")
             , alisa = db.buldosya("alisa", "diğerleri")
@@ -201,6 +206,8 @@ module.exports = {
                 tagroldb[id] = tagrolSunucudb
                 db.yaz(id, tagrolSunucudb, "tag rol", "diğerleri")
             }
+
+            // Slash komutlarını yükleme
             ; (async () => {
                 try {
                     await rest.put(
@@ -211,6 +218,8 @@ module.exports = {
                     console.error(error);
                 }
             })();
+
+            // Süreli jaile atılan kişilerin süresinin bitip bitmediğini kontrol etme
             let tempjailsunucu = dosyatempjail[id]
                 , rol = sunucudb.jail.rol
             if (tempjailsunucu && rol) {
@@ -283,10 +292,14 @@ module.exports = {
             client.sunucudb[id] = sunucudb
             if (!tagroldb[id]) tagroldb[id] = { kisi: {}, tag: (sunucudb.kayıt.tag ? sunucudb.kayıt.tag.slice(0, -1) : undefined) }
         })
-
-        setInterval(() => ses(), 1000 * 60 * 5);
+        
+        // Ses kanallarını kontrol etme
+        // Eğer bot ayarlanmış bir ses kanalından bir hata ile çıkarsa ses kanalına tekrar girer
+        const FIVE_MINUTE = 1000 * 60 * 5
+        setInterval(() => ses(), FIVE_MINUTE);
         ses()
 
+        // Muteli kişileri kontrol etme
         let mute = db.buldosya("mute", "diğerleri")
         Object.entries(mute).forEach(async ([guildId, object]) => {
             Object.entries(object).forEach(async ([memberId, objectMember]) => {
@@ -371,6 +384,7 @@ module.exports = {
 
         let premiumDosya = db.buldosya("premium", "diğerleri")
 
+        // Butonla kayıt edilen kişileri kontrol etme
         let buttons = db.buldosya("buton", "diğerleri")
         Object.entries(buttons).filter(a => client.shardId(a[0]) == client.shard.ids[0]).forEach(async ([guildId, object]) => {
             Object.entries(object).forEach(async ([memberid, objectMember]) => {
@@ -389,6 +403,7 @@ module.exports = {
         Object.entries(buttons).filter(([id, value]) => Object.keys(value).length == 0).forEach(([id]) => delete buttons[id])
         db.yazdosya(buttons, "buton", "diğerleri")
 
+        // Premium sürelerini kontrol etme
         Object.entries(premiumDosya).filter(a => a[1].expiresTimestamp && a[0].search(/\s/) == -1).forEach(async ([guildId, object]) => {
             Time.setTimeout(async () => {
                 let dosya = db.buldosya("premium", "diğerleri")
@@ -414,6 +429,7 @@ module.exports = {
             }, object.expiresTimestamp - Date.now())
         })
 
+        // Bunlar da bot yeniden başlatıldığında komutların aksamamasını sağlar
         Object.entries(db.buldosya("tagrol mesaj", "diğerleri")).filter(([guildId]) => client.shardId(guildId) == client.shard.ids[0]).forEach(async ([guildId, object]) => {
             if (object.date < Date.now() - 480000) return db.sil(guildId, "tagrol mesaj", "diğerleri")
             const kanal = client.channels.cache.get(object.channelId)
@@ -458,6 +474,8 @@ module.exports = {
             if (!guild) return db.sil(guildId, "kur", "diğerleri")
             client.commands.get("kur").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, prefix: (sunucudb.prefix || ayarlar.prefix), hata: () => { }, sonradan: object, guild, msgMember: mesaj.member, guildMe: guild.members.me })
         })
+
+        // Eğer bütün shardlar başlatılırsa bot durumu kanalına mesaj atar
         if (client.options.shardCount == client.shard.ids[0] + 1) {
             let snipe = db.buldosya("snipe", "diğerleri")
                 , newObject = {};

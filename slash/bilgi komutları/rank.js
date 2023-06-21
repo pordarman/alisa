@@ -12,8 +12,11 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             const kişi = int.options.getMember("üye", false) || int.member
             if (kişi.user.bot) return int.reply({ content: 'Botların rankı olmaz :)', ephemeral: true }).catch(err => { })
+            
             let discordlogo = guild.iconURL()
             , ranklar = ayarlar.ranklar
             , sayılar = ayarlar.rankSayıları

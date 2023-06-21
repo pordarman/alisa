@@ -13,19 +13,24 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             if (!int.member.permissions.has('Administrator')) return hata("Yönetici", "yetki")            
+         
             if (int.options.getSubcommand(false) == "kanal") {
                 let rol = int.options.getRole("rol", true)
                 const rolid = rol.id
                 if (sunucudb.jail.rol === rolid) return hata('Jail rolü zaten etiketlediğiniz rolle aynı')
                 if (rol.managed) return hata(`Botların oluşturduğu rolleri başkalarına veremem`)
                 if (rolid == sunucudb.jail.yetkili) return hata(`Etiketlediğiniz rol bu sunucudaki jail yetkili rolü. Lütfen başka bir rol etiketleyiniz`)
+               
                 sunucudb.jail.rol = rolid
                 hata('Bundan sonra jail\'e atılanlara <@&' + rolid + '> adlı rol verilecek', "b")
                 db.yazdosya(sunucudb, sunucuid)
                 return;
             }
             if (!sunucudb.jail.rol) return hata('Jail rolü zaten sıfırlanmış durumda')
+          
             delete sunucudb.jail.rol
             hata('Jail rolü başarıyla sıfırlandı', "b")
             db.yazdosya(sunucudb, sunucuid)

@@ -15,6 +15,8 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let yetkili = sunucudb.jail.yetkili
                 , intMember = int.member
             if (yetkili) {
@@ -26,6 +28,7 @@ module.exports = {
             let guildMe = int.guild.members.me
             if (!guildMe.permissions.has('ManageRoles')) return hata("Kullanıcı Adlarını Yönet", "yetkibot")
             if (guild.roles.cache.get(rol).position >= guildMe.roles.highest.position) return hata(`<@&${rol}> adlı rolün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
+            
             let member = int.options.getMember("üye", true)
             let date = Date.now()
                 , sure = date
@@ -39,9 +42,14 @@ module.exports = {
             if (dakika) dakika.forEach(sn => sure += sn * 60000)
             if (saat) saat.forEach(sn => sure += sn * 3600000)
             if (gün) gün.forEach(sn => sure += sn * 86400000)
+
+            // Kontroller
             if (sure == date) return hata(`Lütfen bir süre giriniz\n\n**Örnek**\n• ${prefix}tempjail <@${member.id}> 1 gün 5 saat 6 dakika 30 saniye biraz kafanı dinle sen\n• ${prefix}tempjail <@${member.id}> 30 dakika`, "h", 20000)
             if (member.roles.cache.has(rol)) return hata(`<@${member.id}> adlı kişi zaten jail'e atılmış durumda`)
+            
             let sunucuJail = db.bul(sunucuid, "jail", "diğerleri") || {}, memberRoles = member.roles.cache.map(a => a.id)
+            
+            // Üyeyi süreli jaile atma
             await member.edit({ roles: [rol] }).then(async () => {
                 let obje = { d: date, s: sure - date, se: sebep, idler: { c: int.channelId, s: int.user.id } }
                 await int.reply({ content: `• <@${member.id}> adlı kişi **${Time.duration({ ms: sure - date, skipZeros: true })}** boyunca __**${sebep || "Sebep belirtilmemiş"}**__ sebebinden jaile atıldı! **Ceza numarası:** \`#${sunucudb.sc.sayı}\``, allowedMentions: { users: [member.id], repliedUser: true }, fetchReply: true }).then(mesaj => {

@@ -8,12 +8,19 @@ module.exports = {
         .setDescription("Tüm kayıt sistemini tek bir komutla kurmanızı sağlar"),
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
-     */
+    */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
+            if (!int.member.permissions.has('Administrator')) return hata("Yönetici", "yetki")
+            if (db.bul(sunucuid, "kur", "diğerleri")) return hata("**Kayıt kur işlemi devam ederken tekrar kayıt kur işlemini başlatamazsın!!**").catch(err => { })
+            if (!int.guild.members.me.permissions.has('Administrator')) return hata(`Yönetici`, "yetkibot")
+
             let yazılacaksunucudb = { isimler: {} }
                 , filter = m => m.author.id === int.user.id
                 , sure = 0
+                , channel = int.channel
                 , maxError = 8
                 , m = {
                     i: `❗ İşlem iptal edilmiştir`,
@@ -55,10 +62,6 @@ module.exports = {
                     },
                     kanalBul: (awaitMsg) => awaitMsg && (awaitMsg.mentions.channels.first() || awaitMsg.guild.channels.cache.get(awaitMsg.content.replace(/<#|>/g, "").trim()))
                 }
-            if (!int.member.permissions.has('Administrator')) return hata("Yönetici", "yetki")
-            if (db.bul(sunucuid, "kur", "diğerleri")) return hata("**Kayıt kur işlemi devam ederken tekrar kayıt kur işlemini başlatamazsın!!**").catch(err => { })
-            if (!int.guild.members.me.permissions.has('Administrator')) return hata(`Yönetici`, "yetkibot")
-            let channel = int.channel
             async function mesajlar(yazı, funcMsg) {
                 funcMsg.reply({ content: yazı, allowedMentions: { roles: false, repliedUser: true } }).catch(() => { })
             }

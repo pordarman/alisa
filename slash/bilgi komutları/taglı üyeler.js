@@ -16,7 +16,10 @@ module.exports = {
       let tagroldb = int.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
         , tag = tagroldb.tag || (sunucudb.kayıt.tag ? sunucudb.kayıt.tag.slice(0, -1) : undefined)
         , dis = tagroldb.dis || sunucudb.kayıt.dis
+
+      // Kontroller
       if (!tag && !dis) return hata("Şeyyy.. Bu sunucuda herhangi bir tag ayarlı değil :(")
+      
       let sıra = 0
         , taglıUyeler = (await int.client.getMembers(int)).filter((member) => !member.user.bot && (tag ? member.user.username.includes(tag) : false) || (dis ? member.user.discriminator == dis : false)).sort((a, b) => (tagroldb.kisi[b.id] || 0) - (tagroldb.kisi[a.id] || 0)).map(a => {
           let aldıgıTaglar = []

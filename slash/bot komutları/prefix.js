@@ -12,7 +12,10 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             if (!int.member.permissions.has('Administrator')) return hata("Yönetici", "yetki")
+            
             let yazı = int.options.getString("prefix")
                 , prefix = sunucudb.prefix || ayarlar.prefix
             if (yazı == ayarlar.prefix) {

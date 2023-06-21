@@ -1,3 +1,4 @@
+const { token, emojiler, shard, webhook } = require("./ayarlar.json");
 const {
   Collection,
   AttachmentBuilder,
@@ -18,11 +19,10 @@ const client = new Client({
     GatewayIntentBits.GuildBans,
   ],
   presence: { status: "idle" },
-  failIfNotExists: false,
-  shardCount: ayarlar.shard,
+  failIfNotExists: false, 
+  shardCount: shard,
 });
 
-const { token, emojiler, shard, webhook } = require("./ayarlar.json");
 const { readdirSync } = require("fs");
 const db = require("./modüller/database");
 

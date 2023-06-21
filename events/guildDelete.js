@@ -11,6 +11,8 @@ module.exports = {
         try {
             let alisa = db.buldosya("alisa", "diğerleri")
             if (alisa.klserver.includes(guild.id)) return;
+
+            // Sunucudan çıkarıldığı bilgisini belirtilen kanala atar
             db.sil(guild.id, "kur", "diğerleri")
             delete guild.client.sunucudb[guild.id]
             alisa.sunucular.çıkarma[guild.id] = Date.now()

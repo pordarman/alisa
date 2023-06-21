@@ -1,6 +1,8 @@
 const { EmbedBuilder, Guild } = require("discord.js")
 const db = require("../modüller/database")
 const ayarlar = require("../ayarlar.json")
+const { REST } = require('@discordjs/rest')
+const { Routes } = require("discord-api-types/v10")
 module.exports = {
     name: "guildCreate",
     /**
@@ -12,9 +14,9 @@ module.exports = {
             let alisa = db.buldosya("alisa", "diğerleri")
             if (alisa.klserver.includes(guild.id)) return guild.leave()
             db.sil(guild.id, "kur", "diğerleri")
-            let { REST } = require('@discordjs/rest')
-                , { Routes } = require("discord-api-types/v10")
-                , rest = new REST({ version: '10' }).setToken(guild.client.token)
+
+            // Eğer bot sunucuya daha önceden eklenmişse ve önceki kayıtlı rolleri veya kanalları bulamazsa kayıtlı rol ve kanalın verisini siler ve bunu sunucu sahibine iletir
+            let rest = new REST({ version: '10' }).setToken(guild.client.token)
                 , sunucudb = db.buldosya(guild.id)
                 , prefix = sunucudb.prefix || ayarlar.prefix
                 , tagrolSunucudb = guild.client.tagrolDatabase(guild.id)
@@ -185,6 +187,8 @@ module.exports = {
                     console.error(error);
                 }
             })();
+
+            // Sunucuya eklendiği bilgisini belirtilen kanala atar
             guild.client.sunucudb[guild.id] = sunucudb
             let sunucuSayı = (await guild.client.shard.broadcastEval(client => client.guilds.cache.size)).reduce((acc, top) => acc + top, 0)
                 , pp = guild.client.user.displayAvatarURL()

@@ -22,6 +22,8 @@ module.exports = {
                 , sunucudb = msg.client.guildDatabase(guild.id)
                 , sunucuafk = sunucudb.afk
                 , msgMember
+
+            // AFK sistemi
             if (Object.keys(sunucuafk).length) {
                 let sahipvarmi = sunucuafk[sahipid]
                     , deneme = []
@@ -100,6 +102,8 @@ module.exports = {
                 }
                 db.yaz("afk", sunucuafk, msg.guildId)
             }
+
+            // Eğer sadece botu etiketlerse bot hakkında bilgi ver
             let prefix = sunucudb.prefix || ayarlar.prefix
                 , clientUserArray = [`<@${msg.client.user.id}>`, `<@!${msg.client.user.id}>`]
             if (clientUserArray.includes(msg.content.trim())) {
@@ -117,6 +121,8 @@ module.exports = {
                 let pp = msg.client.user.displayAvatarURL()
                 return msg.reply({ embeds: [new EmbedBuilder().setAuthor({ name: "Teşekkürler", iconURL: pp }).setDescription(`• Beni bu sunucuda **<t:${(msg.guild.members.me.joinedTimestamp / 1000).toFixed(0)}:F>** tarihinden beri kullandığınız için teşekkürler\n• Bu sunucudaki prefixim **${prefix}** veya <@${msg.client.user.id}>\n• Yardım menüsüne **${prefix}yardım** veya **<@${msg.client.user.id}>yardım** yazarak ulaşabilirsiniz\n• Eğer yardıma ihtiyacınız varsa **${prefix}destek** yazabilirsiniz`).setColor("Purple").setThumbnail(pp).setTimestamp().setFooter({ text: 'İyi ki varsınız <3', iconURL: guild.iconURL() })], components: [new ActionRowBuilder().addComponents(new ButtonBuilder().setStyle(5).setURL(ayarlar.davet).setLabel("Beni davet et").setEmoji("💌")).addComponents(new ButtonBuilder().setEmoji("💗").setStyle(5).setURL(`https://top.gg/bot/${msg.client.user.id}/vote`).setLabel("Oy ver")).addComponents(new ButtonBuilder().setStyle(5).setURL(ayarlar.discord).setLabel("Destek sunucum").setEmoji("🎉"))] }).catch(err => { })
             }
+
+            // Komutları çağırma
             let baslıyormu = [prefix, ...clientUserArray].find(a => msg.content.toLocaleLowerCase().startsWith(a))
             if (baslıyormu) {
                 let args = msg.content.slice(baslıyormu.length).trim().split(/\s+/)
@@ -133,8 +139,8 @@ module.exports = {
                     }
                     return;
                 }
-                const sahiplerVarMi = !ayarlar.sahipler.includes(sahipid)
-                if (komut.owner && sahiplerVarMi) return;
+                const isOwner = ayarlar.sahipler.includes(sahipid)
+                if (komut.owner && !isOwner) return;
                 let guildMe = msg.guild.members.me
                 if (!guildMe.permissions.has("EmbedLinks")) return msg.reply("‼️ **Uyarı! Botu kullanabilmek için botun öncelikle `Bağlantı yerleştir` yetkisinin olması gerekir!**").catch(err => { })
                 if (!alisa.kurallar.includes(sahipid)) {
@@ -142,7 +148,7 @@ module.exports = {
                     msg.channel.send({ embeds: [new EmbedBuilder().setColor("DarkBlue").setDescription(`${ayarlar.emoji.kurallar} Botun kuralları güncellendi. Okumak için butona tıkla.`)], components: [new ActionRowBuilder().addComponents(new ButtonBuilder().setLabel("Kuralları oku").setEmoji(ayarlar.emoji.kurallar).setStyle(1).setCustomId("kurallar"))] }).then(a => setTimeout(() => a.delete().catch(err => { }), 60000)).catch(err => { })
                 }
                 let pre = db.bul(guild.id, "premium", "diğerleri")
-                if (komut.pre && !pre && sahiplerVarMi) return msg.reply({ embeds: [new EmbedBuilder().setDescription(`• Şeyyyy... Bu komut sadece premium sunucularına özeldir :(\n\n• Eğer sizin de bir premiumunuz olsun istiyorsanız **Aylık sadece 10 TL** vererek botun bu muhteşem komutlarını sende kullanabilirsin. Daha fazla detay almak için **${prefix}pre** yazabilirsiniz`).setColor("Red")] }).then(m => setTimeout(() => m.delete().catch(err => { }), 15000)).catch(err => { })
+                if (komut.pre && !pre && !isOwner) return msg.reply({ embeds: [new EmbedBuilder().setDescription(`• Şeyyyy... Bu komut sadece premium sunucularına özeldir :(\n\n• Eğer sizin de bir premiumunuz olsun istiyorsanız **Aylık sadece 10 TL** vererek botun bu muhteşem komutlarını sende kullanabilirsin. Daha fazla detay almak için **${prefix}pre** yazabilirsiniz`).setColor("Red")] }).then(m => setTimeout(() => m.delete().catch(err => { }), 15000)).catch(err => { })
                 if (!komut.owner) alisa.kullanımlar[komut.name].top += 1
                 let kisivarmıdatabasede = alisa.kisiler[sahipid] || 0
                 kisivarmıdatabasede += 1
@@ -151,9 +157,11 @@ module.exports = {
                 sunucuvarmıdatabasede += 1
                 alisa.skullanımlar[guild.id] = sunucuvarmıdatabasede
                 db.yazdosya(alisa, "alisa", "diğerleri")
-                if (sahiplerVarMi) {
+                if (!isOwner) {
                     let komutSahip = komutlarıCokHızlıKullanıyor[sahipid] || { s: 0 }
                     komutSahip.s += 1
+
+                    // Eğer komutları çok hızlı bir şekilde kullanırsa onu uyar
                     if (komutSahip.s > 4) {
                         let date = Date.now()
                             , onceden = karaliste?.kls
@@ -185,6 +193,8 @@ module.exports = {
                                     obj = { content: `• <@${sahipid}> - **(${msg.author.tag})** adlı kişi **1 günlüğüne** kara listeye alındı! - (Komut)\n📅 **Bitiş tarihi:**  <t:${((date + ekstrasure) / 1000).toFixed(0)}:F> - <t:${((date + ekstrasure) / 1000).toFixed(0)}:R>` }
                                     break;
                             }
+
+                            // Eğer birisi kara listeye alınırsa ayarlanan kanala bilgilendirmeyi atar
                             msg.client.channelSend(obj, "KANAL ID")
                         } else {
                             onceden = { sure: Date.now() }
@@ -199,6 +209,7 @@ module.exports = {
                             }).catch(err => { })
                             return;
                         }
+
                         if (ekstrasure) karaliste = { z: (date / 1000).toFixed(0), s: "Komutları çok hızlı kullandı!", sure: date + ekstrasure }
                         else {
                             alisa.kl[sahipid] = { z: (date / 1000).toFixed(0), s: "Komutları çok hızlı kullandı!" }
@@ -210,6 +221,8 @@ module.exports = {
                         db.yazdosya(alisa, "alisa", "diğerleri")
                         return msg.reply({ content: sure }).catch(err => { })
                     }
+
+                    // Komut bekleme süresini kontrol etme
                     if (cooldowndigerleri.has(msg.channelId)) return msg.reply({ content: "⏰ **Lütfen komutları biraz daha yavaş kullanınız**" }).then(a => setTimeout(() => a.delete().catch(err => { }), 1500)).catch(err => { })
                     let simdikizaman = Date.now()
                         , kisivarmı = cooldown[komut.name + sahipid]
@@ -240,6 +253,8 @@ module.exports = {
                     setTimeout(() => delete cooldown[komut.name + sahipid], komutsure)
                     setTimeout(() => cooldowndigerleri.delete(msg.channelId), 1000)
                 }
+
+                // Embed oluşturucu
                 async function hata(yazı, tip = "h", sure = 12500, { fileds, image = null } = {}) {
                     const embed = new EmbedBuilder().setTimestamp()
                     if (fileds) embed.addFields(...fileds)
@@ -255,10 +270,9 @@ module.exports = {
                             embed.setTitle("Hata").setDescription(`• ${yazı}`).setColor("Red")
                             break;
                         case "b":
-                            if (yazı.includes("\n")) {
-                                let split = yazı.split("\n")
-                                yazı = `${split[0]} ${ayarlar.emoji.p}\n${split.slice(1).join("\n")}`
-                            } else yazı += ` ${ayarlar.emoji.p}`
+                            const [firstLine, ...otherLines] = yazı.split("\n")
+                            if (otherLines.length) yazı = `${firstLine} ${ayarlar.emoji.p}\n${otherLines.join("\n")}`
+                            else yazı += ` ${ayarlar.emoji.p}`
                             return msg.reply({ embeds: [embed.setTitle("Başarılı").setDescription(yazı).setColor("Green")] }).catch(err => { })
                         default:
                             embed.setTitle("Eksik komut").setDescription(`• ${yazı}`).setColor('Orange')
@@ -267,6 +281,8 @@ module.exports = {
                     return msg.reply({ embeds: [embed] }).then(a => setTimeout(() => a.delete().catch(err => { }), sure)).catch(err => { })
                 }
                 if (baslıyormu != prefix) msg["mentions"]["_members"] = msg.mentions.members.filter(a => a.id !== msg.client.user.id)
+
+                // Komutu çalıştırma
                 try {
                     komut.run({ sunucudb, pre, alisa, msg, args, sunucuid: guild.id, prefix, hata, guild, msgMember: (msgMember || msg.member), guildMe })
                 } catch (error) {

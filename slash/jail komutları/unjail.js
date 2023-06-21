@@ -12,6 +12,8 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let yetkili = sunucudb.jail.yetkili
                 , intMember = int.member
             if (yetkili) {
@@ -26,7 +28,10 @@ module.exports = {
             if (member.user.bot) return hata(`Botları jailden çıkaramazsın`)
             if (member.id == int.user.id) return hata(`Kendini jailden çıkaramazsın şapşik şey seni :)`)
             if (!member.roles.cache.has(rol)) return hata(`Etiketlediğiniz kişi zaten jailde değil`)
+
             let sunucuJail = db.bul(sunucuid, "jail", "diğerleri") || {}
+
+            // Üyeyi jailden çıkarma
             await member.edit({ roles: (sunucuJail[member.id] ? sunucuJail[member.id].filter(a => guild.roles.cache.has(a)) : member.roles.cache.filter(a => a.id != rol).map(a => a.id)) }).then(() => {
                 const date = Date.now()
                 let tempjaildosya = db.bul(sunucuid, "tempjail", "diğerleri") || {}

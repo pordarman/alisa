@@ -10,6 +10,8 @@ module.exports = {
     async run(rol) {
         try {
             if (rol.managed) return;
+
+            // Eğer kayıtlı olan bir rol silinirse bunu sunucu sahibine iletir ve kayıtlı rolün verisini siler
             let rolsunucuid = rol.guild.id
                 , sunucudb = rol.client.guildDatabase(rolsunucuid)
                 , roller = []

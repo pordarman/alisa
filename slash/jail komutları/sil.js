@@ -12,6 +12,8 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let yetkili = sunucudb.jail.yetkili
                 , intMember = int.member
             if (yetkili) {
@@ -22,6 +24,7 @@ module.exports = {
             if (member.id == int.user.id) return hata(`Kendi jail bilgini silemezsin şapşik şey seni :)`)
             const den = sunucudb.jail.kisi[member.id]
             if (!den) return hata(`Etiketlediğiniz kişi daha önceden hiç jail'e atılmamış oley 🎉`)
+           
             delete sunucudb.jail.kisi[member.id]
             int.reply({ content: `• <@${member.id}> kişisinin jail bilgileri <@${int.user.id}> tarafından silindi`, allowedMentions: { users: false, repliedUser: true } }).catch(err => { })
             let log = sunucudb.jail.log

@@ -11,7 +11,10 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             if (!int.member.permissions.has('Administrator')) return hata("Yönetici", "yetki")
+        
             const embed = new EmbedBuilder()
                 .setTitle('Dikkat')
                 .setDescription('Tüm jail ayarlarını, ayarlanmış rolleri ve kanalları, jail bilgilerini, sıfırlamak/silmek istediğinizden emin misiniz? \nEğer silmek istiyorsanız **evet** istemiyorsanız **hayır** yazınız')

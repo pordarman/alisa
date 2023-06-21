@@ -12,9 +12,12 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             if (!int.member.permissions.has("ManageMessages")) return hata("Mesajları Yönet", "yetki")
             let snipe = db.bul(int.channelId, "snipe", "diğerleri")
             if (!snipe) return hata('Bu kanalda daha önceden hiç mesaj silinmemiş')
+            
             let kisi = int.options.getUser("üye", false)
                 , sahip
             if (kisi) {

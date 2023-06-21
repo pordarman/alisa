@@ -2,25 +2,28 @@ const { SlashCommandBuilder, ChatInputCommandInteraction, ActionRowBuilder, Butt
 const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
-    name: "son",
-    data: new SlashCommandBuilder()
-        .setName("son")
-        .setDescription("Sunucuda kayıt edilen son kişileri gösterir")
-        .addUserOption(option => option.setName("üye").setDescription("Belirli bir üyenin son kayıtları").setRequired(false)),
-    /**
-     * @param {import("../../typedef").exportsRunSlash} param0 
-     */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
-        try {      
-          var tumKayıtlar = sunucudb.son
-        if (!tumKayıtlar.length) return hata(`Bu sunucuda hiçbir kayıt işlemi gerçekleşmediğinden dolayı tablo gösterilemiyor`)
+  name: "son",
+  data: new SlashCommandBuilder()
+    .setName("son")
+    .setDescription("Sunucuda kayıt edilen son kişileri gösterir")
+    .addUserOption(option => option.setName("üye").setDescription("Belirli bir üyenin son kayıtları").setRequired(false)),
+  /**
+   * @param {import("../../typedef").exportsRunSlash} param0 
+   */
+  async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    try {
+
+      // Kontroller
+      var tumKayıtlar = sunucudb.son
+      if (!tumKayıtlar.length) return hata(`Bu sunucuda hiçbir kayıt işlemi gerçekleşmediğinden dolayı tablo gösterilemiyor`)
+      
       const kişi = int.options.getMember("üye", false)
       if (kişi) {
-          let kayıtlar = tumKayıtlar.filter(a => a.s == kişi.id)
+        let kayıtlar = tumKayıtlar.filter(a => a.s == kişi.id)
           , kayıtuzunlugu = kayıtlar.length
         if (!kayıtuzunlugu) return hata(`Etiketlediğiniz kişi daha önceden hiçbir kayıt işlemi gerçekleştirmediğinden dolayı tablo gösterilemiyor`)
         let sayfa = Math.ceil(kayıtuzunlugu / 15)
-        , pp = kişi.displayAvatarURL()
+          , pp = kişi.displayAvatarURL()
         const embed = new EmbedBuilder()
           .setAuthor({ name: kişi.user.tag, iconURL: pp })
           .setDescription(`**• <@${kişi.id}> adlı kişinin toplamda __${kayıtuzunlugu}__ tane kaydı bulundu**\n\n${kayıtlar.slice(0, 15).map((a, i) => `• \`#${(kayıtuzunlugu - i)}\` (${a.c}) <@${a.k}> | <t:${a.z}:F>`).join("\n")}`)
@@ -169,10 +172,10 @@ module.exports = {
           })
         }).catch(() => { })
       }
-        } catch (e) {
-            hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
-            console.log(e)
-        }
+    } catch (e) {
+      hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
+      int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+      console.log(e)
     }
+  }
 }

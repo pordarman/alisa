@@ -12,6 +12,8 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let yetkili = sunucudb.kayıt.yetkili
                 , intMember = int.member
             if (yetkili) {
@@ -35,10 +37,13 @@ module.exports = {
             if (sunucudb.kayıt.secenek) rol = sunucudb.kayıt.normal || []
             else rol = [...(sunucudb.kayıt.erkek || []), ...(sunucudb.kayıt.kız || [])]
             if (kişi.roles.cache.has(kayıtsizrolid) && !rol.some(a => kişi.roles.cache.has(a))) return hata('Etiketlediğiniz kişi zaten kayıtsız alınmış durumda')
+            
             let kontroltag = sunucudb.kayıt.tag, girişisim = sunucudb.kayıt.isimler.giris, isim
             if (girişisim) isim = girişisim.replace(/<tag>/g, (kontroltag ? kontroltag.slice(0, -1) : "")).replace(/<isim>/g, kişi.user.username)
             else isim = `${kontroltag || ""}${kişi.user.username}`;
             (async () => {
+
+                // Üyeyi kayıtsız yapma
                 await kişi.edit({ roles: [kayıtsizrolid], nick: isim.slice(0, 32) }).then(() => {
                     let kl = sunucudb.kl[kişi.id] || []
                     kl.unshift({ type: "ka", author: int.user.id, timestamp: Date.now() })

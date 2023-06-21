@@ -12,6 +12,8 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let yetkili = sunucudb.jail.yetkili
                 , intMember = int.member
             if (yetkili) {
@@ -19,6 +21,7 @@ module.exports = {
             } else if (!intMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
             let kayıtlar2 = sunucudb.jail.son
             if (!kayıtlar2.length) return hata(`Bu sunucuda daha önce hiçbir jail işlemi gerçekleşmediğinden dolayı tablo gösterilemiyor`)
+           
             const kişi = int.options.getMember("üye", false)
             if (kişi) {
                 let kayıtlar = kayıtlar2.filter(a => a.s == kişi.id)

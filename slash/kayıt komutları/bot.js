@@ -13,6 +13,8 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let prefix = sunucudb.prefix || ayarlar.prefix
                 , yetkilirolid = sunucudb.kayıt.yetkili
                 , intMember = int.member
@@ -45,6 +47,8 @@ module.exports = {
             if (kayıtisim) yenisimi = kayıtisim.replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/<isim>/g, sadeceisim)
             else yenisimi = `${tag || ""}${sadeceisim}`
             if (yenisimi.length > 32) return hata('Sunucu ismi 32 karakterden fazla olamaz lütfen karakter sayısını düşürünüz')
+          
+            // Botu kayıt etme
             await member.edit({ roles: [...botrolid, ...member.roles.cache.filter(a => a.id != kayıtsızrolid).map(a => a.id)], nick: yenisimi }).then(async () => {
                 let date = Date.now()
                     , date2 = (date / 1000).toFixed(0)

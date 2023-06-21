@@ -11,11 +11,14 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let yetkilirolid = sunucudb.kayıt.yetkili
                 , intMember = int.member
             if (yetkilirolid) {
                 if (!intMember.roles.cache.has(yetkilirolid) && !intMember.permissions.has('Administrator')) return hata("Bunu sen yapamazsın şapşik şey seni :(")
             } else if (!intMember.permissions.has('Administrator')) return hata("Bunu sen yapamazsın şapşik şey seni :(")
+            
             let seçenek
                 , yazıı
                 , özel = sunucudb.kayıt.özel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"

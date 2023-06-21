@@ -13,6 +13,8 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let yetkili = sunucudb.kayıt.yetkili
                 , intMember = int.member
             if (yetkili) {
@@ -22,6 +24,7 @@ module.exports = {
             if (!kişi) return hata(Time.isNull(kişi) ? "Görünen o ki başka bir şeyin ID'sini yazdınız :( Lütfen geçerli bir kişi ID'si giriniz" : "Lütfen bir kişiyi etiketleyiniz ya da ID\'sini giriniz")
             let isimgecmisii = sunucudb.isimler[kişi.id]
             if (!isimgecmisii) return hata(`Etiketlediğiniz kişi daha önceden hiç kayıt edilmediği için tablo gösterilemiyor`)
+            
             const embed = new EmbedBuilder().setAuthor({ name: kişi.tag, iconURL: kişi.displayAvatarURL() }).setColor("Random").setTimestamp()
             let length = isimgecmisii.length
                 , isimgecmisigecmeli = isimgecmisii.map((a, i) => `• \`#${length - i}\` ${a.c} **${a.n}** (${a.r}) (**Kayıt eden:** <@${a.s}>) | <t:${a.z}:F>`), uzunluk = isimgecmisigecmeli.length, sayfa = Math.ceil(uzunluk / 15)

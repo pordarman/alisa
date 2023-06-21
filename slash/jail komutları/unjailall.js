@@ -12,6 +12,8 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             let yetkili = sunucudb.jail.yetkili
                 , intMember = int.member
             if (yetkili) {
@@ -25,6 +27,7 @@ module.exports = {
             if (roll.position >= guildMe.roles.highest.position) return hata(`<@&${rol}> adlı rolün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
             const kisiler = roll.members.filter(a => !a.user.bot)
             if (kisiler.size == 0) return hata(`Iıııı görüşüne göre kimse jail'de değil...`)
+            
             const dugmevet = new ButtonBuilder()
                 .setStyle(1)
                 .setEmoji(ayarlar.emoji.p)

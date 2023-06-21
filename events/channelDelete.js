@@ -10,6 +10,8 @@ module.exports = {
     async run(ch) {
         try {
             if (!ch.guild || ch.type !== 0) return;
+
+            // Eğer kayıtlı olan bir kanal silinirse bunu sunucu sahibine iletir ve kayıtlı kanalın verisini siler
             let chsunucuid = ch.guildId
                 , sunucudb = ch.client.guildDatabase(chsunucuid)
                 , kanallar = []

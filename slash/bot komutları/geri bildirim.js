@@ -12,7 +12,7 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
-            const öneri = int.options.getString("mesaj", true)
+            const geriBildirim = int.options.getString("mesaj", true)
             int.reply({ content: `📣 **Geri bildiriminiz alındı ve sahibime iletildi. Desteğiniz için teşekkürler 💗**`, ephemeral: true }).catch(err => { })
             const sayı = db.topla(int.user.id, 1, "gb toplam", "diğerleri", false)
             let bilgiler = [
@@ -30,7 +30,7 @@ module.exports = {
                     },
                     {
                         name: "GERİ BİLDİRİM",
-                        value: öneri
+                        value: geriBildirim
                     }
                 )
                 .setColor("#fb1d1c")

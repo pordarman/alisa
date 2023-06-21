@@ -22,7 +22,10 @@ module.exports = {
           if (a[0] == int.client.user.id) return `• ${int.client.stringToEmojis(i + 1)} ${ayarlar.emoji.pp} <@${a[0]}> **${a[1].toplam || "0"}** Kayıt sayım **•** Botların rankı olmaz :)`
           return `• ${int.client.stringToEmojis(i + 1)} <@${a[0]}> **${a[1].toplam || "0"}** Kayıt sayısı **•** ${ranklar[a[1].rank] || "Rankı yok"}`
         })
+
+      // Kontroller
       if (uuu.length == 0) return hata(`Bu sunucuda hiçbir kayıt işlemi gerçekleşmediğinden (ya da sadece botlar kayıt edildiğinden) dolayı tablo gösterilemiyor`)
+      
       let sayfa = Math.ceil(uuu.length / 20),
         discordlogo = guild.iconURL(),
         ms = Date.now() - date,

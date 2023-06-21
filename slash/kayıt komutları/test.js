@@ -11,7 +11,10 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             if (!int.member.permissions.has("Administrator")) return hata("Yönetici", "yetki")
+            
             int.reply({ embeds: [new EmbedBuilder().setDescription(`• Veriler kontrol ediliyor, lütfen biraz bekleyiniz... `).setColor("Orange")], fetchReply: true }).then(async mesaj => {
                 let embed = new EmbedBuilder().setTitle("Sanki biraz yapılması gereken şeyler var gibi?").setColor("Blue").setTimestamp()
                     , rolhatalar = []

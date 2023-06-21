@@ -14,7 +14,10 @@ module.exports = {
      */
     async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
         try {
+
+            // Kontroller
             if (!int.member.permissions.has('Administrator')) return hata("Yönetici", "yetki")
+            
             if (int.options.getSubcommand(false) == "kanal") {
                 const kanal = int.options.getChannel("kanal", true)
                 if (!kanal.joinable) return hata(`Etiketlediğiniz kanala benim katılma yetkim yok :(`)
