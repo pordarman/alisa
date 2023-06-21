@@ -348,7 +348,7 @@ client.getGuildNameOrId = async (id, bool = true) => {
 client.sendChannel = async (object, id, guildId) => {
   try {
     let kanal = client.channels.cache.get(id);
-    if (kanal) return kanal.send(array[0]).catch((err) => {});
+    if (kanal) return kanal.send(object).catch((err) => {});
     return await client.shard.broadcastEval(
       (a, array) => {
         let kanalClient = a.channels.cache.get(array[1]);

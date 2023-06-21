@@ -78,7 +78,6 @@ import Discord from "discord.js"
  * @property {Array} son
  * @property {kayıtObject} kayıt
  * @property {Object} isimler
- * @property {Object} yasaklitag
  * @property {Object} premium
  * @property {Object} kl
  * @property {Object} sc

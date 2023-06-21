@@ -60,8 +60,8 @@ module.exports = {
                             let mesaj
                             if (otog) mesaj = `kişinin hesabı **${Time.duration({ ms: m.user.createdTimestamp, toNow: true, skipZeros: true })}** içinde açıldığı`
                             else {
-                                let split = güvenlik.split(" ")
-                                mesaj = `kişi **${split[0] + " hesap " + split[1]}** olduğu`
+                                const [str, emoji] = güvenlik.split(" ")
+                                mesaj = `kişi **${str + " hesap " + emoji}** olduğu`
                             }
                             return await m.edit({ roles: [rols] }).then(() => chn.send({ content: `• ${ms} adlı ${mesaj} için Şüpheli'ye atıldı!` })).catch(async err => {
                                 let hatanınSebepleri = []

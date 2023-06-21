@@ -282,8 +282,6 @@
 
        },
 
-       yasaklitag: {}, // Bunu ekleyecektim fakat daha fırsatım olmadı, bunu silebilirsiniz
-
        premium: { // Premium komutlarının verileri
 
         yetkili: [ // Yetkili rollerinin ID'leri (Bu rolleri adminler ekliyor)

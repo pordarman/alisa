@@ -15,9 +15,9 @@ module.exports = {
         if (!obj.length) return;
         let shards = {}
         obj.forEach((a) => {
-            let shard = newUser.client.shardId(a[0])
-            if (shards[shard]) shards[shard].push(a)
-            else shards[shard] = [a]
+            let shard = newUser.client.shardId(a[0]);
+            shards[shard] ||= []
+            shards[shard].push(a)
         })
         Object.entries(shards).forEach(async ([shardId, array]) => {
             array.forEach(async ([id, tagrol]) => {
