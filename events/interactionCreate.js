@@ -21,7 +21,7 @@ module.exports = {
             }
             return;
         }
-        let sunucuid = int.guildId
+        let guildId = int.guildId
         if (int.isChatInputCommand()) {
             let komut = int.client.slash.get(int.commandName)
             if (!komut) return;
@@ -29,9 +29,9 @@ module.exports = {
             let kisivarmıdatabasede2 = alisa.kisiler[sahipid] || 0
             kisivarmıdatabasede2 += 1
             alisa.kisiler[sahipid] = kisivarmıdatabasede2
-            let sunucuvarmıdatabasede2 = alisa.skullanımlar[sunucuid] || 0
+            let sunucuvarmıdatabasede2 = alisa.skullanımlar[guildId] || 0
             sunucuvarmıdatabasede2 += 1
-            alisa.skullanımlar[sunucuid] = sunucuvarmıdatabasede2
+            alisa.skullanımlar[guildId] = sunucuvarmıdatabasede2
             db.yazdosya(alisa, "alisa", "diğerleri")
             async function slashHataMesaj(yazı, x = false) {
                 const embed = new EmbedBuilder()
@@ -54,7 +54,7 @@ module.exports = {
                 return int.reply({ embeds: [embed], ephemeral: true }).catch(err => { })
             }
             try {
-                return komut.run({ int, sunucudb: int.client.guildDatabase(sunucuid), alisa, hata: slashHataMesaj, sunucuid, guild: int.guild })
+                return komut.run({ int, guildDatabase: int.client.guildDatabase(guildId), alisa, hata: slashHataMesaj, guildId, guild: int.guild })
             } catch (e) {
 
             }
@@ -82,7 +82,7 @@ module.exports = {
                 return int.reply({ embeds: [embed], ephemeral: true }).catch(err => { })
             }
             try {
-                return komut.run({ int, sunucudb: int.client.guildDatabase(sunucuid), alisa, hata: slashHataMesaj, sunucuid, guild: int.guild })
+                return komut.run({ int, guildDatabase: int.client.guildDatabase(guildId), alisa, hata: slashHataMesaj, guildId, guild: int.guild })
             } catch (e) {
 
             }
@@ -109,7 +109,7 @@ module.exports = {
                 return int.reply({ embeds: [embed], ephemeral: true }).catch(err => { })
             }
             try {
-                return komut.run({ int, sunucudb: int.client.guildDatabase(sunucuid), hata: slashHataMesaj, alisa, sunucuid, guild: int.guild })
+                return komut.run({ int, guildDatabase: int.client.guildDatabase(guildId), hata: slashHataMesaj, alisa, guildId, guild: int.guild })
             } catch (e) {
 
             }

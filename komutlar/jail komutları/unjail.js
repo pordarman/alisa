@@ -9,15 +9,15 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {            
 
             // Kontroller
-            let yetkili = sunucudb.jail.yetkili
+            let yetkili = guildDatabase.jail.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
             } else if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
-            let rol = sunucudb.jail.rol
+            let rol = guildDatabase.jail.rol
             if (!rol) return hata(`Bu sunucuda herhangi bir jail rolü __ayarlanmamış__${msgMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${prefix}jail-rol @rol** yazabilirsiniz` : ""}`)
             if (!guildMe.permissions.has('ManageRoles')) return hata("Kullanıcı Adlarını Yönet", "yetkibot")
             if (guild.roles.cache.get(rol).position >= guildMe.roles.highest.position) return hata(`<@&${rol}> adlı rolün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
@@ -27,27 +27,27 @@ module.exports = {
             if (member.id == msg.author.id) return hata(`Kendini jailden çıkaramazsın şapşik şey seni :)`)
             if (!member.roles.cache.has(rol)) return hata(`Etiketlediğiniz kişi zaten jailde değil`)
 
-            let sunucuJail = db.bul(sunucuid, "jail", "diğerleri") || {}
+            let sunucuJail = db.bul(guildId, "jail", "diğerleri") || {}
 
             // Üyeyi jailden çıkarma
             await member.edit({ roles: (sunucuJail[member.id] ? sunucuJail[member.id].filter(a => guild.roles.cache.has(a)) : member.roles.cache.filter(a => a.id != rol).map(a => a.id)) }).then(() => {
                 const date = Date.now()
                 msg.react(ayarlar.emoji.p).catch(err => { })
-                let tempjaildosya = db.bul(sunucuid, "tempjail", "diğerleri") || {}
-                    , jailDosya = db.bul(sunucuid, "jail", "diğerleri") || {}
-                    , kl = sunucudb.kl[member.id] || []
+                let tempjaildosya = db.bul(guildId, "tempjail", "diğerleri") || {}
+                    , jailDosya = db.bul(guildId, "jail", "diğerleri") || {}
+                    , kl = guildDatabase.kl[member.id] || []
                 kl.unshift({ type: "uj", author: msg.author.id, timestamp: date })
-                sunucudb.kl[member.id] = kl
+                guildDatabase.kl[member.id] = kl
                 delete jailDosya[member.id]
                 if (tempjaildosya[member.id]) delete tempjaildosya[member.id]
-                let kisi = sunucudb.jail.kisi[member.id] || []
+                let kisi = guildDatabase.jail.kisi[member.id] || []
                 kisi.unshift({ y: msg.author.id, z: date, bool: false })
-                sunucudb.jail.kisi[member.id] = kisi
-                sunucudb.jail.son.unshift({ s: msg.author.id, k: member.id, z: date, bool: false })
+                guildDatabase.jail.kisi[member.id] = kisi
+                guildDatabase.jail.son.unshift({ s: msg.author.id, k: member.id, z: date, bool: false })
                 msg.reply({ content: `• <@${member.id}> adlı kişi <@${msg.author.id}> tarafından jail'den çıkarıldı!`, allowedMentions: { users: [member.id], repliedUser: true } }).catch(err => { })
-                db.yaz(sunucuid, jailDosya, "jail", "diğerleri")
-                db.yaz(sunucuid, tempjaildosya, "tempjail", "diğerleri")
-                let log = sunucudb.jail.log
+                db.yaz(guildId, jailDosya, "jail", "diğerleri")
+                db.yaz(guildId, tempjaildosya, "tempjail", "diğerleri")
+                let log = guildDatabase.jail.log
                 if (log) {
                     const zaman = `<t:${(date / 1000).toFixed(0)}:F> - <t:${(date / 1000).toFixed(0)}:R>`
                     const clientPp = msg.client.user.displayAvatarURL()
@@ -70,14 +70,14 @@ module.exports = {
                         .setTimestamp()
                     guild.channels.cache.get(log)?.send({ embeds: [embed] }).catch(err => { })
                 }
-                db.yazdosya(sunucudb, sunucuid)
+                db.yazdosya(guildDatabase, guildId)
                 return;
             }).catch(err => {
                 hata(`**• <@${member.id}> adlı kişiden jail rolünü alamadım! Lütfen bana yönetici yetkisi verdiğinizden ve rolümün üstte olduğundan emin olunuz**\n\n` + "```js\n" + err + "```")
             })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

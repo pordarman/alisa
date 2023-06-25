@@ -8,7 +8,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
@@ -19,8 +19,8 @@ module.exports = {
             if (!args[0]) return hata(`Lütfen yeni isminizi yazınız`)
 
 
-            let tag = sunucudb.kayıt.tag
-            , kayıtisim = sunucudb.kayıt.isimler.kayıt
+            let tag = guildDatabase.kayıt.tag
+            , kayıtisim = guildDatabase.kayıt.isimler.kayıt
             , isim
             , toLocaleLowerCase = msg.content.toLocaleLowerCase()
             , yeniisim = msg.content.slice(toLocaleLowerCase.search(/(?<= *(zengin|booster) ).+/i))
@@ -43,7 +43,7 @@ module.exports = {
             })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

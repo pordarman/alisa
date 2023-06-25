@@ -8,7 +8,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
 
@@ -22,22 +22,22 @@ module.exports = {
                     , yetkihatalari = []
                     , kanalhatalari = []
                     , oneriler = []
-                    , botrolid = sunucudb.kayıt.bot
-                    , kayitsizrolid = sunucudb.kayıt.kayıtsız
-                    , yetkilirolid = sunucudb.kayıt.yetkili
+                    , botrolid = guildDatabase.kayıt.bot
+                    , kayitsizrolid = guildDatabase.kayıt.kayıtsız
+                    , yetkilirolid = guildDatabase.kayıt.yetkili
                     , digerroller = []
-                if (sunucudb.kayıt.ayar) rolhatalar.push("• Kayıt ayarım kapalı durumda, hiçbir kayıt işlemini yapamazsınız!")
+                if (guildDatabase.kayıt.ayar) rolhatalar.push("• Kayıt ayarım kapalı durumda, hiçbir kayıt işlemini yapamazsınız!")
                 if (!kayitsizrolid) rolhatalar.push("• Kayıtsız üyelere verilecek rol ayarlanmamış!")
                 else digerroller.push(kayitsizrolid)
                 if (!botrolid) rolhatalar.push("• Botlara verilecek rol ayarlanmamış!")
                 else digerroller = [...digerroller, ...botrolid]
-                if (sunucudb.kayıt.secenek) {
-                    const kayitrolid = sunucudb.kayıt.normal
+                if (guildDatabase.kayıt.secenek) {
+                    const kayitrolid = guildDatabase.kayıt.normal
                     if (!kayitrolid) rolhatalar.push("• Üyelere verilecek rol ayarlanmamış!")
                     else digerroller = [...digerroller, ...kayitrolid]
                 } else {
-                    const erkekrolid = sunucudb.kayıt.erkek
-                    const kızrolid = sunucudb.kayıt.kız
+                    const erkekrolid = guildDatabase.kayıt.erkek
+                    const kızrolid = guildDatabase.kayıt.kız
                     if (!erkekrolid) rolhatalar.push("• Erkeklere verilecek rol ayarlanmamış!")
                     else digerroller = [...digerroller, ...erkekrolid]
                     if (!kızrolid) rolhatalar.push("• Kızlara verilecek rol ayarlanmamış!")
@@ -51,9 +51,9 @@ module.exports = {
                     const yuksekroluyari = digerroller.filter(a => guild.roles.cache.get(a)?.position >= guildMe.roles.highest.position)
                     if (yuksekroluyari.length) rolhatalar.push(`• [${yuksekroluyari.map(a => "<@&" + a + ">").join(" | ")}] adlı roller benim rolümün sırasından yüksek olduğu için bu rolleri başkalarına veremem`)
                 }
-                const kayitkanal = sunucudb.kayıt.kanal
-                const gunluk = sunucudb.kayıt.günlük
-                const log = sunucudb.kayıt.log
+                const kayitkanal = guildDatabase.kayıt.kanal
+                const gunluk = guildDatabase.kayıt.günlük
+                const log = guildDatabase.kayıt.log
                 const fields = []
                 if (!kayitkanal) kanalhatalari.push("• Kayıtların yapılacağı kanal ayarlanmamış!")
                 else await guild.channels.cache.get(kayitkanal)?.send("Deneme").then(a => a.delete()).catch(() => rolhatalar.push("• Kayıt kanalına mesaj atabilme yetkim yok!"))
@@ -72,7 +72,7 @@ module.exports = {
             }).catch(err => { })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

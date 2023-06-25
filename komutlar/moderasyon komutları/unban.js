@@ -8,11 +8,11 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
-            let banYetkili = sunucudb.kayıt.bany
+            let banYetkili = guildDatabase.kayıt.bany
             if (banYetkili) {
                 if (!msgMember.roles.cache.has(banYetkili) && !msgMember.permissions.has('BanMembers')) return hata(`<@&${banYetkili}> rolüne **veya** Üyeleri Yasakla`, "yetki")
             } else if (!msgMember.permissions.has('BanMembers')) return hata("Üyeleri Yasakla", "yetki")
@@ -25,7 +25,7 @@ module.exports = {
             // Üyenin sunucudaki banını kaldırma
             await guild.members.unban(uye.user.id).then(member => {
                 msg.reply({ content: `${ayarlar.emoji.p} **${uye.user.tag} - (${uye.user.id})** adlı kişinin yasaklanması başarıyla kaldırıldı!\n📝 **Yasaklanma sebebi:**  ${uye.reason || "Sebep belirtilmemiş"}`, allowedMentions: { roles: false, users: false, repliedUser: true } }).catch(err => { })
-                let modLog = sunucudb.kayıt.modl
+                let modLog = guildDatabase.kayıt.modl
                 if (modLog) {
                     let date = (Date.now() / 1000).toFixed(0)
                         , kişininfotografı = member.displayAvatarURL()
@@ -50,7 +50,7 @@ module.exports = {
             }).catch(err => msg.reply({ content: 'Iıııı şey.. Bir hata oluştu da daha sonra tekrar dener misin?\n```js\n' + err + "```" }).catch(err => { }))
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

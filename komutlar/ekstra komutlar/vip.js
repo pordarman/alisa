@@ -10,7 +10,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
             switch (args[0]?.toLocaleLowerCase()) {
                 case "role":
@@ -23,22 +23,22 @@ module.exports = {
 
 
                     if (args[1] === "sıfırla") {
-                        if (!sunucudb.kayıt.vrol) return hata("Vip rolü zaten sıfırlanmış durumda")
-                        delete sunucudb.kayıt.vrol
+                        if (!guildDatabase.kayıt.vrol) return hata("Vip rolü zaten sıfırlanmış durumda")
+                        delete guildDatabase.kayıt.vrol
                         hata("Vip rolü başarıyla sıfırlandı", "b")
-                        db.yazdosya(sunucudb, sunucuid)
+                        db.yazdosya(guildDatabase, guildId)
                         return;
                     }
                     const rol = msg.client.fetchRole(args.join(" "), msg)
                     if (!rol) return hata(`Vip rolü ayarlamak için **${prefix}vip rol @rol**\n\• Sıfırlamak için ise **${prefix}vip rol sıfırla** yazabilirsiniz`, "ne")
                     const rolid = rol.id
-                    if (sunucudb.kayıt.vrol === rolid) return hata("Vip rolü zaten etiketlediğiniz rolle aynı")
+                    if (guildDatabase.kayıt.vrol === rolid) return hata("Vip rolü zaten etiketlediğiniz rolle aynı")
                     if (rol.managed) return hata(`Botların oluşturduğu rolleri başkalarına veremem`)
-                    if (rolid == sunucudb.kayıt.vyetkili) return hata(`Etiketlediğiniz rol bu sunucudaki vip yetkili rolü. Lütfen başka bir rol etiketleyiniz`)
+                    if (rolid == guildDatabase.kayıt.vyetkili) return hata(`Etiketlediğiniz rol bu sunucudaki vip yetkili rolü. Lütfen başka bir rol etiketleyiniz`)
                     
-                    sunucudb.kayıt.vrol = rolid
+                    guildDatabase.kayıt.vrol = rolid
                     hata(`Vip rolü başarıyla <@&${rolid}> olarak ayarlandı`, "b")
-                    db.yazdosya(sunucudb, sunucuid)
+                    db.yazdosya(guildDatabase, guildId)
                     return;
                 }
                 case "vipyetkilirol":
@@ -50,35 +50,35 @@ module.exports = {
 
 
                     if (args[1] === "sıfırla") {
-                        if (!sunucudb.kayıt.vyetkili) return hata("Vip yetkili rolü zaten sıfırlanmış durumda")
-                        delete sunucudb.kayıt.vyetkili
+                        if (!guildDatabase.kayıt.vyetkili) return hata("Vip yetkili rolü zaten sıfırlanmış durumda")
+                        delete guildDatabase.kayıt.vyetkili
                         hata("Vip yetkili rolü başarıyla sıfırlandı", "b")
-                        db.yazdosya(sunucudb, sunucuid)
+                        db.yazdosya(guildDatabase, guildId)
                         return;
                     }
                     const rol = msg.client.fetchRole(args.join(" "), msg)
                     if (!rol) return hata(`Vip yetkili rolü ayarlamak için **${prefix}vip yetkili @rol**\n\n\n• Sıfırlamak için ise **${prefix}vip yetkili sıfırla** yazabilirsiniz`, "ne")
                     const rolidy = rol.id
-                    if (sunucudb.kayıt.vyetkili === rolidy) return hata("Vip rolü zaten etiketlediğiniz rolle aynı")
+                    if (guildDatabase.kayıt.vyetkili === rolidy) return hata("Vip rolü zaten etiketlediğiniz rolle aynı")
                     if (rol.managed) return hata(`Botların oluşturduğu rolleri başkalarına veremem`)
-                    if (rolidy == sunucudb.kayıt.vrol) return hata(`Etiketlediğiniz rol bu sunucudaki vip rolü. Lütfen başka bir rol etiketleyiniz`)
+                    if (rolidy == guildDatabase.kayıt.vrol) return hata(`Etiketlediğiniz rol bu sunucudaki vip rolü. Lütfen başka bir rol etiketleyiniz`)
                     
-                    sunucudb.kayıt.vyetkili = rolidy
+                    guildDatabase.kayıt.vyetkili = rolidy
                     hata("Vip yetkili rolü <@&" + rolidy + "> adlı rol oldu", "b")
-                    db.yazdosya(sunucudb, sunucuid)
+                    db.yazdosya(guildDatabase, guildId)
                     return;
                 }
                 default: {
 
                     // Kontroller
                     if (!args[0]) return hata(`Bir kişiye vip rolünü vermek için **${prefix}vip @kişi**\n\n• Vip rolünü ayarlamak için **${prefix}vip rol @rol**\n\n• Vip yetkili rolünü ayarlamak için **${prefix}vip yetkili @rol** yazabilirsiniz`)
-                    let kayıtyetkili = sunucudb.kayıt.vyetkili
+                    let kayıtyetkili = guildDatabase.kayıt.vyetkili
                     if (kayıtyetkili) {
                         if (!msgMember.roles.cache.has(kayıtyetkili) && !msgMember.permissions.has("Administrator")) return hata(`<@&${kayıtyetkili}> rolüne **veya** Yönetici`, "yetki")
                     } else if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
 
 
-                    let viprol = sunucudb.kayıt.vrol
+                    let viprol = guildDatabase.kayıt.vrol
                     if (!viprol) return hata(`Bu sunucuda herhangi bir vip rolü __ayarlanmamış__${msgMember.permissions.has("Administrator") ? `\n\n• Ayarlamak için **${prefix}vip-rol ayarla @rol** yazabilirsiniz` : ""}`)
                     if (!guildMe.permissions.has("ManageRoles")) return hata("Rolleri Yönet", "yetkibot")
                     const kisi = msg.mentions.members.first() || await msg.client.fetchMember(args[0], msg)
@@ -99,7 +99,7 @@ module.exports = {
             }
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

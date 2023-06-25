@@ -10,7 +10,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
@@ -18,16 +18,16 @@ module.exports = {
             
             let yas = args[0]
             if (["kapat", "kapalı", "deaktif"].includes(yas)) {
-                if (!sunucudb.kayıt.yassınır) return hata("Bu sunucuda yaş zorunluluğu zaten kapalı durumda")
-                delete sunucudb.kayıt.yassınır
+                if (!guildDatabase.kayıt.yassınır) return hata("Bu sunucuda yaş zorunluluğu zaten kapalı durumda")
+                delete guildDatabase.kayıt.yassınır
                 hata("Yaş zorunluluğu başarıyla deaktif edildi", "b")
-                db.yazdosya(sunucudb, sunucuid)
+                db.yazdosya(guildDatabase, guildId)
                 return;
             }
             if (!yas || !Time.isNumber(yas)) return hata(`Yaş sınırını ayarlamak için için **${prefix}yaşsınır <yaş>**\n\n• Kapatmak için ise **${prefix}yaşsınır kapat** yazabilirsiniz\n\n**Örnek**\n• ${prefix}yaşsınır 14\n• ${prefix}yaşsınır 9`)
             if (yas < 0) yas = String(-yas)
             if (yas > 99) return hata("Lütfen yaş aralığınızı 0-100 arasında tutunuz")
-            sunucudb.kayıt.yassınır = +yas
+            guildDatabase.kayıt.yassınır = +yas
             let ek;
             switch (yas[yas.length - 1]) {
                 case "0":
@@ -47,12 +47,12 @@ module.exports = {
                     ek = "ten"
                     break;
             }
-            hata(`Bundan sonra yaşı **${yas}'${ek}** küçük olanların kayıt edilmesine izin vermeyeceğim\n\n• ‼️ **Uyarı!** Bu ayar sadece __**yaş zorunluluğu**__ aktif ise çalışacaktır${!sunucudb.kayıt.yaszorunlu ? `\n• Yaş zorunluluğunu aktif etmek için **${prefix}yaşzorunlu açık** yazabilirsiniz` : ""}`, "b")
-            db.yazdosya(sunucudb, sunucuid)
+            hata(`Bundan sonra yaşı **${yas}'${ek}** küçük olanların kayıt edilmesine izin vermeyeceğim\n\n• ‼️ **Uyarı!** Bu ayar sadece __**yaş zorunluluğu**__ aktif ise çalışacaktır${!guildDatabase.kayıt.yaszorunlu ? `\n• Yaş zorunluluğunu aktif etmek için **${prefix}yaşzorunlu açık** yazabilirsiniz` : ""}`, "b")
+            db.yazdosya(guildDatabase, guildId)
             return;
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

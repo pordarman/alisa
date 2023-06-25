@@ -19,8 +19,8 @@ module.exports = {
             let alisa = db.buldosya("alisa", "diğerleri")
             if (!alisa) return;
             let sahipid = msg.author.id
-                , sunucudb = msg.client.guildDatabase(guild.id)
-                , sunucuafk = sunucudb.afk
+                , guildDatabase = msg.client.guildDatabase(guild.id)
+                , sunucuafk = guildDatabase.afk
                 , msgMember
 
             // AFK sistemi
@@ -104,7 +104,7 @@ module.exports = {
             }
 
             // Eğer sadece botu etiketlerse bot hakkında bilgi ver
-            let prefix = sunucudb.prefix || ayarlar.prefix
+            let prefix = guildDatabase.prefix || ayarlar.prefix
                 , clientUserArray = [`<@${msg.client.user.id}>`, `<@!${msg.client.user.id}>`]
             if (clientUserArray.includes(msg.content.trim())) {
                 let karaliste = alisa.kl[sahipid]
@@ -284,7 +284,7 @@ module.exports = {
 
                 // Komutu çalıştırma
                 try {
-                    komut.run({ sunucudb, pre, alisa, msg, args, sunucuid: guild.id, prefix, hata, guild, msgMember: (msgMember || msg.member), guildMe })
+                    komut.run({ guildDatabase, pre, alisa, msg, args, guildId: guild.id, prefix, hata, guild, msgMember: (msgMember || msg.member), guildMe })
                 } catch (error) {
                     console.log(error)
                 }

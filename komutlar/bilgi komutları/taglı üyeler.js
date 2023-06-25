@@ -8,11 +8,11 @@ module.exports = {
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
     try {
-      let tagroldb = msg.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
-        , tag = tagroldb.tag || (sunucudb.kayıt.tag ? sunucudb.kayıt.tag.slice(0, -1) : undefined)
-        , dis = tagroldb.dis || sunucudb.kayıt.dis
+      let tagroldb = msg.client.tagrolDatabase(guildId, guildDatabase.kayıt.tag)
+        , tag = tagroldb.tag || (guildDatabase.kayıt.tag ? guildDatabase.kayıt.tag.slice(0, -1) : undefined)
+        , dis = tagroldb.dis || guildDatabase.kayıt.dis
       if (!tag && !dis) return hata("Şeyyy.. Bu sunucuda herhangi bir tag ayarlı değil :(")
       let sıra = 0
         , taglıUyeler = (await msg.client.getMembers(msg)).filter((member) => !member.user.bot && (tag ? member.user.username.includes(tag) : false) || (dis ? member.user.discriminator == dis : false)).sort((a, b) => tagroldb.kisi[b.id] - tagroldb.kisi[a.id]).map(a => {
@@ -102,7 +102,7 @@ module.exports = {
       }).catch(err => { })
     } catch (e) {
       msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-      msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+      msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
       console.log(e)
     }
   }

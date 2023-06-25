@@ -8,17 +8,17 @@ module.exports = {
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
     try {
 
       // Kontroller
-      let say = sunucudb.say
+      let say = guildDatabase.say
         , veri = say.veri
       if (!Object.keys(veri).length) return hata(`Şeyyy... Bu sunucuda **${prefix}say** komutunda gösterilecek hiçbir şey __ayarlanmamış__${msgMember.permissions.has("Administrator") ? `\n\n• Eğer say ayarlarını değiştirmek isterseniz **${prefix}say-ayarlar** yazabilirsiniz` : ""}`)
       
       let e = say.emoji
         , s
-        , kayıt = sunucudb.kayıt
+        , kayıt = guildDatabase.kayıt
         , toplamUye = veri.t
         , kayıtlıUyeler = veri.ü
         , taglıUyeler = veri.tag
@@ -39,7 +39,7 @@ module.exports = {
         if (toplamUye) arrayUye.push(`Sunucuda toplam ${s(guild.memberCount)} kişi bulunuyor`)
         if (kayıtlıUyeler) {
           let kayıtsız = s(kayıt.kayıtsız ? guild.roles.cache.get(kayıt.kayıtsız)?.members?.size : "0")
-          if (sunucudb.kayıt.secenek) arrayUye.push(`Sunucuda toplam ${s(kayıt.normal ? uyeler.filter(a => kayıt.normal?.every(b => a.roles.cache.has(b))).size : "0")} kayıtlı üye ve ${kayıtsız} kayıtsız üye bulunuyor`)
+          if (guildDatabase.kayıt.secenek) arrayUye.push(`Sunucuda toplam ${s(kayıt.normal ? uyeler.filter(a => kayıt.normal?.every(b => a.roles.cache.has(b))).size : "0")} kayıtlı üye ve ${kayıtsız} kayıtsız üye bulunuyor`)
           else arrayUye.push(`Sunucuda toplam ${s(kayıt.erkek ? uyeler.filter(a => kayıt.erkek?.every(b => a.roles.cache.has(b))).size : "0")} erkek üye, ${s(kayıt.kız ? uyeler.filter(a => kayıt.kız?.every(b => a.roles.cache.has(b))).size : "0")} kız üye ve ${kayıtsız} kayıtsız üye bulunuyor`)
         }
         if (taglıUyeler) {
@@ -50,13 +50,13 @@ module.exports = {
         if (sesliUyeler) arrayUye.push(`Sesli kanallarda toplam ${s(uyeler.filter(a => !a.user.bot && a.voice.channelId).size)} üye bulunuyor`)
         if (boost) arrayUye.push(`Sunucuda toplam ${s(guild.premiumSubscriptionCount)} boost ve ${s(uyeler.filter(a => a.premiumSinceTimestamp).size)} boost basan üye bulunuyor`)
         if (vipUyeler) arrayUye.push(`Sunucuda toplam ${s(kayıt.vrol ? guild.roles.cache.get(kayıt.vrol)?.members?.size : "0")} vip üye bulunuyor`)
-        if (jailUyeler) arrayUye.push(`Sunucuda toplam ${s(sunucudb.jail.rol ? guild.roles.cache.get(sunucudb.jail.rol)?.members?.size : "0")} kişi jailde`)
+        if (jailUyeler) arrayUye.push(`Sunucuda toplam ${s(guildDatabase.jail.rol ? guild.roles.cache.get(guildDatabase.jail.rol)?.members?.size : "0")} kişi jailde`)
         addFields.push({ name: "__Sunucu bilgileri__", value: (e ? arrayUye.map(a => `${ayarlar.emoji.say} **${a}**`) : arrayUye.map(a => `${ayarlar.emoji.say} ${a}`)).join("\n\n") })
       }
       if (kayıtYetkili || jailYetkili || banYetkili || kickYetkili) {
         let arrayYetkili = []
         if (kayıtYetkili) arrayYetkili.push(`Sunucuda toplam ${s(kayıt.yetkili ? guild.roles.cache.get(kayıt.yetkili)?.members?.size : "0")} kayıt yetkilisi bulunuyor`)
-        if (jailYetkili) arrayYetkili.push(`Sunucuda toplam ${s(sunucudb.jail.yetkili ? guild.roles.cache.get(sunucudb.jail.yetkili)?.members?.size : "0")} jail yetkilisi bulunuyor`)
+        if (jailYetkili) arrayYetkili.push(`Sunucuda toplam ${s(guildDatabase.jail.yetkili ? guild.roles.cache.get(guildDatabase.jail.yetkili)?.members?.size : "0")} jail yetkilisi bulunuyor`)
         if (banYetkili) arrayYetkili.push(`Sunucuda toplam ${s(kayıt.bany ? guild.roles.cache.get(kayıt.bany)?.members?.size : "0")} ban yetkilisi bulunuyor`)
         if (kickYetkili) arrayYetkili.push(`Sunucuda toplam ${s(kayıt.kicky ? guild.roles.cache.get(kayıt.kicky)?.members?.size : "0")} kick yetkilisi bulunuyor`)
         addFields.push({ name: "__Yetkililer__", value: (e ? arrayYetkili.map(a => `${ayarlar.emoji.say} **${a}**`) : arrayYetkili.map(a => `${ayarlar.emoji.say} ${a}`)).join("\n\n") })
@@ -72,7 +72,7 @@ module.exports = {
       msg.reply({ embeds: [embed] }).catch(err => { })
     } catch (e) {
       msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-      msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+      msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
       console.log(e)
     }
   }

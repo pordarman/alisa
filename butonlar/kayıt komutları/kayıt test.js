@@ -6,7 +6,7 @@ module.exports = {
     /**
        * @param {import("../../typedef").exportsRunButtons} param0 
        */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
             let file
                 , content
@@ -24,7 +24,7 @@ module.exports = {
                     file = int.client.namePhoto.üye
                     break;
                 case "BOT":
-                    content = `• <@${int.user.id}>, bu butona tıklayarak botu hızlı bir şekilde kayıt edebilirsiniz (Eğer botun ismini değiştirmek isterseniz **${sunucudb.prefix || ayarlar.prefix}n <kişi ID> yeni ismi** şeklinde yazarak değiştirebilirsiniz)`
+                    content = `• <@${int.user.id}>, bu butona tıklayarak botu hızlı bir şekilde kayıt edebilirsiniz (Eğer botun ismini değiştirmek isterseniz **${guildDatabase.prefix || ayarlar.prefix}n <kişi ID> yeni ismi** şeklinde yazarak değiştirebilirsiniz)`
                     file = int.client.namePhoto.bot
                 case "ŞÜPHELİ":
                     content = `• <@${int.user.id}>, bu butona tıklayarak güvensiz olduğunu anladığınız bir hesabı şüpheli'ye atarbilirsiniz`
@@ -38,7 +38,7 @@ module.exports = {
             return int.reply({ content, files: [file], ephemeral: true }).catch(err => { })
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true)
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

@@ -8,20 +8,20 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {      
             
             // Kontroller
-            let yetkili = sunucudb.kayıt.yetkili
+            let yetkili = guildDatabase.kayıt.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
             } else if (!msgMember.permissions.has('Administrator')) return hata('Yönetici', "yetki")
-            let kayıtsız = sunucudb.kayıt.kayıtsız
+            let kayıtsız = guildDatabase.kayıt.kayıtsız
             if (!kayıtsız) return hata(`Bu sunucuda herhangi bir kayıtsız rolü __ayarlanmamış__${msgMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${prefix}alınacak-rol @rol** yazabilirsiniz` : ""}`)
             
             let rol
-            if (sunucudb.kayıt.secenek) rol = sunucudb.kayıt.normal || []
-            else rol = [...(sunucudb.kayıt.erkek || []), ...(sunucudb.kayıt.kız || [])]
+            if (guildDatabase.kayıt.secenek) rol = guildDatabase.kayıt.normal || []
+            else rol = [...(guildDatabase.kayıt.erkek || []), ...(guildDatabase.kayıt.kız || [])]
             let kisiler = (await msg.client.getMembers(msg)).filter(a => !a.user.bot && a.roles.cache.has(kayıtsız) && !rol.some(b => a.roles.cache.has(b)))
             if (kisiler.size == 0) return msg.reply(`• Bu sunucuda kimse kayıtsız değil oley!`).catch(err => { })
             let sayfa = Math.ceil(kisiler.size / 50)
@@ -33,7 +33,7 @@ module.exports = {
             }
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

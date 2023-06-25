@@ -10,14 +10,14 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
             const geriBildirim = int.options.getString("mesaj", true)
             int.reply({ content: `📣 **Geri bildiriminiz alındı ve sahibime iletildi. Desteğiniz için teşekkürler 💗**`, ephemeral: true }).catch(err => { })
             const sayı = db.topla(int.user.id, 1, "gb toplam", "diğerleri", false)
             let bilgiler = [
                 `**👤 Yazan kişi:**  ${int.user.tag} - (${int.user.id})`,
-                `**🖥️ Yazdığı sunucu:**  ${guild.name} - (${sunucuid})`,
+                `**🖥️ Yazdığı sunucu:**  ${guild.name} - (${guildId})`,
                 `**🎞️ Yazdığı kanal:**  #${int.channel.name} - (${int.channelId})`
             ]
             const embed = new EmbedBuilder()
@@ -38,7 +38,7 @@ module.exports = {
             int.client.sendChannel({ embeds: [embed] }, 'KANAL ID')
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

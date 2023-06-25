@@ -8,15 +8,15 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {            
 
             // Kontroller
-            let yetkili = sunucudb.jail.yetkili
+            let yetkili = guildDatabase.jail.yetkili
             if (yetkili) {
                 if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
             } else if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
-            let kayıtlar2 = sunucudb.jail.son
+            let kayıtlar2 = guildDatabase.jail.son
             if (!kayıtlar2.length) return hata(`Bu sunucuda daha önce hiçbir jail işlemi gerçekleşmediğinden dolayı tablo gösterilemiyor`)
 
             
@@ -180,7 +180,7 @@ module.exports = {
             }
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

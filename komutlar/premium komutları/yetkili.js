@@ -8,7 +8,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
             if (msgMember.permissions.has("Administrator")) {
                 let secenek = args[0]
@@ -21,26 +21,26 @@ module.exports = {
                         if (roles.some(a => a.managed)) return hata(`Etiketlediğiniz rol(lerden) birisi bir bot rolü. Lütfen başka bir rol(leri) etiketleyiniz`)
                         if (roles.size > 25) return hata(`Hey hey heyyy sence de biraz fazla rol etiketlemedin mi?`)
                     
-                        sunucudb.premium.yetkili = roles.map(a => a.id)
+                        guildDatabase.premium.yetkili = roles.map(a => a.id)
                         hata(`Yetkili rol(leri) başarıyla [${roles.map(a => `<@&${a.id}>`).join(" | ")}] olarak ayarlandı`, "b")
-                        db.yazdosya(sunucudb, sunucuid)
+                        db.yazdosya(guildDatabase, guildId)
                         return;
                     }
                     case "sıfırla": {
 
                         // Kontroller
-                        let rol = sunucudb.premium.yetkili
+                        let rol = guildDatabase.premium.yetkili
                         if (!rol) return hata(`Yetkili rolü zaten sıfırlanmış durumda`)
                        
-                        delete sunucudb.premium.yetkili
+                        delete guildDatabase.premium.yetkili
                         hata(`Yetkili rolü başarıyla sıfırlandı`, "b")
-                        db.yazdosya(sunucudb, sunucuid)
+                        db.yazdosya(guildDatabase, guildId)
                         return;
                     }
                     case "etiket": {
 
                         // Kontroller
-                        let rol = sunucudb.premium.yetkili
+                        let rol = guildDatabase.premium.yetkili
                         if (!rol) return hata(`Bu sunucuda herhangi bir yetkili rolü ayarlı değil\n\n• Ayarlamak için **${prefix}yetkili ayarla @rol @rol @rol** yazabilirsiniz`)
                         let kisiler = (await msg.client.getMembers(msg)).filter(a => !a.user.bot && rol.some(b => a.roles.cache.has(b)))
                         if (kisiler.size == 0) return hata(`Şeyyy.. yetkili rolüne kimse sahip değil şapşik şey seni :(`)
@@ -56,7 +56,7 @@ module.exports = {
                     case "gör": {
 
                         // Kontroller
-                        let rol = sunucudb.premium.yetkili
+                        let rol = guildDatabase.premium.yetkili
                         if (!rol) return hata(`Bu sunucuda herhangi bir yetkili rolü ayarlı değil\n\n• Ayarlamak için **${prefix}yetkili ayarla @rol** yazabilirsiniz`)
                         let kisiler = (await msg.client.getMembers(msg)).filter(a => !a.user.bot && rol.some(b => a.roles.cache.has(b)))
                         if (kisiler.size == 0) return hata(`Şeyyy.. yetkili rolüne kimse sahip değil şapşik şey seni :(`)
@@ -72,7 +72,7 @@ module.exports = {
                     case "rol": {
 
                         // Kontroller
-                        let rol = sunucudb.premium.yetkili
+                        let rol = guildDatabase.premium.yetkili
                         if (!rol) return hata(`Bu sunucuda herhangi bir yetkili rolü ayarlı değil\n\n• Ayarlamak için **${prefix}yetkili ayarla @rol** yazabilirsiniz`)
                      
                         return msg.reply({ content: `${rol.map(a => `<@&${a}>`).join(", ")} - (Bu rol(lere) sahip olanlara bildirim __gitmedi__)`, allowedMentions: { roles: false } }).catch(err => { })
@@ -81,7 +81,7 @@ module.exports = {
                         return hata(`Yetkili rollerini ayarlamak için **${prefix}yetkili ayarla**\n• Yetkili rollerini sıfırlamak için **${prefix}yetkili sıfırla**\n• Bütün yetkilileri etiketlemek için **${prefix}yetkili etiket**\n• Bütün yetkilileri bildirim gitmeden görmek için **${prefix}yetkili gör**\n• Yetkili rollerini görmek için **${prefix}yetkili rol** yazabilirsiniz`, "ne", 30000)
                 }
             }
-            let rol = sunucudb.premium.yetkili
+            let rol = guildDatabase.premium.yetkili
             if (!rol) return msg.react(ayarlar.emoji.np).catch(err => { })
             let kisiler = (await msg.client.getMembers(msg)).filter(a => !a.user.bot && rol.some(b => a.roles.cache.has(b)))
             if (kisiler.size == 0) return msg.reply({ content: `${rol.map(a => `<@&${a}>`).join(", ")}`, allowedMentions: { roles: false } }).catch(err => { })
@@ -94,7 +94,7 @@ module.exports = {
             }
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

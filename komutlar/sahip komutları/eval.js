@@ -9,7 +9,7 @@ module.exports = {
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
     try {
       if (!args[0]) return msg.react('❌')
       let komuteval = eval(args.join(" "))

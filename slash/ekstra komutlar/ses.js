@@ -12,7 +12,7 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
 
             // Kontroller
@@ -21,18 +21,18 @@ module.exports = {
             if (int.options.getSubcommand(false) == "kanal") {
                 const kanal = int.options.getChannel("kanal", true)
                 if (!kanal.joinable) return hata(`Etiketlediğiniz kanala benim katılma yetkim yok :(`)
-                DiscordVoice.joinVoiceChannel({ channelId: kanal.id, guildId: sunucuid, adapterCreator: guild.voiceAdapterCreator, selfDeaf: true, selfMute: true })
+                DiscordVoice.joinVoiceChannel({ channelId: kanal.id, guildId: guildId, adapterCreator: guild.voiceAdapterCreator, selfDeaf: true, selfMute: true })
                 int.reply(`📥 <#${kanal.id}> kanalına giriş yaptım!`).catch(err => { })
-                return db.yaz(sunucuid, kanal.id, "ses", "diğerleri")
+                return db.yaz(guildId, kanal.id, "ses", "diğerleri")
             }
-            if (!db.bul(sunucuid, "ses", "diğerleri")) return hata(`Zaten daha önceden katılmam için bir ses kanalı belirlememişsiniz`)
+            if (!db.bul(guildId, "ses", "diğerleri")) return hata(`Zaten daha önceden katılmam için bir ses kanalı belirlememişsiniz`)
             int.guild.members.me.voice.disconnect().catch(err => { })
             hata(`Artık bundan sonra bir ses kanalına girmeyeceğim`, "b")
-            db.sil(sunucuid, "ses", "diğerleri")
+            db.sil(guildId, "ses", "diğerleri")
             return;
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

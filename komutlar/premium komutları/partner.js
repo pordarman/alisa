@@ -8,7 +8,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
             let secenek = args[0]
             if (msgMember.permissions.has("Administrator")) {
@@ -19,28 +19,28 @@ module.exports = {
                         let rol = msg.mentions.roles.first() || guild.roles.cache.get(args[1])
                         if (!rol) return hata(`Lütfen bir rol etiketleyiniz veya ID'sini giriniz\n\n**Örnek**\n• ${prefix}partner ayarla @rol\n• ${prefix}partner ayarla ROLID`)
                         if (rol.managed) return hata(`Etiketlediğiniz rol bir bot rolü. Lütfen başka bir rol etiketleyiniz`)
-                        if (rol.id == sunucudb.premium.partner) return hata(`Etiketlediğiniz rol zaten parter yetkilisi rolü olarak ayarlanmış durumda`)
+                        if (rol.id == guildDatabase.premium.partner) return hata(`Etiketlediğiniz rol zaten parter yetkilisi rolü olarak ayarlanmış durumda`)
                       
-                        sunucudb.premium.partner = rol.id
+                        guildDatabase.premium.partner = rol.id
                         hata(`Partner yetkilisi rolü başarıyla <@&${rol.id}> olarak ayarlandı`, "b")
-                        db.yazdosya(sunucudb, sunucuid)
+                        db.yazdosya(guildDatabase, guildId)
                         return;
                     }
                     case "sıfırla": {
 
                         // Kontroller
-                        let rol = sunucudb.premium.partner
+                        let rol = guildDatabase.premium.partner
                         if (!rol) return hata(`Partner yetkilisi rolü zaten sıfırlanmış durumda`)
                        
-                        delete sunucudb.premium.partner
+                        delete guildDatabase.premium.partner
                         hata(`Partner yetkilisi rolü başarıyla sıfırlandı`, "b")
-                        db.yazdosya(sunucudb, sunucuid)
+                        db.yazdosya(guildDatabase, guildId)
                         return;
                     }
                     case "etiket": {
 
                         // Kontroller
-                        let rol = sunucudb.premium.partner
+                        let rol = guildDatabase.premium.partner
                         if (!rol) return hata(`Bu sunucuda herhangi bir partner yetkilisi rolü ayarlı değil\n\n• Ayarlamak için **${prefix}partner ayarla @rol** yazabilirsiniz`)
                         let kisiler = (await msg.client.getMembers(msg)).filter(a => !a.user.bot && a.roles.cache.has(rol))
                         if (kisiler.size == 0) return hata(`Şeyyy.. Partner yetkilisi rolüne kimse sahip değil şapşik şey seni :(`)
@@ -56,7 +56,7 @@ module.exports = {
                     case "gör": {
 
                         // Kontroller
-                        let rol = sunucudb.premium.partner
+                        let rol = guildDatabase.premium.partner
                         if (!rol) return hata(`Bu sunucuda herhangi bir partner yetkilisi rolü ayarlı değil\n\n• Ayarlamak için **${prefix}partner ayarla @rol** yazabilirsiniz`)
                         let kisiler = (await msg.client.getMembers(msg)).filter(a => !a.user.bot && a.roles.cache.has(rol))
                         if (kisiler.size == 0) return hata(`Şeyyy.. Partner yetkilisi rolüne kimse sahip değil şapşik şey seni :(`)
@@ -73,7 +73,7 @@ module.exports = {
                     case "rol": {
 
                         // Kontroller
-                        let rol = sunucudb.premium.partner
+                        let rol = guildDatabase.premium.partner
                         if (!rol) return hata(`Bu sunucuda herhangi bir partner yetkilisi rolü ayarlı değil\n\n• Ayarlamak için **${prefix}partner ayarla @rol** yazabilirsiniz`)
                       
                         return msg.reply({ content: `<@&${rol}> - (Bu role sahip olanlara bildirim __gitmedi__)`, allowedMentions: { roles: false } }).catch(err => { })
@@ -82,7 +82,7 @@ module.exports = {
                         return hata(`Partner yetkilisi rolü ayarlama için **${prefix}partner ayarla**\n• Partner rolünü sıfırlamak için **${prefix}partner sıfırla**\n• Bütün partner yetkililerini etiketlemek için **${prefix}partner etiket**\n• Bütün partner yetkililerini bildirim gitmeden görmek için **${prefix}partner gör**\n• Partner yetkilisi rolünü görmek için **${prefix}partner rol** yazabilirsiniz`, "ne", 30000)
                 }
             }
-            let rol = sunucudb.premium.partner
+            let rol = guildDatabase.premium.partner
             if (!rol) return msg.react(ayarlar.emoji.np).catch(err => { })
             let kisiler = (await msg.client.getMembers(msg)).filter(a => !a.user.bot && a.roles.cache.has(rol))
             if (kisiler.size == 0) return msg.reply({ content: `<@&${rol}>`, allowedMentions: { roles: false } }).catch(err => { })
@@ -95,7 +95,7 @@ module.exports = {
             }
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

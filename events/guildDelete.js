@@ -14,7 +14,7 @@ module.exports = {
 
             // Sunucudan çıkarıldığı bilgisini belirtilen kanala atar
             db.sil(guild.id, "kur", "diğerleri")
-            delete guild.client.sunucudb[guild.id]
+            delete guild.client.guildDatabase[guild.id]
             alisa.sunucular.çıkarma[guild.id] = Date.now()
             db.yazdosya(alisa, "alisa", "diğerleri")
             guild.client.secenek.delete(guild.id)

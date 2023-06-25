@@ -8,7 +8,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
@@ -25,15 +25,15 @@ module.exports = {
             await msg.channel.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(a => {
                 const m = a.first()
                 if (m.content.toLocaleLowerCase() === "evet") {
-                    sunucudb.jail = { kisi: {}, son: [] }
+                    guildDatabase.jail = { kisi: {}, son: [] }
                     m.reply('Bu sunucudaki bütüm jail ayar ve bilgilerinizi başarıyla sıfırladım').catch(err => { })
-                    db.yazdosya(sunucudb, sunucuid)
+                    db.yazdosya(guildDatabase, guildId)
                     return;
                 } else m.reply({ content: "İşlem iptal edilmiştir" }).catch(err => { })
             }).catch(() => msg.reply({ content: `⏰ <@${msg.author.id}>, süreniz bitti!` }).catch(err => { }))
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

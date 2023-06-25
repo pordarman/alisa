@@ -8,12 +8,12 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
             const üye = msg.mentions.members.first() || await msg.client.fetchMember(args[0], msg) || msgMember
             await üye.fetch(true)
             let sunucuad = üye.nickname || "Sunucudaki adı yok"
-                , tümroller = üye.roles.cache.filter(a => a.id !== sunucuid)
+                , tümroller = üye.roles.cache.filter(a => a.id !== guildId)
                 , kişininbanneri = üye.user.bannerURL()
                 , kişininfotografı = üye.displayAvatarURL()
                 , botmu = üye.user.bot ? `🤖 **Üye bot mu:**  Bot` : `👤 **Üye bot mu:**  Bot değil`
@@ -50,7 +50,7 @@ module.exports = {
             msg.reply({ embeds: [embed] }).catch(() => { })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

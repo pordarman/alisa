@@ -8,13 +8,13 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
             if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
             
-            let tagrol = msg.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
+            let tagrol = msg.client.tagrolDatabase(guildId, guildDatabase.kayıt.tag)
             , ayar = tagrol.ayar ? `Kapalı ${ayarlar.emoji.kapali}` : `Açık ${ayarlar.emoji.acik}`
             , dme = tagrol.dmesaje ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
             , dmk = tagrol.dmesajk ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
@@ -46,7 +46,7 @@ module.exports = {
             msg.reply({ embeds: [embed] }).catch(err => { })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

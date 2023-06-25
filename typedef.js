@@ -73,7 +73,7 @@ import Discord from "discord.js"
  */
 
 /**
- * @typedef {Object} sunucudbObject
+ * @typedef {Object} guildDatabaseObject
  * @property {Object} kayıtkisiler
  * @property {Array} son
  * @property {kayıtObject} kayıt
@@ -118,10 +118,10 @@ import Discord from "discord.js"
 /**
  * @typedef {Object} exportsRunCommands
  * @property {alisaObject} alisa
- * @property {sunucudbObject} sunucudb 
+ * @property {guildDatabaseObject} guildDatabase 
  * @property {Discord.Message} msg 
  * @property {Array<String>} args 
- * @property {String} sunucuid 
+ * @property {String} guildId 
  * @property {String} prefix 
  * @property {premiumObject} pre
  * @property {hataObject} hata 
@@ -135,9 +135,9 @@ import Discord from "discord.js"
  * @typedef {Object} exportsRunButtons
  * @property {Discord.ButtonInteraction} int 
  * @property {alisaObject} alisa
- * @property {sunucudbObject} sunucudb 
+ * @property {guildDatabaseObject} guildDatabase 
  * @property {hataObject} hata 
- * @property {String} sunucuid
+ * @property {String} guildId
  * @property {Discord.Guild} guild
  * @property {Array} sonradan
  */
@@ -146,9 +146,9 @@ import Discord from "discord.js"
  * @typedef {Object} exportsRunSlash
  * @property {Discord.ChatInputCommandInteraction} int 
  * @property {alisaObject} alisa
- * @property {sunucudbObject} sunucudb 
+ * @property {guildDatabaseObject} guildDatabase 
  * @property {hataObject} hata 
- * @property {String} sunucuid
+ * @property {String} guildId
  * @property {Discord.Guild} guild
  * @property {Array} sonradan
  */

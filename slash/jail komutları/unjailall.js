@@ -10,17 +10,17 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
 
             // Kontroller
-            let yetkili = sunucudb.jail.yetkili
+            let yetkili = guildDatabase.jail.yetkili
                 , intMember = int.member
             if (yetkili) {
                 if (!intMember.roles.cache.has(yetkili) && !intMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
             } else if (!intMember.permissions.has('Administrator')) return hata('Yönetici', "yetki")
-            let rol = sunucudb.jail.rol
-            if (!rol) return hata(`Bu sunucuda herhangi bir jail rolü __ayarlanmamış__${intMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${sunucudb.prefix || ayarlar.prefix}jail-rol @rol** yazabilirsiniz` : ""}`)
+            let rol = guildDatabase.jail.rol
+            if (!rol) return hata(`Bu sunucuda herhangi bir jail rolü __ayarlanmamış__${intMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${guildDatabase.prefix || ayarlar.prefix}jail-rol @rol** yazabilirsiniz` : ""}`)
             let guildMe = int.guild.members.me
             if (!guildMe.permissions.has('ManageRoles')) return hata("Rolleri Yönet", "yetkibot")
             let roll = guild.roles.cache.get(rol)
@@ -48,14 +48,14 @@ module.exports = {
                         a.edit({ content: "İşlem sürüyor..." }).catch(err => { })
                         let hatalar = []
                         let embedlar = []
-                            , sunucuJail = db.bul(sunucuid, "jail", "diğerleri")
+                            , sunucuJail = db.bul(guildId, "jail", "diğerleri")
                             , dongu = 0
                         if (sunucuJail) {
                             kisiler.forEach(async a => {
                                 dongu += 1
-                                let kl = sunucudb.kl[a.id] || []
+                                let kl = guildDatabase.kl[a.id] || []
                                 kl.unshift({ type: "uj", author: int.user.id, timestamp: Date.now() })
-                                sunucudb.kl[a.id] = kl
+                                guildDatabase.kl[a.id] = kl
                                 await Time.wait(350)
                                 await a.edit({ roles: (sunucuJail[a.id] ? sunucuJail[a.id].filter(b => guild.roles.cache.has(b)) : a.roles.cache.filter(b => b.id != rol).map(b => b.id)) }).catch(err => hatalar.push(`<@${a.id}>`)).then(err => delete sunucuJail[a.id])
                                 if (dongu == kisiler.size) return son()
@@ -63,9 +63,9 @@ module.exports = {
                         } else {
                             kisiler.forEach(async a => {
                                 dongu += 1
-                                let kl = sunucudb.kl[a.id] || []
+                                let kl = guildDatabase.kl[a.id] || []
                                 kl.unshift({ type: "uj", author: int.user.id, timestamp: Date.now() })
-                                sunucudb.kl[a.id] = kl
+                                guildDatabase.kl[a.id] = kl
                                 await Time.wait(350)
                                 await a.roles.remove(rol).catch(err => hatalar.push(`<@${a.id}>`))
                                 if (dongu == kisiler.size) return son()
@@ -84,10 +84,10 @@ module.exports = {
                             if (jaildencikarilankisiler.size) {
                                 const date = Date.now()
                                 jaildencikarilankisiler.forEach(a => {
-                                    let kisi = sunucudb.jail.kisi[a.id] || []
+                                    let kisi = guildDatabase.jail.kisi[a.id] || []
                                     kisi.unshift({ y: int.user.id, z: date, bool: false })
-                                    sunucudb.jail.kisi[a.id] = kisi
-                                    sunucudb.jail.son.unshift({ s: int.user.id, k: a.id, z: date, bool: false })
+                                    guildDatabase.jail.kisi[a.id] = kisi
+                                    guildDatabase.jail.son.unshift({ s: int.user.id, k: a.id, z: date, bool: false })
                                 })
                                 const cikarilan = jaildencikarilankisiler.map(a => `<@${a.id}>`).slice(0, 90).join(", ") + (jaildencikarilankisiler.size > 90 ? ` +${jaildencikarilankisiler.size - 90} kişi daha...` : "")
                                 const zaman = `<t:${(date / 1000).toFixed(0)}:F> - <t:${(date / 1000).toFixed(0)}:R>`
@@ -113,7 +113,7 @@ module.exports = {
                                     .setFooter({ text: `${int.client.user.username} Jail sistemi`, iconURL: clientPp })
                                     .setTimestamp()
                                 embedlar.push(embed)
-                                let log = sunucudb.jail.log
+                                let log = guildDatabase.jail.log
                                 if (log) {
                                     const yapılanSeyler = [
                                         `🧰 **JAIL'DEN ÇIKARAN YETKİLİ**`,
@@ -138,12 +138,12 @@ module.exports = {
                                     guild.channels.cache.get(log)?.send({ embeds: [embed] }).catch(err => { })
                                 }
                                 let tempjaildosya = db.buldosya("tempjail", "diğerleri")
-                                delete tempjaildosya[sunucuid]
+                                delete tempjaildosya[guildId]
                                 db.yazdosya(tempjaildosya, "tempjail", "diğerleri")
                             }
                             a.edit({ embeds: embedlar, components: [], content: `İşlem bitti!` }).catch(err => { })
-                            db.yazdosya(sunucudb, sunucuid)
-                            db.yaz(sunucuid, sunucuJail, "jail", "diğerleri")
+                            db.yazdosya(guildDatabase, guildId)
+                            db.yaz(guildId, sunucuJail, "jail", "diğerleri")
                             return;
                         }
                     } else return a.edit({ content: "İşlem iptal edildi", components: [] }).catch(err => { })
@@ -154,7 +154,7 @@ module.exports = {
             }).catch(err => { })
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

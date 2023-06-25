@@ -47,147 +47,147 @@ module.exports = {
             , alisa = db.buldosya("alisa", "diğerleri")
         client.guilds.cache.forEach(async (a, id) => {
             if (alisa.klserver.includes(id)) return a.leave()
-            let sunucudb = db.buldosya(id)
+            let guildDatabase = db.buldosya(id)
                 , hatalar = []
-                , tagrolSunucudb = tagroldb[id] || { kisi: {}, tag: (sunucudb.kayıt.tag ? sunucudb.kayıt.tag.slice(0, -1) : undefined) }
-                , kayıtsız = sunucudb.kayıt.kayıtsız
-                , yetkili = sunucudb.kayıt.yetkili
-                , erkekRol = sunucudb.kayıt.erkek || []
+                , tagrolguildDatabase = tagroldb[id] || { kisi: {}, tag: (guildDatabase.kayıt.tag ? guildDatabase.kayıt.tag.slice(0, -1) : undefined) }
+                , kayıtsız = guildDatabase.kayıt.kayıtsız
+                , yetkili = guildDatabase.kayıt.yetkili
+                , erkekRol = guildDatabase.kayıt.erkek || []
                 , erkekRolFilter = erkekRol.filter(role => a.roles.cache.has(role))
-                , kızRol = sunucudb.kayıt.kız || []
+                , kızRol = guildDatabase.kayıt.kız || []
                 , kızRolFilter = kızRol.filter(role => a.roles.cache.has(role))
-                , kayıtRol = sunucudb.kayıt.normal || []
+                , kayıtRol = guildDatabase.kayıt.normal || []
                 , kayıtRolFilter = kayıtRol.filter(role => a.roles.cache.has(role))
-                , botRol = sunucudb.kayıt.bot || []
+                , botRol = guildDatabase.kayıt.bot || []
                 , botRolFilter = botRol.filter(role => a.roles.cache.has(role))
-                , yetkiliRol = sunucudb.premium.yetkili || []
+                , yetkiliRol = guildDatabase.premium.yetkili || []
                 , yetkiliRolFilter = yetkiliRol.filter(role => a.roles.cache.has(role))
-                , partnerRol = sunucudb.premium.partner
-                , kayıtKanal = sunucudb.kayıt.kanal
-                , kayıtGunluk = sunucudb.kayıt.günlük
-                , kayıtLog = sunucudb.kayıt.log
-                , modLog = sunucudb.kayıt.modl
-                , tagrolRol = tagrolSunucudb.rol
-                , tagrolKanal = tagrolSunucudb.kanal
-                , tagrolLog = tagrolSunucudb.log
-                , jailRol = sunucudb.jail.rol
-                , jailYetkili = sunucudb.jail.yetkili
-                , jailLog = sunucudb.jail.log
-                , vipRol = sunucudb.kayıt.vrol
-                , vipYetkili = sunucudb.kayıt.vyetkili
-                , banYetkili = sunucudb.kayıt.bany
-                , kickYetkili = sunucudb.kayıt.kicky
+                , partnerRol = guildDatabase.premium.partner
+                , kayıtKanal = guildDatabase.kayıt.kanal
+                , kayıtGunluk = guildDatabase.kayıt.günlük
+                , kayıtLog = guildDatabase.kayıt.log
+                , modLog = guildDatabase.kayıt.modl
+                , tagrolRol = tagrolguildDatabase.rol
+                , tagrolKanal = tagrolguildDatabase.kanal
+                , tagrolLog = tagrolguildDatabase.log
+                , jailRol = guildDatabase.jail.rol
+                , jailYetkili = guildDatabase.jail.yetkili
+                , jailLog = guildDatabase.jail.log
+                , vipRol = guildDatabase.kayıt.vrol
+                , vipYetkili = guildDatabase.kayıt.vyetkili
+                , banYetkili = guildDatabase.kayıt.bany
+                , kickYetkili = guildDatabase.kayıt.kicky
             if (kayıtsız && !a.roles.cache.has(kayıtsız)) {
-                delete sunucudb.kayıt.kayıtsız
+                delete guildDatabase.kayıt.kayıtsız
                 hatalar.push('Kayıtsız rolü')
             }
             if (yetkili && !a.roles.cache.has(yetkili)) {
-                delete sunucudb.kayıt.yetkili
+                delete guildDatabase.kayıt.yetkili
                 hatalar.push('Yetkili rolü')
             }
             if (erkekRolFilter.length < erkekRol.length) {
                 if (erkekRolFilter.length) {
-                    sunucudb.kayıt.erkek = erkekRolFilter
+                    guildDatabase.kayıt.erkek = erkekRolFilter
                     hatalar.push('Erkek rollerinden bazıları')
                 } else {
-                    delete sunucudb.kayıt.erkek
+                    delete guildDatabase.kayıt.erkek
                     hatalar.push('Erkek rollerinin hepsi')
                 }
             }
             if (kızRolFilter.length < kızRol.length) {
                 if (kızRolFilter.length) {
-                    sunucudb.kayıt.kız = kızRolFilter
+                    guildDatabase.kayıt.kız = kızRolFilter
                     hatalar.push('Kız rollerinden bazıları')
                 } else {
-                    delete sunucudb.kayıt.kız
+                    delete guildDatabase.kayıt.kız
                     hatalar.push('Kız rollerinin hepsi')
                 }
             }
             if (kayıtRolFilter.length < kayıtRol.length) {
                 if (kayıtRolFilter.length) {
-                    sunucudb.kayıt.normal = kayıtRolFilter
+                    guildDatabase.kayıt.normal = kayıtRolFilter
                     hatalar.push('Üye rollerinden bazıları')
                 } else {
-                    delete sunucudb.kayıt.normal
+                    delete guildDatabase.kayıt.normal
                     hatalar.push('Üye rollerinin hepsi')
                 }
             }
             if (botRolFilter.length < botRol.length) {
                 if (botRolFilter.length) {
-                    sunucudb.kayıt.bot = botRolFilter
+                    guildDatabase.kayıt.bot = botRolFilter
                     hatalar.push('Bot rollerinden bazıları')
                 } else {
-                    delete sunucudb.kayıt.bot
+                    delete guildDatabase.kayıt.bot
                     hatalar.push('Bot rollerinin hepsi')
                 }
             }
             if (yetkiliRolFilter.length != yetkiliRol.length) {
                 if (yetkiliRolFilter.length) {
-                    sunucudb.premium.yetkili = yetkiliRolFilter
+                    guildDatabase.premium.yetkili = yetkiliRolFilter
                     hatalar.push('Yetkili rollerinden bazıları')
                 } else {
-                    delete sunucudb.premium.yetkili
+                    delete guildDatabase.premium.yetkili
                     hatalar.push('Yetkili rollerinin hepsi')
                 }
             }
             if (partnerRol && !a.roles.cache.has(partnerRol)) {
-                delete sunucudb.premium.partner
+                delete guildDatabase.premium.partner
                 hatalar.push('Partner rolü')
             }
             if (kayıtKanal && !a.channels.cache.has(kayıtKanal)) {
-                delete sunucudb.kayıt.kanal
+                delete guildDatabase.kayıt.kanal
                 hatalar.push('Kayıt kanalı')
             }
             if (kayıtGunluk && !a.channels.cache.has(kayıtGunluk)) {
-                delete sunucudb.kayıt.günlük
+                delete guildDatabase.kayıt.günlük
                 hatalar.push('Kayıt günlük kanalı')
             }
             if (kayıtLog && !a.channels.cache.has(kayıtLog)) {
-                delete sunucudb.kayıt.log
+                delete guildDatabase.kayıt.log
                 hatalar.push('Kayıt log kanalı')
             }
             if (modLog && !a.channels.cache.has(modLog)) {
-                delete sunucudb.kayıt.modl
+                delete guildDatabase.kayıt.modl
                 hatalar.push('Moderasyon log kanalı')
             }
             if (tagrolRol && !a.roles.cache.has(tagrolRol)) {
-                delete tagrolSunucudb.rol
+                delete tagrolguildDatabase.rol
                 hatalar.push('Tagrol rolü')
             }
             if (tagrolKanal && !a.channels.cache.has(tagrolKanal)) {
-                delete tagrolSunucudb.kanal
+                delete tagrolguildDatabase.kanal
                 hatalar.push('Tagrol kanalı')
             }
             if (tagrolLog && !a.channels.cache.has(tagrolLog)) {
-                delete tagrolSunucudb.log
+                delete tagrolguildDatabase.log
                 hatalar.push('Tagrol log kanalı')
             }
             if (jailRol && !a.roles.cache.has(jailRol)) {
-                delete sunucudb.jail.rol
+                delete guildDatabase.jail.rol
                 hatalar.push('Jail rolü')
             }
             if (jailYetkili && !a.roles.cache.has(jailYetkili)) {
-                delete sunucudb.jail.yetkili
+                delete guildDatabase.jail.yetkili
                 hatalar.push('Jail yetkili rolü')
             }
             if (jailLog && !a.channels.cache.has(jailLog)) {
-                delete sunucudb.jail.log
+                delete guildDatabase.jail.log
                 hatalar.push('Jail log kanalı')
             }
             if (vipRol && !a.roles.cache.has(vipRol)) {
-                delete sunucudb.kayıt.vrol
+                delete guildDatabase.kayıt.vrol
                 hatalar.push('Vip rolü')
             }
             if (vipYetkili && !a.roles.cache.has(vipYetkili)) {
-                delete sunucudb.kayıt.vyetkili
+                delete guildDatabase.kayıt.vyetkili
                 hatalar.push('Vip yetkili rolü')
             }
             if (banYetkili && !a.roles.cache.has(banYetkili)) {
-                delete sunucudb.kayıt.bany
+                delete guildDatabase.kayıt.bany
                 hatalar.push('Ban yetkili rolü')
             }
             if (kickYetkili && !a.roles.cache.has(kickYetkili)) {
-                delete sunucudb.kayıt.kicky
+                delete guildDatabase.kayıt.kicky
                 hatalar.push('Kick yetkili rolü')
             }
             if (hatalar.length) {
@@ -202,9 +202,9 @@ module.exports = {
                     .setColor("Blue")
                     .setTimestamp();
                 (await client.fetchUserForce(a.ownerId))?.send({ embeds: [embed] }).catch(err => { });
-                db.yazdosya(sunucudb, id)
-                tagroldb[id] = tagrolSunucudb
-                db.yaz(id, tagrolSunucudb, "tag rol", "diğerleri")
+                db.yazdosya(guildDatabase, id)
+                tagroldb[id] = tagrolguildDatabase
+                db.yaz(id, tagrolguildDatabase, "tag rol", "diğerleri")
             }
 
             // Slash komutlarını yükleme
@@ -221,7 +221,7 @@ module.exports = {
 
             // Süreli jaile atılan kişilerin süresinin bitip bitmediğini kontrol etme
             let tempjailsunucu = dosyatempjail[id]
-                , rol = sunucudb.jail.rol
+                , rol = guildDatabase.jail.rol
             if (tempjailsunucu && rol) {
                 Object.entries(tempjailsunucu).forEach(async ([memberId, object]) => {
                     const uye1 = await client.fetchMemberForce(memberId, { guild: a })
@@ -242,19 +242,19 @@ module.exports = {
                                 let date3 = Date.now()
                                     , sahip = await client.fetchUserForce(object.idler.s)
                                     , obje = { y: sahip.id, z: date3, sure: "⏰", bool: false }
-                                    , kisi = sunucudb.jail.kisi[uye.id] || []
-                                    , kl = sunucudb.kl[uye.id] || []
+                                    , kisi = guildDatabase.jail.kisi[uye.id] || []
+                                    , kl = guildDatabase.kl[uye.id] || []
                                 kl.unshift({ type: "tj", c: false, author: sahip.id, timestamp: date3 })
-                                sunucudb.kl[uye.id] = kl
+                                guildDatabase.kl[uye.id] = kl
                                 kisi.unshift(obje)
-                                sunucudb.jail.kisi[uye.id] = kisi
-                                sunucudb.jail.son.unshift({ s: sahip.id, k: uye.id, z: date3, sure: "⏰", bool: false })
-                                db.yazdosya(sunucudb, id)
+                                guildDatabase.jail.kisi[uye.id] = kisi
+                                guildDatabase.jail.son.unshift({ s: sahip.id, k: uye.id, z: date3, sure: "⏰", bool: false })
+                                db.yazdosya(guildDatabase, id)
                                 if (object.idler.m) {
                                     let mesaj = await fetchMessage(kanal, object.idler.m)
                                     if (mesaj) mesaj.reply({ content: `• <@${uye.id}> adlı kişinin jail rolü başarıyla kaldırıldı!`, allowedMentions: { users: [uye.id], repliedUser: true } })?.catch(err => { })
                                 }
-                                let log = sunucudb.jail.log
+                                let log = guildDatabase.jail.log
                                 if (log) {
                                     let pp = uye.displayAvatarURL()
                                         , zaman = `<t:${(object.d / 1000).toFixed(0)}:F> - <t:${(object.d / 1000).toFixed(0)}:R>`
@@ -287,10 +287,10 @@ module.exports = {
                     }
                 })
             }
-            if (sunucudb.kayıt.secenek) client.secenek.add(id)
-            if (sunucudb.kayıt.özel) sunucudb.kayıt.özel.yazı = sunucudb.kayıt.özel.yazı.replace(/<sayı>/g, "<toplam>").replace(/<emojiSayı>/g, "<emojiToplam>")
-            client.sunucudb[id] = sunucudb
-            if (!tagroldb[id]) tagroldb[id] = { kisi: {}, tag: (sunucudb.kayıt.tag ? sunucudb.kayıt.tag.slice(0, -1) : undefined) }
+            if (guildDatabase.kayıt.secenek) client.secenek.add(id)
+            if (guildDatabase.kayıt.özel) guildDatabase.kayıt.özel.yazı = guildDatabase.kayıt.özel.yazı.replace(/<sayı>/g, "<toplam>").replace(/<emojiSayı>/g, "<emojiToplam>")
+            client.guildDatabase[id] = guildDatabase
+            if (!tagroldb[id]) tagroldb[id] = { kisi: {}, tag: (guildDatabase.kayıt.tag ? guildDatabase.kayıt.tag.slice(0, -1) : undefined) }
         })
         
         // Ses kanallarını kontrol etme
@@ -307,16 +307,16 @@ module.exports = {
                 if (objectMember.s < Date.now()) {
                     const kanal = client.channels.cache.get(objectMember.k)
                     if (!kanal) return;
-                    let sunucudb = client.guildDatabase(kanal.guildId)
-                        , kl = sunucudb.kl[memberId] || []
+                    let guildDatabase = client.guildDatabase(kanal.guildId)
+                        , kl = guildDatabase.kl[memberId] || []
                     kl.unshift({ type: "unmute", author: objectMember.a, timestamp: Date.now() })
-                    sunucudb.kl[memberId] = kl
-                    db.yazdosya(sunucudb, kanal.guildId)
+                    guildDatabase.kl[memberId] = kl
+                    db.yazdosya(guildDatabase, kanal.guildId)
                     let mesaj = await fetchMessage(kanal, objectMember.m)
                     if (mesaj) mesaj.reply(gonderilcekMesaj).catch(err => { })
                     else kanal?.send(gonderilcekMesaj).catch(err => { })
                     delete mute[guildId][memberId]
-                    let modLog = sunucudb.kayıt.modl
+                    let modLog = guildDatabase.kayıt.modl
                     if (modLog) {
                         let date = (Date.now() / 1000).toFixed(0)
                             , author = (await client.fetchUserForce(objectMember.a))
@@ -344,16 +344,16 @@ module.exports = {
                 const kanal = client.channels.cache.get(objectMember.k)
                 if (!kanal) return;
                 Time.setTimeout(async () => {
-                    let sunucudb = client.guildDatabase(kanal.guildId)
-                        , kl = sunucudb.kl[memberId] || []
+                    let guildDatabase = client.guildDatabase(kanal.guildId)
+                        , kl = guildDatabase.kl[memberId] || []
                     kl.unshift({ type: "unmute", author: objectMember.a, timestamp: Date.now() })
-                    sunucudb.kl[memberId] = kl
-                    db.yazdosya(sunucudb, kanal.guildId)
+                    guildDatabase.kl[memberId] = kl
+                    db.yazdosya(guildDatabase, kanal.guildId)
                     const mesaj = await fetchMessage(kanal, objectMember.m)
                     if (mesaj) mesaj.reply(gonderilcekMesaj).catch(err => { })
                     else kanal?.send(gonderilcekMesaj).catch(err => { })
                     delete mute[guildId][memberId]
-                    let modLog = sunucudb.kayıt.modl
+                    let modLog = guildDatabase.kayıt.modl
                     if (modLog) {
                         let date = (Date.now() / 1000).toFixed(0)
                             , author = (await client.fetchUserForce(objectMember.a))
@@ -391,13 +391,13 @@ module.exports = {
                 if (objectMember.d < Date.now() - 60000) return delete buttons[guildId][memberid]
                 const kanal = client.channels.cache.get(objectMember.k)
                 if (!kanal) return delete buttons[guildId][memberid];
-                let sunucudb = client.guildDatabase(guildId)
+                let guildDatabase = client.guildDatabase(guildId)
                 const mesaj = (await fetchMessage(kanal, objectMember.id, objectMember.sahip))
                 if (!mesaj) return delete buttons[guildId][memberid]
                 let guild = client.guilds.cache.get(guildId)
                 if (!guild) return delete buttons[guildId][memberid]
-                client.butonsure.set(memberid + guildId, objectMember.sahip)
-                client.buttons.get(objectMember.t).run({ int: mesaj, sunucudb, pre: premiumDosya[guildId], alisa, hata: () => { }, sonradan: objectMember, guild, sunucuid: guildId })
+                client.buttonCooldown.set(memberid + guildId, objectMember.sahip)
+                client.buttons.get(objectMember.t).run({ int: mesaj, guildDatabase, pre: premiumDosya[guildId], alisa, hata: () => { }, sonradan: objectMember, guild, guildId: guildId })
             })
         })
         Object.entries(buttons).filter(([id, value]) => Object.keys(value).length == 0).forEach(([id]) => delete buttons[id])
@@ -414,17 +414,17 @@ module.exports = {
                     , kisi = await client.fetchUserForce(object.author)
                 kisi.send(`• Heyy bakıyorum ki ${await client.getGuildNameOrId(guildId)} sunucunun premiumu bitmiş gibi görünüyor :(\n\n• Eğer premium'dan memnun kaldıysanız ya da yeniden satın almak isterseniz destek sunucuma gelebilirsiniz!!\n\n• ${ayarlar.discord}`).catch(err => { })
                     ; (await client.fetchUserForce(ayarlar.sahip)).send(`**> PREMİUM BİLGİLENDİRME**\n\n• **${client.guilds.cache.get(guildId)?.name || "❓ Bilinmeyen sunucu"} - (${guildId})** sunucunun premium'u bitmiştir.\n• **Satın alan kişi:** <@${kisi.id}> - ${kisi.tag}\n• **Kullandığı süre:** ${Time.duration(object.totalTime)}`).catch(err => { })
-                let sunucudb = client.guildDatabase(guildId)
-                    , tagroldb = client.tagrolDatabase(guildId, sunucudb.kayıt.tag)
-                    , object = { kayıt: { yassinir: sunucudb.kayıt.yassinir }, premium: sunucudb.premium, tagrol: { dmesaje: tagroldb.dmesaje, dmesajk: tagroldb.dmesajk, mesaje: tagroldb.mesaje, mesajk: tagroldb.mesajk } }
-                sunucudb.premium = {}
-                delete sunucudb.kayıt.yassinir
+                let guildDatabase = client.guildDatabase(guildId)
+                    , tagroldb = client.tagrolDatabase(guildId, guildDatabase.kayıt.tag)
+                    , object = { kayıt: { yassinir: guildDatabase.kayıt.yassinir }, premium: guildDatabase.premium, tagrol: { dmesaje: tagroldb.dmesaje, dmesajk: tagroldb.dmesajk, mesaje: tagroldb.mesaje, mesajk: tagroldb.mesajk } }
+                guildDatabase.premium = {}
+                delete guildDatabase.kayıt.yassinir
                 delete tagroldb.dmesaje
                 delete tagroldb.dmesajk
                 delete tagroldb.mesaje
                 delete tagroldb.mesajk
                 db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
-                db.yazdosya(sunucudb, guildId)
+                db.yazdosya(guildDatabase, guildId)
                 db.yaz(guildId, object, "premium database", "diğerleri")
             }, object.expiresTimestamp - Date.now())
         })
@@ -434,45 +434,45 @@ module.exports = {
             if (object.date < Date.now() - 480000) return db.sil(guildId, "tagrol mesaj", "diğerleri")
             const kanal = client.channels.cache.get(object.channelId)
             if (!kanal) return db.sil(guildId, "tagrol mesaj", "diğerleri")
-            let sunucudb = client.guildDatabase(guildId)
+            let guildDatabase = client.guildDatabase(guildId)
             const mesaj = (await fetchMessage(kanal, object.messageId, object.authorId))
             if (!mesaj) return db.sil(guildId, "tagrol mesaj", "diğerleri")
             let guild = client.guilds.cache.get(guildId)
             if (!guild) return db.sil(guildId, "tagrol mesaj", "diğerleri")
-            client.commands.get("tagrol-mesaj").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, hata: () => { }, prefix: (sunucudb.prefix || ayarlar.prefix), sonradan: true, guild, msgMember: mesaj.member, guildMe: guild.members.me })
+            client.commands.get("tagrol-mesaj").run({ guildDatabase, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], guildId: guildId, hata: () => { }, prefix: (guildDatabase.prefix || ayarlar.prefix), sonradan: true, guild, msgMember: mesaj.member, guildMe: guild.members.me })
         })
         Object.entries(db.buldosya("gözel", "diğerleri")).filter(([guildId]) => client.shardId(guildId) == client.shard.ids[0]).forEach(async ([guildId, object]) => {
             if (object.date < Date.now() - 480000) return db.sil(guildId, "gözel", "diğerleri")
             const kanal = client.channels.cache.get(object.channelId)
             if (!kanal) return db.sil(guildId, "gözel", "diğerleri")
-            let sunucudb = client.guildDatabase(guildId)
+            let guildDatabase = client.guildDatabase(guildId)
             const mesaj = (await fetchMessage(kanal, object.messageId, object.authorId))
             if (!mesaj) return db.sil(guildId, "gözel", "diğerleri")
             let guild = client.guilds.cache.get(guildId)
             if (!guild) return db.sil(guildId, "gözel", "diğerleri")
-            client.commands.get("gözel").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, hata: () => { }, prefix: (sunucudb.prefix || ayarlar.prefix), sonradan: true, guild, msgMember: mesaj.member, guildMe: guild.members.me })
+            client.commands.get("gözel").run({ guildDatabase, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], guildId: guildId, hata: () => { }, prefix: (guildDatabase.prefix || ayarlar.prefix), sonradan: true, guild, msgMember: mesaj.member, guildMe: guild.members.me })
         })
         Object.entries(db.buldosya("özel", "diğerleri")).filter(([guildId]) => client.shardId(guildId) == client.shard.ids[0]).forEach(async ([guildId, object]) => {
             if (object.date < Date.now() - 480000) return db.sil(guildId, "özel", "diğerleri")
             const kanal = client.channels.cache.get(object.channelId)
             if (!kanal) return db.sil(guildId, "özel", "diğerleri")
-            let sunucudb = client.guildDatabase(guildId)
+            let guildDatabase = client.guildDatabase(guildId)
             const mesaj = (await fetchMessage(kanal, object.messageId, object.authorId))
             if (!mesaj) return db.sil(guildId, "özel", "diğerleri")
             let guild = client.guilds.cache.get(guildId)
             if (!guild) return db.sil(guildId, "özel", "diğerleri")
-            client.commands.get("özel").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, prefix: (sunucudb.prefix || ayarlar.prefix), hata: () => { }, sonradan: true, guild, msgMember: mesaj.member, guildMe: guild.members.me })
+            client.commands.get("özel").run({ guildDatabase, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], guildId: guildId, prefix: (guildDatabase.prefix || ayarlar.prefix), hata: () => { }, sonradan: true, guild, msgMember: mesaj.member, guildMe: guild.members.me })
         })
         Object.entries(db.buldosya("kur", "diğerleri")).filter(([guildId]) => client.shardId(guildId) == client.shard.ids[0]).forEach(async ([guildId, object]) => {
             if (object.date < Date.now() - 120000) return db.sil(guildId, "kur", "diğerleri")
             const kanal = client.channels.cache.get(object.channelId)
             if (!kanal) return db.sil(guildId, "kur", "diğerleri")
-            let sunucudb = client.guildDatabase(guildId)
+            let guildDatabase = client.guildDatabase(guildId)
             const mesaj = (await fetchMessage(kanal, object.messageId, object.authorId))
             if (!mesaj) return db.sil(guildId, "kur", "diğerleri")
             let guild = client.guilds.cache.get(guildId)
             if (!guild) return db.sil(guildId, "kur", "diğerleri")
-            client.commands.get("kur").run({ sunucudb, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], sunucuid: guildId, prefix: (sunucudb.prefix || ayarlar.prefix), hata: () => { }, sonradan: object, guild, msgMember: mesaj.member, guildMe: guild.members.me })
+            client.commands.get("kur").run({ guildDatabase, pre: premiumDosya[guildId], alisa, msg: mesaj, args: [], guildId: guildId, prefix: (guildDatabase.prefix || ayarlar.prefix), hata: () => { }, sonradan: object, guild, msgMember: mesaj.member, guildMe: guild.members.me })
         })
 
         // Eğer bütün shardlar başlatılırsa bot durumu kanalına mesaj atar

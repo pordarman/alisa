@@ -12,93 +12,93 @@ module.exports = {
             if (rol.managed) return;
 
             // Eğer kayıtlı olan bir rol silinirse bunu sunucu sahibine iletir ve kayıtlı rolün verisini siler
-            let rolsunucuid = rol.guild.id
-                , sunucudb = rol.client.guildDatabase(rolsunucuid)
+            let rolguildId = rol.guild.id
+                , guildDatabase = rol.client.guildDatabase(rolguildId)
                 , roller = []
-                , botrolsilinmeid = sunucudb.kayıt.bot
+                , botrolsilinmeid = guildDatabase.kayıt.bot
             if (botrolsilinmeid && botrolsilinmeid.includes(rol.id)) {
-                if (botrolsilinmeid.length == 1) delete sunucudb.kayıt.bot
+                if (botrolsilinmeid.length == 1) delete guildDatabase.kayıt.bot
                 else botrolsilinmeid.splice(botrolsilinmeid.indexOf(rol.id), 1)
-                db.yazdosya(sunucudb, rolsunucuid)
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Bot rolü`)
             }
-            const erkekrolsilinmeid = sunucudb.kayıt.erkek
+            const erkekrolsilinmeid = guildDatabase.kayıt.erkek
             if (erkekrolsilinmeid && erkekrolsilinmeid.includes(rol.id)) {
-                if (erkekrolsilinmeid.length == 1) delete sunucudb.kayıt.erkek
+                if (erkekrolsilinmeid.length == 1) delete guildDatabase.kayıt.erkek
                 else erkekrolsilinmeid.splice(erkekrolsilinmeid.indexOf(rol.id), 1)
-                db.yazdosya(sunucudb, rolsunucuid)
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Erkek rolü`)
             }
-            const kızrolsilinmeid = sunucudb.kayıt.kız
+            const kızrolsilinmeid = guildDatabase.kayıt.kız
             if (kızrolsilinmeid && kızrolsilinmeid.includes(rol.id)) {
-                if (kızrolsilinmeid.length == 1) delete sunucudb.kayıt.kız
+                if (kızrolsilinmeid.length == 1) delete guildDatabase.kayıt.kız
                 else kızrolsilinmeid.splice(kızrolsilinmeid.indexOf(rol.id), 1)
-                db.yazdosya(sunucudb, rolsunucuid)
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Kız rolü`)
             }
-            const uyerolsilinmeid = sunucudb.kayıt.normal
+            const uyerolsilinmeid = guildDatabase.kayıt.normal
             if (uyerolsilinmeid && uyerolsilinmeid.includes(rol.id)) {
-                if (uyerolsilinmeid.length == 1) delete sunucudb.kayıt.normal
+                if (uyerolsilinmeid.length == 1) delete guildDatabase.kayıt.normal
                 else uyerolsilinmeid.splice(uyerolsilinmeid.indexOf(rol.id), 1)
-                db.yazdosya(sunucudb, rolsunucuid)
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Üye rolü`)
             }
-            const yetkilirolsilinmeid = sunucudb.premium.yetkili
+            const yetkilirolsilinmeid = guildDatabase.premium.yetkili
             if (yetkilirolsilinmeid && yetkilirolsilinmeid.includes(rol.id)) {
-                if (yetkilirolsilinmeid.length == 1) delete sunucudb.premium.yetkili
+                if (yetkilirolsilinmeid.length == 1) delete guildDatabase.premium.yetkili
                 else yetkilirolsilinmeid.splice(uyerolsilinmeid.indexOf(rol.id), 1)
-                db.yazdosya(sunucudb, rolsunucuid)
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Üye rolü`)
             }
-            let tagroldb = rol.client.tagrolDatabase(rolsunucuid)
+            let tagroldb = rol.client.tagrolDatabase(rolguildId)
             if (tagroldb?.rol == rol.id) {
                 delete tagroldb.rol
-                db.yaz(rolsunucuid, tagroldb, "tag rol", "diğerleri")
+                db.yaz(rolguildId, tagroldb, "tag rol", "diğerleri")
                 roller.push(`Tagrol rolü`)
             }
-            if (sunucudb.kayıt.kayıtsız == rol.id) {
-                delete sunucudb.kayıt.kayıtsız
-                db.yazdosya(sunucudb, rolsunucuid)
+            if (guildDatabase.kayıt.kayıtsız == rol.id) {
+                delete guildDatabase.kayıt.kayıtsız
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Kayıtsız rolü`)
             }
-            if (sunucudb.premium.partner == rol.id) {
-                delete sunucudb.kayıt.kayıtsız
-                db.yazdosya(sunucudb, rolsunucuid)
+            if (guildDatabase.premium.partner == rol.id) {
+                delete guildDatabase.kayıt.kayıtsız
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Partner rolü`)
             }
-            if (sunucudb.kayıt.yetkili == rol.id) {
-                delete sunucudb.kayıt.yetkili
-                db.yazdosya(sunucudb, rolsunucuid)
+            if (guildDatabase.kayıt.yetkili == rol.id) {
+                delete guildDatabase.kayıt.yetkili
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Kayıt yetkili rolü`)
             }
-            if (sunucudb.jail.yetkili == rol.id) {
-                delete sunucudb.jail.yetkili
-                db.yazdosya(sunucudb, rolsunucuid)
+            if (guildDatabase.jail.yetkili == rol.id) {
+                delete guildDatabase.jail.yetkili
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Jail yetkili rolü`)
             }
-            if (sunucudb.jail.rol == rol.id) {
-                delete sunucudb.jail.rol
-                db.yazdosya(sunucudb, rolsunucuid)
+            if (guildDatabase.jail.rol == rol.id) {
+                delete guildDatabase.jail.rol
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Jail rolü`)
             }
-            if (sunucudb.kayıt.vrol == rol.id) {
-                delete sunucudb.kayıt.vrol
-                db.yazdosya(sunucudb, rolsunucuid)
+            if (guildDatabase.kayıt.vrol == rol.id) {
+                delete guildDatabase.kayıt.vrol
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Vip rolü`)
             }
-            if (sunucudb.kayıt.vyetkili == rol.id) {
-                delete sunucudb.kayıt.vyetkili
-                db.yazdosya(sunucudb, rolsunucuid)
+            if (guildDatabase.kayıt.vyetkili == rol.id) {
+                delete guildDatabase.kayıt.vyetkili
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Vip yetkili rolü`)
             }
-            if (sunucudb.kayıt.bany == rol.id) {
-                delete sunucudb.kayıt.bany
-                db.yazdosya(sunucudb, rolsunucuid)
+            if (guildDatabase.kayıt.bany == rol.id) {
+                delete guildDatabase.kayıt.bany
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Ban yetkili rolü`)
             }
-            if (sunucudb.kayıt.kicky == rol.id) {
-                delete sunucudb.kayıt.kicky
-                db.yazdosya(sunucudb, rolsunucuid)
+            if (guildDatabase.kayıt.kicky == rol.id) {
+                delete guildDatabase.kayıt.kicky
+                db.yazdosya(guildDatabase, rolguildId)
                 roller.push(`Kick yetkili rolü`)
             }
             if (roller.length) {
@@ -109,7 +109,7 @@ module.exports = {
                 else rolll = roller.slice(0, lastindex) + " ve " + roller.slice(lastindex + 2)
                 const embed = new EmbedBuilder()
                     .setTitle("Bilgilendirme")
-                    .setDescription(`• **${rol.guild.name} - (${rolsunucuid})** sunucusundaki __${rolll}__ olan **@${rol.name}** adlı rol silinmiştir. Lütfen başka bir rol ayarlayınız.`)
+                    .setDescription(`• **${rol.guild.name} - (${rolguildId})** sunucusundaki __${rolll}__ olan **@${rol.name}** adlı rol silinmiştir. Lütfen başka bir rol ayarlayınız.`)
                     .setColor("Blue")
                     .setTimestamp();
                 (await rol.client.fetchUserForce(rol.guild.ownerId))?.send({ embeds: [embed] }).catch(err => { });

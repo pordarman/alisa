@@ -17,149 +17,149 @@ module.exports = {
 
             // Eğer bot sunucuya daha önceden eklenmişse ve önceki kayıtlı rolleri veya kanalları bulamazsa kayıtlı rol ve kanalın verisini siler ve bunu sunucu sahibine iletir
             let rest = new REST({ version: '10' }).setToken(guild.client.token)
-                , sunucudb = db.buldosya(guild.id)
-                , prefix = sunucudb.prefix || ayarlar.prefix
-                , tagrolSunucudb = guild.client.tagrolDatabase(guild.id)
-                , kayıtsız = sunucudb.kayıt.kayıtsız
-                , yetkili = sunucudb.kayıt.yetkili
-                , erkekRol = sunucudb.kayıt.erkek || []
+                , guildDatabase = db.buldosya(guild.id)
+                , prefix = guildDatabase.prefix || ayarlar.prefix
+                , tagrolguildDatabase = guild.client.tagrolDatabase(guild.id)
+                , kayıtsız = guildDatabase.kayıt.kayıtsız
+                , yetkili = guildDatabase.kayıt.yetkili
+                , erkekRol = guildDatabase.kayıt.erkek || []
                 , erkekRolFilter = erkekRol.filter(role => guild.roles.cache.has(role))
-                , kızRol = sunucudb.kayıt.kız || []
+                , kızRol = guildDatabase.kayıt.kız || []
                 , kızRolFilter = kızRol.filter(role => guild.roles.cache.has(role))
-                , kayıtRol = sunucudb.kayıt.normal || []
+                , kayıtRol = guildDatabase.kayıt.normal || []
                 , kayıtRolFilter = kayıtRol.filter(role => guild.roles.cache.has(role))
-                , botRol = sunucudb.kayıt.bot || []
+                , botRol = guildDatabase.kayıt.bot || []
                 , botRolFilter = botRol.filter(role => guild.roles.cache.has(role))
-                , yetkiliRol = sunucudb.premium.yetkili || []
+                , yetkiliRol = guildDatabase.premium.yetkili || []
                 , yetkiliRolFilter = yetkiliRol.filter(role => guild.roles.cache.has(role))
-                , partnerRol = sunucudb.premium.yetkili
-                , kayıtKanal = sunucudb.kayıt.kanal
-                , kayıtGunluk = sunucudb.kayıt.günlük
-                , kayıtLog = sunucudb.kayıt.log
-                , modLog = sunucudb.kayıt.modl
-                , tagrolRol = tagrolSunucudb.rol
-                , tagrolKanal = tagrolSunucudb.kanal
-                , tagrolLog = tagrolSunucudb.log
-                , jailRol = sunucudb.jail.rol
-                , jailYetkili = sunucudb.jail.yetkili
-                , jailLog = sunucudb.jail.log
-                , vipRol = sunucudb.kayıt.vrol
-                , vipYetkili = sunucudb.kayıt.vyetkili
-                , banYetkili = sunucudb.kayıt.bany
-                , kickYetkili = sunucudb.kayıt.kicky
+                , partnerRol = guildDatabase.premium.yetkili
+                , kayıtKanal = guildDatabase.kayıt.kanal
+                , kayıtGunluk = guildDatabase.kayıt.günlük
+                , kayıtLog = guildDatabase.kayıt.log
+                , modLog = guildDatabase.kayıt.modl
+                , tagrolRol = tagrolguildDatabase.rol
+                , tagrolKanal = tagrolguildDatabase.kanal
+                , tagrolLog = tagrolguildDatabase.log
+                , jailRol = guildDatabase.jail.rol
+                , jailYetkili = guildDatabase.jail.yetkili
+                , jailLog = guildDatabase.jail.log
+                , vipRol = guildDatabase.kayıt.vrol
+                , vipYetkili = guildDatabase.kayıt.vyetkili
+                , banYetkili = guildDatabase.kayıt.bany
+                , kickYetkili = guildDatabase.kayıt.kicky
                 , hatalar = []
                 , embeds = []
             if (kayıtsız && !guild.roles.cache.has(kayıtsız)) {
-                delete sunucudb.kayıt.kayıtsız
+                delete guildDatabase.kayıt.kayıtsız
                 hatalar.push('Kayıtsız rolü')
             }
             if (yetkili && !guild.roles.cache.has(yetkili)) {
-                delete sunucudb.kayıt.yetkili
+                delete guildDatabase.kayıt.yetkili
                 hatalar.push('Yetkili rolü')
             }
             if (erkekRolFilter.length != erkekRol.length) {
                 if (erkekRolFilter.length) {
-                    sunucudb.kayıt.erkek = erkekRolFilter
+                    guildDatabase.kayıt.erkek = erkekRolFilter
                     hatalar.push('Erkek rollerinden bazıları')
                 } else {
-                    delete sunucudb.kayıt.erkek
+                    delete guildDatabase.kayıt.erkek
                     hatalar.push('Erkek rollerinin hepsi')
                 }
             }
             if (kızRolFilter.length != kızRol.length) {
                 if (kızRolFilter.length) {
-                    sunucudb.kayıt.kız = kızRolFilter
+                    guildDatabase.kayıt.kız = kızRolFilter
                     hatalar.push('Kız rollerinden bazıları')
                 } else {
-                    delete sunucudb.kayıt.kız
+                    delete guildDatabase.kayıt.kız
                     hatalar.push('Kız rollerinin hepsi')
                 }
             }
             if (kayıtRolFilter.length != kayıtRol.length) {
                 if (kayıtRolFilter.length) {
-                    sunucudb.kayıt.normal = kayıtRolFilter
+                    guildDatabase.kayıt.normal = kayıtRolFilter
                     hatalar.push('Üye rollerinden bazıları')
                 } else {
-                    delete sunucudb.kayıt.normal
+                    delete guildDatabase.kayıt.normal
                     hatalar.push('Üye rollerinin hepsi')
                 }
             }
             if (botRolFilter.length != botRol.length) {
                 if (botRolFilter.length) {
-                    sunucudb.kayıt.bot = botRolFilter
+                    guildDatabase.kayıt.bot = botRolFilter
                     hatalar.push('Bot rollerinden bazıları')
                 } else {
-                    delete sunucudb.kayıt.bot
+                    delete guildDatabase.kayıt.bot
                     hatalar.push('Bot rollerinin hepsi')
                 }
             }
             if (yetkiliRolFilter.length != yetkiliRol.length) {
                 if (yetkiliRolFilter.length) {
-                    sunucudb.premium.yetkili = yetkiliRolFilter
+                    guildDatabase.premium.yetkili = yetkiliRolFilter
                     hatalar.push('Yetkili rollerinden bazıları')
                 } else {
-                    delete sunucudb.premium.yetkili
+                    delete guildDatabase.premium.yetkili
                     hatalar.push('Yetkili rollerinin hepsi')
                 }
             }
             if (partnerRol && !guild.roles.cache.has(partnerRol)) {
-                delete sunucudb.premium.partner
+                delete guildDatabase.premium.partner
                 hatalar.push('Partner rolü')
             }
             if (kayıtKanal && !guild.channels.cache.has(kayıtKanal)) {
-                delete sunucudb.kayıt.kanal
+                delete guildDatabase.kayıt.kanal
                 hatalar.push('Kayıt kanalı')
             }
             if (kayıtGunluk && !guild.channels.cache.has(kayıtGunluk)) {
-                delete sunucudb.kayıt.günlük
+                delete guildDatabase.kayıt.günlük
                 hatalar.push('Kayıt günlük kanalı')
             }
             if (kayıtLog && !guild.channels.cache.has(kayıtLog)) {
-                delete sunucudb.kayıt.log
+                delete guildDatabase.kayıt.log
                 hatalar.push('Kayıt log kanalı')
             }
             if (modLog && !guild.channels.cache.has(modLog)) {
-                delete sunucudb.kayıt.modl
+                delete guildDatabase.kayıt.modl
                 hatalar.push('Moderasyon log kanalı')
             }
             if (tagrolRol && !guild.roles.cache.has(tagrolRol)) {
-                delete tagrolSunucudb.rol
+                delete tagrolguildDatabase.rol
                 hatalar.push('Tagrol rolü')
             }
             if (tagrolKanal && !guild.channels.cache.has(tagrolKanal)) {
-                delete tagrolSunucudb.kanal
+                delete tagrolguildDatabase.kanal
                 hatalar.push('Tagrol kanalı')
             }
             if (tagrolLog && !guild.channels.cache.has(tagrolLog)) {
-                delete tagrolSunucudb.log
+                delete tagrolguildDatabase.log
                 hatalar.push('Tagrol log kanalı')
             }
             if (jailRol && !guild.roles.cache.has(jailRol)) {
-                delete sunucudb.jail.rol
+                delete guildDatabase.jail.rol
                 hatalar.push('Jail rolü')
             }
             if (jailYetkili && !guild.roles.cache.has(jailYetkili)) {
-                delete sunucudb.jail.yetkili
+                delete guildDatabase.jail.yetkili
                 hatalar.push('Jail yetkili rolü')
             }
             if (jailLog && !guild.channels.cache.has(jailLog)) {
-                delete sunucudb.jail.log
+                delete guildDatabase.jail.log
                 hatalar.push('Jail log kanalı')
             }
             if (vipRol && !guild.roles.cache.has(vipRol)) {
-                delete sunucudb.kayıt.vrol
+                delete guildDatabase.kayıt.vrol
                 hatalar.push('Vip rolü')
             }
             if (vipYetkili && !guild.roles.cache.has(vipYetkili)) {
-                delete sunucudb.kayıt.vyetkili
+                delete guildDatabase.kayıt.vyetkili
                 hatalar.push('Vip yetkili rolü')
             }
             if (banYetkili && !guild.roles.cache.has(banYetkili)) {
-                delete sunucudb.kayıt.bany
+                delete guildDatabase.kayıt.bany
                 hatalar.push('Ban yetkili rolü')
             }
             if (kickYetkili && !guild.roles.cache.has(kickYetkili)) {
-                delete sunucudb.kayıt.kicky
+                delete guildDatabase.kayıt.kicky
                 hatalar.push('Kick yetkili rolü')
             }
             if (hatalar.length) {
@@ -174,8 +174,8 @@ module.exports = {
                     .setColor("Blue")
                     .setTimestamp();
                 embeds.push(embed)
-                db.yazdosya(sunucudb, guild.id)
-                db.yaz(guild.id, tagrolSunucudb, "tag rol", "diğerleri")
+                db.yazdosya(guildDatabase, guild.id)
+                db.yaz(guild.id, tagrolguildDatabase, "tag rol", "diğerleri")
             }
             ; (async () => {
                 try {
@@ -189,13 +189,13 @@ module.exports = {
             })();
 
             // Sunucuya eklendiği bilgisini belirtilen kanala atar
-            guild.client.sunucudb[guild.id] = sunucudb
+            guild.client.guildDatabase[guild.id] = guildDatabase
             let sunucuSayı = (await guild.client.shard.broadcastEval(client => client.guilds.cache.size)).reduce((acc, top) => acc + top, 0)
                 , pp = guild.client.user.displayAvatarURL()
             alisa.sunucular.ekleme[guild.id] = Date.now()
             if (sunucuSayı % 100 == 0 && !alisa.starih[sunucuSayı]) alisa.starih[sunucuSayı] = Date.now()
             db.yazdosya(alisa, "alisa", "diğerleri")
-            if (sunucudb.kayıt.secenek) guild.client.secenek.add(guild.id)
+            if (guildDatabase.kayıt.secenek) guild.client.secenek.add(guild.id)
             const embedtr = new EmbedBuilder()
                 .setAuthor({ name: guild.client.user.tag, iconURL: pp })
                 .setDescription(`• Beni **${guild.name}** adlı sunucunuza eklediğiniz için teşekkürleeerr <3 sizi asla yüz üstü bırakmayacağım bundan emin olabilirsiniz. \n\n• Şimdi kısaca kendimden bahsetmek gerekirse ben her public sunucuda olması gereken botlardan sadece birisiyim. İçimde birçok özelliğim ve sistemim bulunuyor\n\n**__İşte birkaç özelliğim__**\n ├> Butonlu kayıt sistemi\n ├> Gelişmiş özelleştirilmiş giriş mesajı\n ├> Kayıt edilirken düzenlenecek ismi dilediğiniz gibi özelleştirebilme\n ├> Gelişmiş son kayıtlar komutu, tagrol ve jail sistemi\n ├> Botun istediğiniz ses kanalına girmesini sağlayıp üyeleri karşılama\n └> İstediğiniz zaman tüm her şeyi sıfırlama ve çok daha fazlası!\n\n• Benimle ilgili gelişmeleri takip etmek için **${prefix}yenilik** yazman yeterli\n\n• Artık yeni gelen premium sistemi sayesinde premiumlara özel bir sürü yeni komutlar eklendi! Premium hakkında daha fazla bilgi almak isterseniz **${prefix}pre** yazabilirsiniz\n\n*• Diğer botlardan 5 kat daha hızlı!*\n\n• Eğer herhangi bir sorun olduğunda **${prefix}destek** yazarak veya [Destek Sunucuma](${ayarlar.discord}) gelerek yardım alabilirsiniz!\n\n**SENİN BOTUN SENİN KURALLARIN**`)

@@ -9,14 +9,14 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {            
 
             // Kontroller
             if (!msgMember.permissions.has('Administrator')) return hata('Yönetici', "yetki")
             let kisi = msg.mentions.users.first() || await msg.client.fetchUser(args.join(" "))
             if (!kisi) return hata(Time.isNull(kisi) ? "Görünen o ki başka bir şeyin ID'sini yazdınız :( Lütfen geçerli bir kişi ID'si giriniz" : "Lütfen bir kişiyi etiketleyiniz ya da ID\'sini giriniz")
-            let kisiLog = sunucudb.kl[kisi.id]?.filter(a => ["j", "mute", "ban", "kick"].includes(a.type) || (a.type == "tj" && a.c))
+            let kisiLog = guildDatabase.kl[kisi.id]?.filter(a => ["j", "mute", "ban", "kick"].includes(a.type) || (a.type == "tj" && a.c))
             if (!kisiLog) return hata("Etiketlediğiniz kişinin herhangi bir sicili bulunmuyor")
             
             let type = (input) => {
@@ -111,7 +111,7 @@ module.exports = {
             }).catch(() => { })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

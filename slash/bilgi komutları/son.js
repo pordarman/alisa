@@ -10,11 +10,11 @@ module.exports = {
   /**
    * @param {import("../../typedef").exportsRunSlash} param0 
    */
-  async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+  async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
     try {
 
       // Kontroller
-      var tumKayıtlar = sunucudb.son
+      var tumKayıtlar = guildDatabase.son
       if (!tumKayıtlar.length) return hata(`Bu sunucuda hiçbir kayıt işlemi gerçekleşmediğinden dolayı tablo gösterilemiyor`)
       
       const kişi = int.options.getMember("üye", false)
@@ -174,7 +174,7 @@ module.exports = {
       }
     } catch (e) {
       hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-      int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+      int.client.error(module.id.split("\\").slice(5).join("\\"), e)
       console.log(e)
     }
   }

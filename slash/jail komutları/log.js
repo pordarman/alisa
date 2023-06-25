@@ -11,7 +11,7 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
 
             // Kontroller
@@ -19,22 +19,22 @@ module.exports = {
 
             if (int.options.getSubcommand(false) == "kanal") {
                 let kanal = int.options.getChannel("kanal", true)
-                if (sunucudb.jail.log === kanal.id) return hata("Jail log kanalı zaten <#" + kanal.id + "> kanalı olarak ayarlı")
+                if (guildDatabase.jail.log === kanal.id) return hata("Jail log kanalı zaten <#" + kanal.id + "> kanalı olarak ayarlı")
                 
-                sunucudb.jail.log = kanal.id
+                guildDatabase.jail.log = kanal.id
                 hata('Jail log kanalı başarıyla <#' + kanal.id + '> olarak ayarlandı', "b")
-                db.yazdosya(sunucudb, sunucuid)
+                db.yazdosya(guildDatabase, guildId)
                 return;
             }
-            if (!sunucudb.jail.log) return hata("Jail log kanalı zaten sıfırlanmış durumda")
+            if (!guildDatabase.jail.log) return hata("Jail log kanalı zaten sıfırlanmış durumda")
             
-            delete sunucudb.jail.log
+            delete guildDatabase.jail.log
             hata('Jail log kanalı başarıyla sıfırlanmıştır', "b")
-            db.yazdosya(sunucudb, sunucuid)
+            db.yazdosya(guildDatabase, guildId)
             return;
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

@@ -6,48 +6,48 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunButtons} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sonradan, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, sonradan, guildId, guild }) {
         try {
 
             // Eğer bot, kurma sırasında yeniden başlatılırsa kesinti vermemesi için tanımlamaları en başta yapıyoruz
             function UpperKelimeler(str) {
-                if (!sunucudb.kayıt.otoduzeltme) {
-                    let sembol = sunucudb.kayıt.sembol
+                if (!guildDatabase.kayıt.otoduzeltme) {
+                    let sembol = guildDatabase.kayıt.sembol
                     if (sembol) return str.replace(/ /g, " " + sembol)
                     else return str
                 }
                 const parcalar = str.match(/[\wöçşıüğÖÇŞİÜĞ]+/g)
                 if (!parcalar?.length) return str
                 parcalar.forEach(a => str = str.replace(a, a[0].toLocaleUpperCase() + a.slice(1).toLocaleLowerCase()))
-                let sembol = sunucudb.kayıt.sembol
+                let sembol = guildDatabase.kayıt.sembol
                 if (sembol) return str.replace(/ /g, " " + sembol)
                 else return str
             }
             async function kayıt({ memberid, member, sahipid, verilecekRolId, filter, rolVarMı, kayıtsızrolid, prefix, databaseButon }) {
                 return await int.channel.awaitMessages({ filter: filter, time: 30000, max: 1 }).then(async mesaj1 => {
                     delete databaseButon[memberid]
-                    db.yaz(sunucuid, databaseButon, "buton", "diğerleri")
-                    setTimeout(() => int.client.butonsure.delete(memberid + sunucuid), 1000)
+                    db.yaz(guildId, databaseButon, "buton", "diğerleri")
+                    setTimeout(() => int.client.buttonCooldown.delete(memberid + guildId), 1000)
                     const mesaj = mesaj1.first()
                     if (mesaj.content.length < 0) return mesaj.reply("• Sanki bir isim yazmalıydın he, ne diyorsun?").catch(err => { })
-                    let tag = sunucudb.kayıt.tag
-                        , kayıtisim = sunucudb.kayıt.isimler.kayıt
+                    let tag = guildDatabase.kayıt.tag
+                        , kayıtisim = guildDatabase.kayıt.isimler.kayıt
                         , ismi
                         , sadeceisim = mesaj.content.replace(new RegExp(`(<@!?${memberid}>|${memberid}|^\.(kay[ıi]t|erkek|k[ıi]z|e|k) )`, "gm"), "").replace(/ +/g, " ").trim()
                     if (kayıtisim) {
                         if (kayıtisim.indexOf("<yaş>") != -1) {
                             let age = sadeceisim.match(int.client.regex.fetchAge)
                             if (age) {
-                                let sınır = sunucudb.kayıt.yassınır
+                                let sınır = guildDatabase.kayıt.yassınır
                                 if (sınır > age[0]) return mesaj.reply(`Heyyy dur bakalım orada! Bu sunucuda **${sınır}** yaşından küçükleri kayıt edemezsin!`).catch(err => { })
                                 sadeceisim = sadeceisim.replace(age[0], "").replace(/ +/g, " ").trim()
-                            } else if (sunucudb.kayıt.yaszorunlu) return mesaj.reply("Heyyy dur bakalım orada! Bu sunucuda kayıt ederken geçerli bir yaş girmek zorundasın!").catch(err => { })
+                            } else if (guildDatabase.kayıt.yaszorunlu) return mesaj.reply("Heyyy dur bakalım orada! Bu sunucuda kayıt ederken geçerli bir yaş girmek zorundasın!").catch(err => { })
                             else age = [""]
                             ismi = kayıtisim.replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/<isim>/g, UpperKelimeler(sadeceisim)).replace(/<yaş>/g, age[0])
                         } else ismi = kayıtisim.replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/<isim>/g, UpperKelimeler(sadeceisim))
                     } else {
-                        if (sunucudb.kayıt.yaszorunlu) {
-                            let sınır = sunucudb.kayıt.yassınır
+                        if (guildDatabase.kayıt.yaszorunlu) {
+                            let sınır = guildDatabase.kayıt.yassınır
                             if (sınır) {
                                 let age = sadeceisim.match(int.client.regex.fetchAge)
                                 if (!age) return mesaj.reply("Heyyy dur bakalım orada! Bu sunucuda kayıt ederken geçerli bir yaş girmek zorundasın!").catch(err => { })
@@ -61,21 +61,21 @@ module.exports = {
                         let date = Date.now()
                         mesaj.react(ayarlar.emoji.p).catch(err => { })
                         let kisivarmıdatabasede = alisa.kisiler[sahipid] || 0
-                            , sunucuvarmıdatabasede = alisa.skullanımlar[sunucuid] || 0
+                            , sunucuvarmıdatabasede = alisa.skullanımlar[guildId] || 0
                             , date2 = (date / 1000).toFixed(0)
                             , zaman = `<t:${date2}:F>`
                             , verilecekRolString = verilecekRolId.map(a => "<@&" + a + ">").join(", ")
-                            , sahip = { kız: 0, toplam: 0, erkek: 0, normal: 0, ...sunucudb.kayıtkisiler[sahipid] }
-                            , kontrolisimler = sunucudb.isimler[memberid]
+                            , sahip = { kız: 0, toplam: 0, erkek: 0, normal: 0, ...guildDatabase.kayıtkisiler[sahipid] }
+                            , kontrolisimler = guildDatabase.isimler[memberid]
                             , desmsg = null
-                            , kl = sunucudb.kl[memberid] || []
+                            , kl = guildDatabase.kl[memberid] || []
                             , ranklar = ayarlar.ranklar
                         kl.unshift({ type: "k", c: "Erkek", author: sahipid, timestamp: date })
-                        sunucudb.kl[memberid] = kl
+                        guildDatabase.kl[memberid] = kl
                         kisivarmıdatabasede += 1
                         alisa.kisiler[sahipid] = kisivarmıdatabasede
                         sunucuvarmıdatabasede += 1
-                        alisa.skullanımlar[sunucuid] = sunucuvarmıdatabasede
+                        alisa.skullanımlar[guildId] = sunucuvarmıdatabasede
                         alisa.kullanımlar.erkek.buton += 1
                         if (!kontrolisimler) {
                             sahip.toplam += 1
@@ -110,14 +110,14 @@ module.exports = {
                                 .setColor("#1252ce")
                                 .setTimestamp()
                         mesaj.reply({ embeds: [embed], components: [dugmeler] }).catch(err => { })
-                        let logkanalid = sunucudb.kayıt.günlük
+                        let logkanalid = guildDatabase.kayıt.günlük
                         if (logkanalid) {
-                            let g = sunucudb.kayıt.gözel
+                            let g = guildDatabase.kayıt.gözel
                             const mesajlar = [...ayarlar.k, `Anlattıkları kadar karizmaymışsın <m>`, `<m> aramıza bir yakışıklı katıldı`, `Karizmalığın ete kemiğe bürünmüş hali gibisin <m>`, `Adam diyince akla sen geliyorsun <m>`, `Yok yok ben iyiyim <m> sadece yakışıklılığın gözlerimi aldı da`, `<m> uzuun araştırmalarım sonucunda çok yakışıklı olduğuna karar verdim`, `<m> pardon karizma salonuna mı geldim`, `<m> pardon beyefendi yakışıklılık yarışmasına katılmayı hiç düşündünüz mü?`, `<m> bu yakışıklılığı taşırken hiç yorulmuyor musun?`, `<m> beyefendi müsadenizle size yürüyeceğim`, `<m> sana yakışıklı diyorlar doğru mu?`]
                             if (g) {
                                 let taglar = []
                                 if (tag) taglar.push(tag.slice(0, -1))
-                                if (sunucudb.kayıt.dis) taglar.push(`#${sunucudb.kayıt.dis}`)
+                                if (guildDatabase.kayıt.dis) taglar.push(`#${guildDatabase.kayıt.dis}`)
                                 taglar = taglar.join(" - ") || "**TAG YOK**"
                                 const kisi = guild.memberCount
                                 let r = g.yazı.replace(/<üye>/g, `<@${member.id}>`).replace(/<üyeİsim>/g, member.user.username).replace(/<üyeI[dD]>/g, memberid).replace(/<rol>/g, verilecekRolString).replace(/<üyeTag>/g, member.user.tag).replace(/<toplam>/g, kisi.toLocaleString().replace(".", ",")).replace(/<emojiToplam>/g, int.client.stringToEmojis(kisi)).replace(/<yetkili>/g, `<@${mesaj.author.id}>`).replace(/<yetkiliTag>/g, mesaj.author.tag).replace(/<yetkiliİsim>/g, mesaj.author.username).replace(/<yetkiliI[dD]>/g, sahipid).replace(/<sayı>/g, kayıtsayısı).replace(/<tag>/g, taglar)
@@ -138,11 +138,11 @@ module.exports = {
                                 guild.channels.cache.get(logkanalid)?.send({ embeds: [hepsi], content: mesajlar[Math.floor(Math.random() * mesajlar.length)].replace("<m>", `<@${memberid}>`) }).catch(err => { })
                             }
                         }
-                        sunucudb.son.unshift({ c: ayarlar.emoji.erkek, s: sahipid, k: memberid, z: date2 })
-                        let logKanali = sunucudb.kayıt.log
+                        guildDatabase.son.unshift({ c: ayarlar.emoji.erkek, s: sahipid, k: memberid, z: date2 })
+                        let logKanali = guildDatabase.kayıt.log
                         if (logKanali) {
                             let yapılanSeyler = [
-                                `**• Sunucuda toplam ${sunucudb.son.length.toLocaleString().replace(/\./g, ",")} kişi kayıt edildi!**\n`,
+                                `**• Sunucuda toplam ${guildDatabase.son.length.toLocaleString().replace(/\./g, ",")} kişi kayıt edildi!**\n`,
                                 `🧰 **KAYIT EDEN YETKİLİ**`,
                                 `**• Adı:**  <@${mesaj.author.id}> - ${mesaj.author.tag}`,
                                 `**• Kayıt sayısı:**  ${kayıtsayısı} - (${ayarlar.emoji.erkek} ${sahip.erkek || 0}, ${ayarlar.emoji.kiz} ${sahip.kız || 0})`,
@@ -165,22 +165,22 @@ module.exports = {
                                     .setTimestamp()
                             guild.channels.cache.get(logKanali)?.send({ embeds: [embed] }).catch(err => { })
                         }
-                        let toplamherkes = db.topla(sunucuid, 1, "kayıt toplam herkes", "diğerleri")
+                        let toplamherkes = db.topla(guildId, 1, "kayıt toplam herkes", "diğerleri")
                             , obje = { kk: "<@" + memberid + ">", r: verilecekRolString, z: zaman }
                             , isimler = { c: ayarlar.emoji.erkek, n: ismi, r: verilecekRolString, s: sahipid, z: date2 }
                         if (toplamherkes % 1000 == 0) alisa.kayıtsayı[toplamherkes.toString()] = date
-                        db.topla(sunucuid, 1, "erkek toplam herkes", "diğerleri")
+                        db.topla(guildId, 1, "erkek toplam herkes", "diğerleri")
                         sahip.son = obje
                         if (!sahip.ilk) sahip.ilk = obje
                         if (kontrolisimler) kontrolisimler.unshift(isimler)
-                        else sunucudb.isimler[memberid] = [isimler]
-                        sunucudb.kayıtkisiler[sahipid] = sahip
+                        else guildDatabase.isimler[memberid] = [isimler]
+                        guildDatabase.kayıtkisiler[sahipid] = sahip
                         db.yazdosya(alisa, "alisa", "diğerleri")
-                        db.yazdosya(sunucudb, sunucuid)
+                        db.yazdosya(guildDatabase, guildId)
                         return;
                     }).catch(async err => {
                         delete databaseButon[memberid]
-                        db.yaz(sunucuid, databaseButon, "buton", "diğerleri")
+                        db.yaz(guildId, databaseButon, "buton", "diğerleri")
                         if (err?.code == 10007) return mesaj.reply("• Şeyyyy... Sanırım bu kişi artık sunucuda değil şapşik şey seni :(").catch(err => { })
                         if (err?.code == 50013) return mesaj.reply(`• <@${memberid}> adlı kişinin ismini ve rollerini düzenlemeye yetkim yetmiyor. Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`).catch(err => { })
                         console.log(err)
@@ -189,62 +189,62 @@ module.exports = {
                     })
                 }).catch(err => {
                     int.channel?.send(`⏰ <@${sahipid}>, süreniz bitti!`).catch(err => { })
-                    int.client.butonsure.delete(memberid + sunucuid)
+                    int.client.buttonCooldown.delete(memberid + guildId)
                     delete databaseButon[memberid]
-                    db.yaz(sunucuid, databaseButon, "buton", "diğerleri")
+                    db.yaz(guildId, databaseButon, "buton", "diğerleri")
                 })
             }
             if (sonradan) {
                 let memberid = sonradan[0]
                     , sahipid = sonradan[1].sahip
-                int.client.butonsure.set(memberid + sunucuid, sahipid)
-                setTimeout(() => int.client.butonsure.delete(memberid + sunucuid), 35000)
-                return await kayıt({ memberid: memberid, member: await int.client.fetchMemberForce(memberid, int), sahipid: sahipid, verilecekRolId: sunucudb.kayıt.erkek, filter: m => m.author.id == sahipid, rolVarMı: sonradan[1].rolVarMı, kayıtsızrolid: sunucudb.kayıt.kayıtsız, prefix: sunucudb.prefix || ayarlar.prefix, databaseButon: db.bul(sunucuid, "buton", "diğerleri") || {} })
+                int.client.buttonCooldown.set(memberid + guildId, sahipid)
+                setTimeout(() => int.client.buttonCooldown.delete(memberid + guildId), 35000)
+                return await kayıt({ memberid: memberid, member: await int.client.fetchMemberForce(memberid, int), sahipid: sahipid, verilecekRolId: guildDatabase.kayıt.erkek, filter: m => m.author.id == sahipid, rolVarMı: sonradan[1].rolVarMı, kayıtsızrolid: guildDatabase.kayıt.kayıtsız, prefix: guildDatabase.prefix || ayarlar.prefix, databaseButon: db.bul(guildId, "buton", "diğerleri") || {} })
             }
 
             // Kontroller
             let sahipid = int.user.id
-            if (int.client.butonsure.some(a => a == sahipid)) return hata(`Heyyy dur bakalım orada! Zaten halihazırda bir kayıt işlemi gerçekleştiriyorsun!`)
-            let prefix = sunucudb.prefix || ayarlar.prefix
-                , yetkilirolid = sunucudb.kayıt.yetkili
+            if (int.client.buttonCooldown.some(a => a == sahipid)) return hata(`Heyyy dur bakalım orada! Zaten halihazırda bir kayıt işlemi gerçekleştiriyorsun!`)
+            let prefix = guildDatabase.prefix || ayarlar.prefix
+                , yetkilirolid = guildDatabase.kayıt.yetkili
                 , intMember = int.member
             if (!yetkilirolid) return hata(`Bu sunucuda üyeleri kayıt eden yetkili rolü __ayarlanmamış__${intMember.permissions.has("Administrator") ? `\n\n• Ayarlamak için **${prefix}yetkili-rol @rol** yazabilirsiniz veya her şeyi teker teker ayarlamak yerine **${prefix}kur** yazıp bütün kayıt sistemini tek bir komutla ayarlayabilirsiniz` : ""}`)
             if (!intMember.roles.cache.has(yetkilirolid) && !intMember.permissions.has("Administrator")) return hata("Bunu sen yapamazsın şapşik şey seni :(")
-            if (sunucudb.kayıt.secenek) return hata(`Kayıt seçeneğim __**Normal Kayıt**__ olarak ayarlı lütfen \`${prefix}kayıt\` komutunu kullanınız${intMember.permissions.has("Administrator") ? `\n\n• Eğer kız ve erkek olarak kayıt etmek isterseniz **${prefix}seç cinsiyet** yazabilirsiniz` : ""}`)
-            if (sunucudb.kayıt.ayar) return hata(`Şu anda kayıt ayarım kapalı durumda bu yüzden hiçbir kayıt işlemlerini __yapamazsınız__${intMember.permissions.has("Administrator") ? `\n\n• Eğer kayıt ayarımı açmak istiyorsanız **${prefix}ayar aç** yazabilirsiniz` : ""}`)
+            if (guildDatabase.kayıt.secenek) return hata(`Kayıt seçeneğim __**Normal Kayıt**__ olarak ayarlı lütfen \`${prefix}kayıt\` komutunu kullanınız${intMember.permissions.has("Administrator") ? `\n\n• Eğer kız ve erkek olarak kayıt etmek isterseniz **${prefix}seç cinsiyet** yazabilirsiniz` : ""}`)
+            if (guildDatabase.kayıt.ayar) return hata(`Şu anda kayıt ayarım kapalı durumda bu yüzden hiçbir kayıt işlemlerini __yapamazsınız__${intMember.permissions.has("Administrator") ? `\n\n• Eğer kayıt ayarımı açmak istiyorsanız **${prefix}ayar aç** yazabilirsiniz` : ""}`)
             let guildMe = int.guild.members.me
             if (!guildMe.permissions.has("ManageRoles")) return hata("Rolleri Yönet", "yetkibot")
             if (!guildMe.permissions.has("ManageNicknames")) return hata("Kullanıcı Adlarını Yönet", "yetkibot")
-            var verilecekRolId = sunucudb.kayıt.erkek
+            var verilecekRolId = guildDatabase.kayıt.erkek
             if (!verilecekRolId) return hata(`Bu sunucuda herhangi bir erkek rolü __ayarlanmamış__${intMember.permissions.has("Administrator") ? `\n\n• Ayarlamak için **${prefix}erkek-rol @rol** yazabilirsiniz veya her şeyi teker teker ayarlamak yerine **${prefix}kur** yazıp bütün kayıt sistemini tek bir komutla ayarlayabilirsiniz` : ""}`)
-            var kayıtsızrolid = sunucudb.kayıt.kayıtsız
+            var kayıtsızrolid = guildDatabase.kayıt.kayıtsız
             if (!kayıtsızrolid) return hata(`Bu sunucuda herhangi bir kayıtsız rolü __ayarlanmamış__${intMember.permissions.has("Administrator") ? `\n\n• Ayarlamak için **${prefix}alınacak-rol @rol** yazabilirsiniz veya her şeyi teker teker ayarlamak yerine **${prefix}kur** yazıp bütün kayıt sistemini tek bir komutla ayarlayabilirsiniz` : ""}`)
             let rol = [...verilecekRolId, kayıtsızrolid].filter(a => guild.roles.cache.get(a)?.position >= guildMe.roles.highest.position)
             if (rol.length) return hata(`[${rol.map(a => "<@&" + a + ">").join(" | ")}] adlı rol(ler)'in sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
             let memberid = int.customId.replace(this.name, "")
                 , member = await int.client.fetchMemberForce(memberid, int)
             if (!member) return hata("Şeyyyy... Sanırım bu kişi artık sunucuda değil şapşik şey seni :(")
-            if (int.client.butonsure.has(memberid + sunucuid)) return hata("Heyyy dur bakalım orada! Şu anda başkası bu kayıt işlemini gerçekleştiriyor!")
+            if (int.client.buttonCooldown.has(memberid + guildId)) return hata("Heyyy dur bakalım orada! Şu anda başkası bu kayıt işlemini gerçekleştiriyor!")
             if (memberid === sahipid) return hata("Kendi kendini kayıt edemezsin şapşik şey seni :)")
             if (memberid == guild.ownerId) return hata("Sunucu sahibini kayıt edemezsin şapşik şey seni :)")
-            let kızrolseysi = sunucudb.kayıt.kız || []
+            let kızrolseysi = guildDatabase.kayıt.kız || []
             if ([...verilecekRolId, ...kızrolseysi].some(a => member.roles.cache.has(a))) return hata("Kayıt etmek istediğiniz kişi zaten daha önceden kayıt edilmiş")
             let rolVarMı = true
             if (!member.roles.cache.has(kayıtsızrolid)) rolVarMı = false
             if (member.roles.highest.position >= guildMe.roles.highest.position) return hata(`Kayıt etmek istediğiniz kişinin rolünün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
             
-            int.client.butonsure.set(memberid + sunucuid, sahipid)
-            let databaseButon = db.bul(sunucuid, "buton", "diğerleri") || {}
-            int.message.reply({ content: `${ayarlar.emoji.erkek} <@${sahipid}>, kayıt etmek istediğiniz <@${memberid}> adlı kişinin sadece ismini ${sunucudb.kayıt.yaszorunlu ? "ve yaşını" : ""} mesaj olarak yazınız` }).then(async ms => {
+            int.client.buttonCooldown.set(memberid + guildId, sahipid)
+            let databaseButon = db.bul(guildId, "buton", "diğerleri") || {}
+            int.message.reply({ content: `${ayarlar.emoji.erkek} <@${sahipid}>, kayıt etmek istediğiniz <@${memberid}> adlı kişinin sadece ismini ${guildDatabase.kayıt.yaszorunlu ? "ve yaşını" : ""} mesaj olarak yazınız` }).then(async ms => {
                 databaseButon[memberid] = { t: this.name, sahip: sahipid, id: ms.id, k: int.channelId, rolVarMı: rolVarMı, d: Date.now() }
-                db.yaz(sunucuid, databaseButon, "buton", "diğerleri")
-                setTimeout(() => int.client.butonsure.delete(memberid + sunucuid), 35000)
+                db.yaz(guildId, databaseButon, "buton", "diğerleri")
+                setTimeout(() => int.client.buttonCooldown.delete(memberid + guildId), 35000)
                 let filter = m => m.author.id == sahipid
                 return await kayıt({ memberid: memberid, member: member, sahipid: sahipid, verilecekRolId: verilecekRolId, filter: filter, rolVarMı: rolVarMı, kayıtsızrolid: kayıtsızrolid, prefix: prefix, databaseButon: databaseButon })
-            }).catch(err => int.client.butonsure.delete(memberid + sunucuid))
+            }).catch(err => int.client.buttonCooldown.delete(memberid + guildId))
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true)
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

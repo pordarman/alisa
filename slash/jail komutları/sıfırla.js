@@ -9,7 +9,7 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
 
             // Kontroller
@@ -26,15 +26,15 @@ module.exports = {
             await int.channel.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(a => {
                 const m = a.first()
                 if (m.content.toLocaleLowerCase() === "evet") {
-                    sunucudb.jail = { kisi: {}, son: [] }
+                    guildDatabase.jail = { kisi: {}, son: [] }
                     hata('Bu sunucudaki tüm jail ayarınızı başarıyla sıfırladım', "b")
-                    db.yazdosya(sunucudb, sunucuid)
+                    db.yazdosya(guildDatabase, guildId)
                     return;
                 } else m.reply({ content: "İşlem iptal edilmiştir" }).catch(err => { })
             }).catch(() => int.reply({ content: `⏰ <@${int.user.id}>, süreniz bitti!` }).catch(err => { }))
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

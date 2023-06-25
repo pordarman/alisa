@@ -12,38 +12,38 @@ module.exports = {
             if (!ch.guild || ch.type !== 0) return;
 
             // Eğer kayıtlı olan bir kanal silinirse bunu sunucu sahibine iletir ve kayıtlı kanalın verisini siler
-            let chsunucuid = ch.guildId
-                , sunucudb = ch.client.guildDatabase(chsunucuid)
+            let chguildId = ch.guildId
+                , guildDatabase = ch.client.guildDatabase(chguildId)
                 , kanallar = []
-            if (sunucudb.kayıt.kanal == ch.id) {
-                delete sunucudb.kayıt.kanal
-                db.yazdosya(sunucudb, chsunucuid)
+            if (guildDatabase.kayıt.kanal == ch.id) {
+                delete guildDatabase.kayıt.kanal
+                db.yazdosya(guildDatabase, chguildId)
                 kanallar.push(`Kayıt kanalı`)
             }
-            if (sunucudb.kayıt.günlük == ch.id) {
-                delete sunucudb.kayıt.günlük
-                db.yazdosya(sunucudb, chsunucuid)
+            if (guildDatabase.kayıt.günlük == ch.id) {
+                delete guildDatabase.kayıt.günlük
+                db.yazdosya(guildDatabase, chguildId)
                 kanallar.push(`Kayıt günlük kanalı`)
             }
-            if (sunucudb.kayıt.log == ch.id) {
-                delete sunucudb.kayıt.log
-                db.yazdosya(sunucudb, chsunucuid)
+            if (guildDatabase.kayıt.log == ch.id) {
+                delete guildDatabase.kayıt.log
+                db.yazdosya(guildDatabase, chguildId)
                 kanallar.push(`Kayıt log kanalı`)
             }
-            let tagroldb = ch.client.tagrolDatabase(chsunucuid)
+            let tagroldb = ch.client.tagrolDatabase(chguildId)
             if (tagroldb.kanal == ch.id) {
                 delete tagroldb.kanal
-                db.yaz(chsunucuid, tagroldb, "tag rol", "diğerleri")
+                db.yaz(chguildId, tagroldb, "tag rol", "diğerleri")
                 kanallar.push(`Tagrol kanalı`)
             }
             if (tagroldb.log == ch.id) {
                 delete tagroldb.log
-                db.yaz(chsunucuid, tagroldb, "tag rol", "diğerleri")
+                db.yaz(chguildId, tagroldb, "tag rol", "diğerleri")
                 kanallar.push(`Tagrol log kanalı`)
             }
-            if (sunucudb.jail.log == ch.id) {
-                delete sunucudb.jail.log
-                db.yazdosya(sunucudb, chsunucuid)
+            if (guildDatabase.jail.log == ch.id) {
+                delete guildDatabase.jail.log
+                db.yazdosya(guildDatabase, chguildId)
                 kanallar.push(`Jail log kanalı`)
             }
             if (kanallar.length) {
@@ -54,7 +54,7 @@ module.exports = {
                 else kanall = kanallar.slice(0, lastindex) + " ve " + kanallar.slice(lastindex + 2)
                 const embed = new EmbedBuilder()
                     .setTitle("Bilgilendirme")
-                    .setDescription(`• **${ch.guild.name} - (${chsunucuid})** sunucusundaki __${kanall}__ olan **#${ch.name}** adlı kanal silinmiştir. Lütfen başka bir kanal ayarlayınız.`)
+                    .setDescription(`• **${ch.guild.name} - (${chguildId})** sunucusundaki __${kanall}__ olan **#${ch.name}** adlı kanal silinmiştir. Lütfen başka bir kanal ayarlayınız.`)
                     .setColor("Blue")
                     .setTimestamp();
                 (await ch.client.fetchUserForce(ch.guild.ownerId))?.send({ embeds: [embed] }).catch(err => { });

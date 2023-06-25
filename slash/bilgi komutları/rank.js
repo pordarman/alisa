@@ -10,7 +10,7 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
 
             // Kontroller
@@ -20,7 +20,7 @@ module.exports = {
             let discordlogo = guild.iconURL()
             , ranklar = ayarlar.ranklar
             , sayılar = ayarlar.rankSayıları
-            , sahip = sunucudb.kayıtkisiler[kişi.id]
+            , sahip = guildDatabase.kayıtkisiler[kişi.id]
             , kayıtsayısı = sahip?.toplam || 0
             , kişirank = sahip?.rank
             , gösterge = ""
@@ -66,7 +66,7 @@ module.exports = {
             int.reply({ embeds: [embed] }).catch(err => { })
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

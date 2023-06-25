@@ -19,7 +19,7 @@ const client = new Client({
     GatewayIntentBits.GuildBans,
   ],
   presence: { status: "idle" },
-  failIfNotExists: false, 
+  failIfNotExists: false,
   shardCount: shard,
 });
 
@@ -33,7 +33,7 @@ const db = require("./modüller/database");
 /*
  * Sunucu verilerini daha hızlı çekmek amacıyla geçici olarak burada tutuyoruz
  */
-client.sunucudb = {};
+client.guildDatabase = {};
 
 /*
  * Botu kullanan sunucuların kaç tanesi cinsiyetle kayıt ediyor kaç tanesi tek üye olarak kayıt ediyor burada saklıyoruz
@@ -53,17 +53,19 @@ client.buttons = new Collection();
 /*
  * Butonla kayıt ederken aynı anda birden fazla kişinin kayıt edilmesini engellemek için oluşturuldu
  */
-client.butonsure = new Collection();
+client.buttonCooldown = new Collection();
 
 /*
  * Slash komutlarını burada tutuyoruz
  */
-client.slash = new Collection([["commands", []]]);
+client.slash = new Collection([
+  ["commands", []]
+]);
 
 /*
  * Sunucunun verisini çeker
  */
-client.guildDatabase = (id) => client.sunucudb[id] || db.buldosya(id);
+client.guildDatabase = (id) => client.guildDatabase[id] || db.buldosya(id);
 
 /*
  * Sunucunun tagrol veri bilgisini çeker
@@ -128,17 +130,17 @@ client.namePhoto = {
  */
 try {
   client.hook = new WebhookClient({ url: webhook });
-} catch (e) {}
+} catch (e) { }
 
 /*
  * Bu da hata kanalına atılan mesaj
  */
-client.hata = (dirname, error) =>
+client.error = (dirname, error) =>
   client.hook?.send(
     `**${dirname}** adlı komut dosyamda bir hata oluştu!\n` +
-      "```js\n" +
-      error +
-      "```"
+    "```js\n" +
+    error +
+    "```"
   );
 
 /*
@@ -161,7 +163,7 @@ client.getMembers = async (msg) => {
   let guild = msg.guild,
     cache = guild.members.cache;
   if (guild.memberCount == cache.size) return cache;
-  return await guild.members.fetch().catch((err) => {});
+  return await guild.members.fetch().catch((err) => { });
 };
 
 /*
@@ -211,8 +213,8 @@ client.fetchUserForce = async (id) => {
     );
     user = deneme.find((a) => a != null);
     if (user) return new User(client, user);
-  } catch (e) {}
-  return await client.users.fetch(id).catch((err) => {});
+  } catch (e) { }
+  return await client.users.fetch(id).catch((err) => { });
 };
 
 /*
@@ -298,7 +300,7 @@ client.getGuildNameOrId = async (id, bool = true) => {
       { context: id, shard: client.shardId(id) }
     );
     if (sunucu) return bool ? `**${sunucu.name}**` : sunucu.name;
-  } catch (e) {}
+  } catch (e) { }
   return bool ? `**${id}** ID'ye sahip` : undefined;
 };
 
@@ -348,11 +350,11 @@ client.getGuildNameOrId = async (id, bool = true) => {
 client.sendChannel = async (object, id, guildId) => {
   try {
     let kanal = client.channels.cache.get(id);
-    if (kanal) return kanal.send(object).catch((err) => {});
+    if (kanal) return kanal.send(object).catch((err) => { });
     return await client.shard.broadcastEval(
       (a, array) => {
         let kanalClient = a.channels.cache.get(array[1]);
-        if (kanalClient) return kanalClient.send(array[0]).catch((err) => {});
+        if (kanalClient) return kanalClient.send(array[0]).catch((err) => { });
       },
       {
         context: [object, id],

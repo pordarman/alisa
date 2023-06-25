@@ -8,7 +8,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
@@ -17,7 +17,7 @@ module.exports = {
             let secenekler = [
                 `**• ${prefix}say-ayarlar [emojili/emojisiz]**`,
                 `\n**• ${prefix}say-ayarlar [ekle/çıkar] toplam =>**  Sunucudaki üye sayısını gösterir`,
-                `**• ${prefix}say-ayarlar [ekle/çıkar] üyeler =>**  Sunucuda kaç ${sunucudb.kayıt.secenek ? "üye" : "erkek, kız"} ve kayıtsız üye olduğunu gösterir`,
+                `**• ${prefix}say-ayarlar [ekle/çıkar] üyeler =>**  Sunucuda kaç ${guildDatabase.kayıt.secenek ? "üye" : "erkek, kız"} ve kayıtsız üye olduğunu gösterir`,
                 `**• ${prefix}say-ayarlar [ekle/çıkar] taglıüye =>**  Sunucudaki taglı üye sayısını gösterir`,
                 `**• ${prefix}say-ayarlar [ekle/çıkar] sesliüye =>**  Sesli kanallarda kaç kişi olduğunu gösterir`,
                 `**• ${prefix}say-ayarlar [ekle/çıkar] boost =>**  Sunucuda kaç boost ve kaç kişinin boost bastığını gösterir`,
@@ -98,10 +98,10 @@ module.exports = {
                         default:
                             return hata(`Lütfen bir seçenek giriniz\n\n**🗒️ Girilebilir seçenekler**\n${secenekler.join("\n")}`)
                     }
-                    if (sunucudb.say.veri[eklenecekSey]) return hata(`**${prefix}say** komutunda yazdığınız __${obj[eklenecekSey]}__ zaten gösteriyorum`)
-                    sunucudb.say.veri[eklenecekSey] = true
-                    hata(`**${prefix}say** komutunda artık __${obj[eklenecekSey]}__ da gösteriyoruumm!!\n\n**Say komutunda gösterilecek veriler**\n• ${Object.keys(sunucudb.say.veri).map(a => obj[a].replace("sayısını", "sayısı")).join(", ")}`, "b")
-                    db.yazdosya(sunucudb, sunucuid)
+                    if (guildDatabase.say.veri[eklenecekSey]) return hata(`**${prefix}say** komutunda yazdığınız __${obj[eklenecekSey]}__ zaten gösteriyorum`)
+                    guildDatabase.say.veri[eklenecekSey] = true
+                    hata(`**${prefix}say** komutunda artık __${obj[eklenecekSey]}__ da gösteriyoruumm!!\n\n**Say komutunda gösterilecek veriler**\n• ${Object.keys(guildDatabase.say.veri).map(a => obj[a].replace("sayısını", "sayısı")).join(", ")}`, "b")
+                    db.yazdosya(guildDatabase, guildId)
                     return;
                 }
                 case "çıkar":
@@ -161,30 +161,30 @@ module.exports = {
                         default:
                             return hata(`Lütfen bir seçenek giriniz\n\n**🗒️ Girilebilir seçenekler**\n${secenekler.join("\n")}`, "h", 45000)
                     }
-                    if (!sunucudb.say.veri[cikarilacakSey]) return hata(`**${prefix}say** komutunda yazdığınız __${obj[cikarilacakSey]}__ zaten göstermiyorum`)
-                    delete sunucudb.say.veri[cikarilacakSey]
-                    hata(`**${prefix}say** komutunda artık __${obj[cikarilacakSey]}__ göstermiyorum\n\n**Say komutunda gösterilecek veriler**\n• ${Object.keys(sunucudb.say.veri).map(a => obj[a].replace("sayısını", "sayısı")).join(", ")}`, "b")
-                    db.yazdosya(sunucudb, sunucuid)
+                    if (!guildDatabase.say.veri[cikarilacakSey]) return hata(`**${prefix}say** komutunda yazdığınız __${obj[cikarilacakSey]}__ zaten göstermiyorum`)
+                    delete guildDatabase.say.veri[cikarilacakSey]
+                    hata(`**${prefix}say** komutunda artık __${obj[cikarilacakSey]}__ göstermiyorum\n\n**Say komutunda gösterilecek veriler**\n• ${Object.keys(guildDatabase.say.veri).map(a => obj[a].replace("sayısını", "sayısı")).join(", ")}`, "b")
+                    db.yazdosya(guildDatabase, guildId)
                     return;
                 }
                 case "emojili":
-                    if (sunucudb.say.emoji) return hata(`Bu sunucuda **${prefix}say** emoji ayarım zaten __emojili__ durumda`)
-                    sunucudb.say.emoji = true
+                    if (guildDatabase.say.emoji) return hata(`Bu sunucuda **${prefix}say** emoji ayarım zaten __emojili__ durumda`)
+                    guildDatabase.say.emoji = true
                     hata(`Bu sunucudaki **${prefix}say** komutum artık __emojili__ halde!`, "b")
-                    db.yazdosya(sunucudb, sunucuid)
+                    db.yazdosya(guildDatabase, guildId)
                     return;
                 case "emojisiz":
-                    if (!sunucudb.say.emoji) return hata(`Bu sunucuda **${prefix}say** emoji ayarım zaten __emojisiz__ durumda`)
-                    delete sunucudb.say.emoji
+                    if (!guildDatabase.say.emoji) return hata(`Bu sunucuda **${prefix}say** emoji ayarım zaten __emojisiz__ durumda`)
+                    delete guildDatabase.say.emoji
                     hata(`Bu sunucudaki **${prefix}say** komutum artık __emojisiz__ halde!`, "b")
-                    db.yazdosya(sunucudb, sunucuid)
+                    db.yazdosya(guildDatabase, guildId)
                     return;
                 default:
                     return hata(`Lütfen bir seçenek giriniz\n\n**🗒️ Girilebilir seçenekler**\n${secenekler.join("\n")}`, "h", 45000)
             }
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

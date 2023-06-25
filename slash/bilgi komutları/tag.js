@@ -9,19 +9,19 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
             let tag = []            
-            const kayıt = sunucudb.kayıt
+            const kayıt = guildDatabase.kayıt
             if (kayıt.tag) tag.push(kayıt.tag.slice(0, -1))
             if (kayıt.dis) tag.push(`#${kayıt.dis}`)
             tag = tag.join(" - ")
             if (tag) return int.reply({ content: tag }).catch(err => { })
-            else if (int.member.permissions.has("Administrator")) return int.reply({ content: 'Sunucuda tag ayarlı değil. Ayarlamak için **' + (sunucudb.prefix || ayarlar.prefix) + 'tag-a** `tagınız` yazabilirsiniz', ephemeral: true }).catch(err => { })
+            else if (int.member.permissions.has("Administrator")) return int.reply({ content: 'Sunucuda tag ayarlı değil. Ayarlamak için **' + (guildDatabase.prefix || ayarlar.prefix) + 'tag-a** `tagınız` yazabilirsiniz', ephemeral: true }).catch(err => { })
             else return int.reply({ content: 'Bu sunucuda herhangi bir tag ayarlı değil', ephemeral: true }).catch(err => { })
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

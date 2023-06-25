@@ -11,18 +11,18 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
 
             // Kontroller
-            let yetkili = sunucudb.kayıt.yetkili
+            let yetkili = guildDatabase.kayıt.yetkili
                 , intMember = int.member
             if (yetkili) {
                 if (!intMember.roles.cache.has(yetkili) && !intMember.permissions.has('Administrator')) return hata("Bunu sen yapamazsın şapşik şey seni :(")
             } else if (!intMember.permissions.has('Administrator')) return hata("Bunu sen yapamazsın şapşik şey seni :(")
             let kişi = int.options.getUser("üye", true)
             if (!kişi) return hata(Time.isNull(kişi) ? "Görünen o ki başka bir şeyin ID'sini yazdınız :( Lütfen geçerli bir kişi ID'si giriniz" : "Lütfen bir kişiyi etiketleyiniz ya da ID\'sini giriniz")
-            let isimgecmisii = sunucudb.isimler[kişi.id]
+            let isimgecmisii = guildDatabase.isimler[kişi.id]
             if (!isimgecmisii) return hata(`Etiketlediğiniz kişi daha önceden hiç kayıt edilmediği için tablo gösterilemiyor`)
             
             const embed = new EmbedBuilder().setAuthor({ name: kişi.tag, iconURL: kişi.displayAvatarURL() }).setColor("Random").setTimestamp()
@@ -64,7 +64,7 @@ module.exports = {
             }).catch(err => { })
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

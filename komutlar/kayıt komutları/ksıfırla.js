@@ -8,7 +8,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
@@ -28,11 +28,11 @@ module.exports = {
                     await msg.channel.awaitMessages({ filter: filter, max: 1, time: 120 * 1000 }).then(async ms2 => {
                         const mes3 = ms2.first()
                         if (mes3.content.toLocaleLowerCase() == "evet") {
-                            sunucudb = { kayıtkisiler: {}, kayıt: { bototo: true, isimler: {}, otoduzeltme: true }, son: [], isimler: {}, jail: { kisi: {}, son: [] }, premium: {}, kl: {}, sc: { sayı: 1, kisi: {} }, say: { veri: { t: true, ü: true, tag: true, sü: true, b: true }, emoji: true }, afk: sunucudb.afk }
-                            msg.client.sunucudb[sunucuid] = sunucudb
+                            guildDatabase = { kayıtkisiler: {}, kayıt: { bototo: true, isimler: {}, otoduzeltme: true }, son: [], isimler: {}, jail: { kisi: {}, son: [] }, premium: {}, kl: {}, sc: { sayı: 1, kisi: {} }, say: { veri: { t: true, ü: true, tag: true, sü: true, b: true }, emoji: true }, afk: guildDatabase.afk }
+                            msg.client.guildDatabase[guildId] = guildDatabase
                             mes3.reply({ content: "Başarıyla bu sunucudaki **BÜTÜN** verilerinizi sıfırladım " }).catch(() => { })
-                            db.yaz(sunucuid, { kisi: {} }, "tag rol", "diğerleri")
-                            db.yazdosya(sunucudb, sunucuid)
+                            db.yaz(guildId, { kisi: {} }, "tag rol", "diğerleri")
+                            db.yazdosya(guildDatabase, guildId)
                             return;
                         } else mes3.reply({ content: "İşlem iptal edilmiştir" }).catch(() => { })
                     }).catch(err => msg.reply({ content: `⏰ <@${msg.author.id}>, süreniz bitti!` }).catch(() => { }))
@@ -40,7 +40,7 @@ module.exports = {
             }).catch(() => msg.reply({ content: `⏰ <@${msg.author.id}>, süreniz bitti!` }).catch(() => { }))
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

@@ -8,7 +8,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
@@ -25,12 +25,12 @@ module.exports = {
             await msg.channel.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(a => {
                 const m = a.first()
                 if (m.content.toLocaleLowerCase() === "evet") {                    
-                    const tagrol = msg.client.tagrolDatabase(sunucuid)
-                    sunucudb.kayıt = { vrol: sunucudb.kayıt.vrol, vyetkili: sunucudb.kayıt.vyetkili, bany: sunucudb.kayıt.bany, kicky: sunucudb.kayıt.kicky, modl: sunucudb.kayıt.modl, dis: tagrol.dis, bototo: sunucudb.kayıt.bototo, isimler: {}, otoduzeltme: true }
+                    const tagrol = msg.client.tagrolDatabase(guildId)
+                    guildDatabase.kayıt = { vrol: guildDatabase.kayıt.vrol, vyetkili: guildDatabase.kayıt.vyetkili, bany: guildDatabase.kayıt.bany, kicky: guildDatabase.kayıt.kicky, modl: guildDatabase.kayıt.modl, dis: tagrol.dis, bototo: guildDatabase.kayıt.bototo, isimler: {}, otoduzeltme: true }
                     delete tagrol.tag
                     m.reply({ content: "Başarıyla bu sunucudaki kayıt ayarlarınızı sıfırladım" }).catch(() => { })
-                    db.yaz(sunucuid, tagrol, "tag rol", "diğerleri")
-                    db.yazdosya(sunucudb, sunucuid)
+                    db.yaz(guildId, tagrol, "tag rol", "diğerleri")
+                    db.yazdosya(guildDatabase, guildId)
                     return;
                 } else m.reply({ content: "İşlem iptal edilmiştir" }).catch(err => { })
             }).catch(() => {
@@ -38,7 +38,7 @@ module.exports = {
             })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

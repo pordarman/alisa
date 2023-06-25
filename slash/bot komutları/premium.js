@@ -16,9 +16,9 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
-            let prefix = sunucudb.prefix || ayarlar.prefix
+            let prefix = guildDatabase.prefix || ayarlar.prefix
             switch (int.options.getSubcommand(false)) {
                 case "kullan": {
                     let kod = int.options.getString("kod", false)
@@ -28,30 +28,30 @@ module.exports = {
                     if (!kodVarMı) return hata(`**${kod}** koduna karşılık gelen premium kodunu bulamadım!\n\n• Eğer premium satın aldıysanız ve aktif edemiyorsanız __[destek sunucuma](${ayarlar.discord})__ gelip yetkililerden destek alabilirsiniz`)
                     if (kodVarMı[1].author != int.user.id) return hata(`Bu premium kodunu yalnızca satın alan kişi (<@${kodVarMı[1].author}>) kullanabilir`)
                     if (kodVarMı[1].isUse) return hata(`**${kod}** koduna karşılık gelen premium kodunda zaten bir sunucu ( ${(await int.client.getGuild(kodVarMı[0]))?.name || kodVarMı[0]} ) bulunuyor${kodVarMı[1].isDemo ? "" : `\n\n• Eğer premiumunuzu başka bir sunucuya aktarmak için **${prefix}pre değiştir** yazarak premiumunuzu başka bir sunucuya aktarabilirsiniz`}`)
-                    let sunucuId = int.options.getString("id", false) || sunucuid
-                    if (dosya[sunucuId]) return hata(`Şeyyy... ${await int.client.getGuildNameOrId(sunucuId)} sunucuda zaten bir premium bulunuyor şapşik şey seni :(`)
+                    let guildId = int.options.getString("id", false) || guildId
+                    if (dosya[guildId]) return hata(`Şeyyy... ${await int.client.getGuildNameOrId(guildId)} sunucuda zaten bir premium bulunuyor şapşik şey seni :(`)
                     if (kodVarMı[1].isDemo) {
-                        if (kodVarMı[1].guild == sunucuId) {
-                            if (dosya.g.includes(sunucuId)) return hata(`${await int.client.getGuildNameOrId(sunucuId)} sunucu daha önceden ${int.client.user.username}'nın deneme sürümünü kullanmış :((`)
+                        if (kodVarMı[1].guild == guildId) {
+                            if (dosya.g.includes(guildId)) return hata(`${await int.client.getGuildNameOrId(guildId)} sunucu daha önceden ${int.client.user.username}'nın deneme sürümünü kullanmış :((`)
                         } else return hata(`Bu premium kodunu sadece **${(await int.client.getGuild(kodVarMı[1].guild))?.name || `${kodVarMı[1].guild}** ID'ye sahip**`} **sunucu kullanabilir şapşik şey seni :(`)
                     }
                     let isFinite = kodVarMı[1].expiresTimestamp
-                    dosya[sunucuId] = { ...kodVarMı[1], expiresTimestamp: isFinite ? (Date.now() + isFinite) : undefined, isUse: true }
+                    dosya[guildId] = { ...kodVarMı[1], expiresTimestamp: isFinite ? (Date.now() + isFinite) : undefined, isUse: true }
                     delete dosya[kodVarMı[0]]
-                    dosya.g.push(sunucuId)
+                    dosya.g.push(guildId)
                     db.yazdosya(dosya, "premium", "diğerleri")
-                    let dosyaDatabase = db.bul(sunucuId, "premium database", "diğerleri")
+                    let dosyaDatabase = db.bul(guildId, "premium database", "diğerleri")
                     if (dosyaDatabase) {
-                        let sunucudb = int.client.guildDatabase(sunucuId)
-                            , tagroldb = int.client.tagrolDatabase(sunucuId, sunucudb.kayıt.tag)
-                        sunucudb.kayıt.yassinir = dosyaDatabase.kayıt.yassinir
+                        let guildDatabase = int.client.guildDatabase(guildId)
+                            , tagroldb = int.client.tagrolDatabase(guildId, guildDatabase.kayıt.tag)
+                        guildDatabase.kayıt.yassinir = dosyaDatabase.kayıt.yassinir
                         tagroldb.mesaje = dosyaDatabase.tagrol.mesaje
                         tagroldb.mesajk = dosyaDatabase.tagrol.mesajk
                         tagroldb.dmesaje = dosyaDatabase.tagrol.dmesaje
                         tagroldb.dmesajk = dosyaDatabase.tagrol.dmesajk
-                        db.yaz(sunucuId, tagroldb, "tag rol", "diğerleri")
-                        db.yazdosya(sunucudb, sunucuId)
-                        db.sil(sunucuId, "premium database", "diğerleri")
+                        db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
+                        db.yazdosya(guildDatabase, guildId)
+                        db.sil(guildId, "premium database", "diğerleri")
                     }
                     if (isFinite) {
                         Time.setTimeout(async () => {
@@ -64,78 +64,78 @@ module.exports = {
                                 , kisi = await int.client.fetchUserForce(veri[1].author)
                             kisi.send(`• Heyy bakıyorum ki **${sunucuAdı || `${veri[0]}** ID'ye sahip**`} **sunucunun premiumu bitmiş gibi görünüyor :(\n\n• Eğer premium'dan memnun kaldıysanız ya da yeniden satın almak isterseniz destek sunucuma gelebilirsiniz!!\n\n• ${ayarlar.discord}`).catch(err => { })
                                 ; (await int.client.fetchUserForce(ayarlar.sahip)).send(`**> PREMİUM BİLGİLENDİRME**\n\n• **${sunucuAdı || "❓ Bilinmeyen sunucu"} - (${veri[0]})** sunucunun premium'u bitmiştir.\n• **Satın alan kişi:** <@${kisi.id}> - ${kisi.tag}\n• **Kullandığı süre:** ${Time.duration(veri[1].totalTime)}`).catch(err => { })
-                            let sunucudb = int.client.guildDatabase(veri[0])
-                                , tagroldb = int.client.tagrolDatabase(veri[0], sunucudb.kayıt.tag)
-                                , object = { kayıt: { yassinir: sunucudb.kayıt.yassinir }, premium: sunucudb.premium, tagrol: { dmesaje: tagroldb.dmesaje, dmesajk: tagroldb.dmesajk, mesaje: tagroldb.mesaje, mesajk: tagroldb.mesajk } }
-                            sunucudb.premium = {}
-                            delete sunucudb.kayıt.yassinir
+                            let guildDatabase = int.client.guildDatabase(veri[0])
+                                , tagroldb = int.client.tagrolDatabase(veri[0], guildDatabase.kayıt.tag)
+                                , object = { kayıt: { yassinir: guildDatabase.kayıt.yassinir }, premium: guildDatabase.premium, tagrol: { dmesaje: tagroldb.dmesaje, dmesajk: tagroldb.dmesajk, mesaje: tagroldb.mesaje, mesajk: tagroldb.mesajk } }
+                            guildDatabase.premium = {}
+                            delete guildDatabase.kayıt.yassinir
                             delete tagroldb.dmesaje
                             delete tagroldb.dmesajk
                             delete tagroldb.mesaje
                             delete tagroldb.mesajk
                             db.yaz(veri[0], tagroldb, "tag rol", "diğerleri")
-                            db.yazdosya(sunucudb, veri[0])
+                            db.yazdosya(guildDatabase, veri[0])
                             db.yaz(veri[0], object, "premium database", "diğerleri")
                         }, kodVarMı[1].expiresTimestamp)
                     }
-                    return hata(`Premium kodu başarıyla aktif edildi ve kullanılabilir durumda! ${await int.client.getGuildNameOrId(sunucuId)} sunucu artık __çok ama çok özel avantajlara sahipp__!!`, "b")
+                    return hata(`Premium kodu başarıyla aktif edildi ve kullanılabilir durumda! ${await int.client.getGuildNameOrId(guildId)} sunucu artık __çok ama çok özel avantajlara sahipp__!!`, "b")
                 }
                 case "değiştir": {
                     let kod = int.options.get("kod", true)
                         , dosya = db.buldosya("premium", "diğerleri")
-                    if (!kod) return hata(`Lütfen yetkililerden aldığınız premium komutu giriniz\n\n**Örnek**\n• ${prefix}pre değiştir ${rastgeleKod(8, dosya)} <sunucuId>`)
+                    if (!kod) return hata(`Lütfen yetkililerden aldığınız premium komutu giriniz\n\n**Örnek**\n• ${prefix}pre değiştir ${rastgeleKod(8, dosya)} <guildId>`)
                     let kodVarMı = Object.entries(dosya).find(a => a[1].code == kod)
                     if (!kodVarMı) return hata(`**${kod}** koduna karşılık gelen premium kodunu bulamadım!\n\n• Eğer premium satın aldıysanız ve aktif edemiyorsanız __[destek sunucuma](${ayarlar.discord})__ gelip yetkililerden destek alabilirsiniz`)
                     if (kodVarMı[1].author != int.user.id) return hata(`Bu premium kodunu yalnızca satın alan kişi (<@${kodVarMı[1].author}>) kullanabilir`)
-                    if (isNaN(+kodVarMı[0])) return hata(`**${kod}** koduna karşılık gelen premium kodunda zaten herhangi bir sunucu tanımlanmamış!\n\n• Eğer premium kodunu kullanmak isterseniz **${prefix}pre kullan <kod> <sunucuId>** şeklinde yazabilirsiniz\n\n**Örnek**\n• ${prefix}pre kullan ${rastgeleKod(8, dosya)}\n\n• ${prefix}pre kullan ${rastgeleKod(8, dosya)} ${sunucuid}`)
+                    if (isNaN(+kodVarMı[0])) return hata(`**${kod}** koduna karşılık gelen premium kodunda zaten herhangi bir sunucu tanımlanmamış!\n\n• Eğer premium kodunu kullanmak isterseniz **${prefix}pre kullan <kod> <guildId>** şeklinde yazabilirsiniz\n\n**Örnek**\n• ${prefix}pre kullan ${rastgeleKod(8, dosya)}\n\n• ${prefix}pre kullan ${rastgeleKod(8, dosya)} ${guildId}`)
                     if (kodVarMı[1].isDemo) return hata(`Premium deneme sürümünü başka bir sunucuya aktaramazsın şapşik şey seni :((`)
-                    let sunucuId = int.options.getString("id")
-                    if (!sunucuId) return hata("Lütfen premium özelliğini aktaracağınız sunucunun ID'sini giriniz")
-                    if (kodVarMı[0] == sunucuId) return hata(`Girdiğiniz premium kodu zaten ${await int.client.getGuildNameOrId(sunucuId)} sunucuda kullanılıyor`)
-                    if (dosya[sunucuId]) return hata(`Şeyyy... **${(await int.client.getGuild(kodVarMı[1].guild))?.name || `${kodVarMı[1].guild}** ID'ye sahip**`} **sunucuda zaten bir premium bulunuyor şapşik şey seni :(`)
-                    dosya[sunucuId] = { ...kodVarMı[1], isUse: true }
+                    let guildId = int.options.getString("id")
+                    if (!guildId) return hata("Lütfen premium özelliğini aktaracağınız sunucunun ID'sini giriniz")
+                    if (kodVarMı[0] == guildId) return hata(`Girdiğiniz premium kodu zaten ${await int.client.getGuildNameOrId(guildId)} sunucuda kullanılıyor`)
+                    if (dosya[guildId]) return hata(`Şeyyy... **${(await int.client.getGuild(kodVarMı[1].guild))?.name || `${kodVarMı[1].guild}** ID'ye sahip**`} **sunucuda zaten bir premium bulunuyor şapşik şey seni :(`)
+                    dosya[guildId] = { ...kodVarMı[1], isUse: true }
                     delete dosya[kodVarMı[0]]
-                    dosya.g.push(sunucuId)
-                    let sunucudb = int.client.guildDatabase(kodVarMı[0])
-                        , tagroldb = int.client.tagrolDatabase(kodVarMı[0], sunucudb.kayıt.tag)
-                        , object = { kayıt: { yassinir: sunucudb.kayıt.yassinir }, premium: sunucudb.premium, tagrol: { dmesaje: tagroldb.dmesaje, dmesajk: tagroldb.dmesajk, mesaje: tagroldb.mesaje, mesajk: tagroldb.mesajk } }
-                    sunucudb.premium = {}
-                    delete sunucudb.kayıt.yassinir
+                    dosya.g.push(guildId)
+                    let guildDatabase = int.client.guildDatabase(kodVarMı[0])
+                        , tagroldb = int.client.tagrolDatabase(kodVarMı[0], guildDatabase.kayıt.tag)
+                        , object = { kayıt: { yassinir: guildDatabase.kayıt.yassinir }, premium: guildDatabase.premium, tagrol: { dmesaje: tagroldb.dmesaje, dmesajk: tagroldb.dmesajk, mesaje: tagroldb.mesaje, mesajk: tagroldb.mesajk } }
+                    guildDatabase.premium = {}
+                    delete guildDatabase.kayıt.yassinir
                     delete tagroldb.dmesaje
                     delete tagroldb.dmesajk
                     delete tagroldb.mesaje
                     delete tagroldb.mesajk
                     db.yaz(kodVarMı[0], tagroldb, "tag rol", "diğerleri")
-                    db.yazdosya(sunucudb, kodVarMı[0])
+                    db.yazdosya(guildDatabase, kodVarMı[0])
                     db.yaz(kodVarMı[0], object, "premium database", "diğerleri")
                     db.yazdosya(dosya, "premium", "diğerleri")
-                    let dosyaDatabase = db.bul(sunucuId, "premium database", "diğerleri")
+                    let dosyaDatabase = db.bul(guildId, "premium database", "diğerleri")
                     if (dosyaDatabase) {
-                        let sunucudb = int.client.guildDatabase(sunucuId)
-                            , tagroldb = int.client.tagrolDatabase(sunucuId, sunucudb.kayıt.tag)
-                        sunucudb.kayıt.yassinir = dosyaDatabase.kayıt.yassinir
-                        sunucuId.premium = dosyaDatabase.premium
+                        let guildDatabase = int.client.guildDatabase(guildId)
+                            , tagroldb = int.client.tagrolDatabase(guildId, guildDatabase.kayıt.tag)
+                        guildDatabase.kayıt.yassinir = dosyaDatabase.kayıt.yassinir
+                        guildId.premium = dosyaDatabase.premium
                         tagroldb.mesaje = dosyaDatabase.tagrol.mesaje
                         tagroldb.mesajk = dosyaDatabase.tagrol.mesajk
                         tagroldb.dmesaje = dosyaDatabase.tagrol.dmesaje
                         tagroldb.dmesajk = dosyaDatabase.tagrol.dmesajk
-                        db.yaz(sunucuId, tagroldb, "tag rol", "diğerleri")
-                        db.yazdosya(sunucudb, sunucuId)
-                        db.sil(sunucuId, "premium database", "diğerleri")
+                        db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
+                        db.yazdosya(guildDatabase, guildId)
+                        db.sil(guildId, "premium database", "diğerleri")
                     }
-                    return hata(`Premium kodu başarıyla aktif edildi ve kullanılabilir durumda! ${await int.client.getGuildNameOrId(sunucuId)} sunucu artık __çok ama çok özel avantajlara sahipp__!!`, "b")
+                    return hata(`Premium kodu başarıyla aktif edildi ve kullanılabilir durumda! ${await int.client.getGuildNameOrId(guildId)} sunucu artık __çok ama çok özel avantajlara sahipp__!!`, "b")
                 }
                 case "özellik": {
                     let pp = int.client.user.displayAvatarURL()
                     return int.reply({ embeds: [new EmbedBuilder().setAuthor({ name: int.client.user.username, iconURL: pp }).setDescription(`• *Botun premium sistemi özellikleri*`).setColor("#9e02e2").setTimestamp().setThumbnail(pp)] }).catch(err => { })
                 }
                 case "fiyat": {
-                    let pre = db.bul(sunucuid, "premium", "diğerleri")
+                    let pre = db.bul(guildId, "premium", "diğerleri")
                         , pp = int.client.user.displayAvatarURL()
                     return int.reply({ embeds: [new EmbedBuilder().setAuthor({ name: int.client.user.username, iconURL: pp }).setDescription(`*Botun premium fiyatlandırma bilgileri*`).setColor("#9e02e2").setTimestamp().setThumbnail(pp)] }).catch(err => { })
                 }
                 case "süre": {
-                    let pre = db.bul(sunucuid, "premium", "diğerleri")
+                    let pre = db.bul(guildId, "premium", "diğerleri")
                     if (!pre) return hata(`Bu sunucuya tanımlanmış herhangi bir premium bulunmuyor :(`)
                     let s = pre.expiresTimestamp
                     if (!s) return int.reply({ content: `• Bu sunucudaki premium **ASLA** bitmeyecektir oleyy!! 🎉` }).catch(err => { })
@@ -145,7 +145,7 @@ module.exports = {
             }
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

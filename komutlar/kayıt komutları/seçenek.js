@@ -8,7 +8,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
@@ -18,24 +18,24 @@ module.exports = {
                 case "cinsiyet":
                 case "cin":
                 case "c": {
-                    if (!sunucudb.kayıt.secenek) return hata('Bu sunucudaki kayıt seçeneğim zaten __**Cinsiyet**__ olarak ayarlı')
-                    msg.client.secenek.delete(sunucuid)
-                    delete sunucudb.kayıt.normal
-                    delete sunucudb.kayıt.secenek
+                    if (!guildDatabase.kayıt.secenek) return hata('Bu sunucudaki kayıt seçeneğim zaten __**Cinsiyet**__ olarak ayarlı')
+                    msg.client.secenek.delete(guildId)
+                    delete guildDatabase.kayıt.normal
+                    delete guildDatabase.kayıt.secenek
                     hata('Bu sunucudaki kayıt seçeneğim başarıyla __**Cinsiyet**__ olarak ayarlandı', "b")
-                    db.yazdosya(sunucudb, sunucuid)
+                    db.yazdosya(guildDatabase, guildId)
                     return;
                 }
                 case "normal":
                 case "nor":
                 case "n": {
-                    if (sunucudb.kayıt.secenek) return hata('Bu sunucudaki kayıt seçeneğim zaten __**Normal Kayıt**__ olarak ayarlı')
-                    msg.client.secenek.add(sunucuid)
-                    delete sunucudb.kayıt.erkek
-                    delete sunucudb.kayıt.kız
-                    sunucudb.kayıt.secenek = true
+                    if (guildDatabase.kayıt.secenek) return hata('Bu sunucudaki kayıt seçeneğim zaten __**Normal Kayıt**__ olarak ayarlı')
+                    msg.client.secenek.add(guildId)
+                    delete guildDatabase.kayıt.erkek
+                    delete guildDatabase.kayıt.kız
+                    guildDatabase.kayıt.secenek = true
                     hata('Bu sunucudaki kayıt seçeneğim başarıyla __**Normal Kayıt**__ olarak ayarlandı', "b")
-                    db.yazdosya(sunucudb, sunucuid)
+                    db.yazdosya(guildDatabase, guildId)
                     return;
                 }
                 default:
@@ -43,7 +43,7 @@ module.exports = {
             }
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

@@ -9,11 +9,11 @@ module.exports = {
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
     try {      
 
       // Kontroller
-      let yetkiliid = sunucudb.kayıt.yetkili
+      let yetkiliid = guildDatabase.kayıt.yetkili
       if (yetkiliid) {
         if (!msgMember.roles.cache.has(yetkiliid) && !msgMember.permissions.has('ManageNicknames')) return hata(`<@&${yetkiliid}> rolüne **veya** Kullanıcı Adlarını Yönet`, "yetki")
       } else if (!msgMember.permissions.has('ManageNicknames')) return hata(`Kullanıcı Adlarını Yönet`, "yetki")
@@ -27,7 +27,7 @@ module.exports = {
       if (member.roles.highest.position >= guildMe.roles.highest.position && memberid !== msg.client.user.id) return hata(`Etiketlediğiniz kişinin rolünün sırası benim rolümün sırasından yüksek! Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
       if (member.roles.highest.position >= msgMember.roles.highest.position && msg.author.id !== guild.ownerId && memberid !== msg.author.id) return hata(`Etiketlediğiniz kişinin sizin rolünüzden yüksek o yüzden onun ismini değiştiremezsiniz`)
       function UpperKelimeler(str) {
-        if (!sunucudb.kayıt.otoduzeltme) {
+        if (!guildDatabase.kayıt.otoduzeltme) {
           if (sembol) return str.replace(/ /g, " " + sembol)
           else return str
         }
@@ -37,23 +37,23 @@ module.exports = {
         if (sembol) return str.replace(/ /g, " " + sembol)
         else return str
       }
-      let tag = sunucudb.kayıt.tag
-      , sembol = sunucudb.kayıt.sembol
+      let tag = guildDatabase.kayıt.tag
+      , sembol = guildDatabase.kayıt.sembol
       , sadeceisim = j?.replace(new RegExp(`<@!?${memberid}>|${memberid}`, "g"), "")?.replace(/ +/g, " ")?.trim()
       , isim
       if (member.user.bot) isim = `${tag || ""}${sadeceisim || member.user.username}`
       else {
-        let kayıtisim = sunucudb.kayıt.isimler.kayıt
+        let kayıtisim = guildDatabase.kayıt.isimler.kayıt
         if (kayıtisim) {
           if (kayıtisim.indexOf("<yaş>") != -1) {
             let age = sadeceisim.match(msg.client.regex.fetchAge)
             if (age) sadeceisim = sadeceisim.replace(age[0], "").replace(/ +/g, " ").trim()
-            else if (sunucudb.kayıt.yaszorunlu) return hata("Hey bu sunucuda kayıt ederken geçerli bir yaş girmek zorundasın!")
+            else if (guildDatabase.kayıt.yaszorunlu) return hata("Hey bu sunucuda kayıt ederken geçerli bir yaş girmek zorundasın!")
             else age = [""]
             isim = kayıtisim.replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/<isim>/g, UpperKelimeler(sadeceisim)).replace(/<yaş>/g, age[0])
           } else isim = kayıtisim.replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/<isim>/g, UpperKelimeler(sadeceisim))
         } else {
-          if (sunucudb.kayıt.yaszorunlu && sadeceisim.search(msg.client.regex.fetchAge) == -1) return hata("Hey bu sunucuda kayıt ederken geçerli bir yaş girmek zorundasın!")
+          if (guildDatabase.kayıt.yaszorunlu && sadeceisim.search(msg.client.regex.fetchAge) == -1) return hata("Hey bu sunucuda kayıt ederken geçerli bir yaş girmek zorundasın!")
           isim = `${tag || ""}${UpperKelimeler(sadeceisim)}`
         }
       }
@@ -64,10 +64,10 @@ module.exports = {
       await member.setNickname(isim).then(() => {
         msg.react(ayarlar.emoji.p).catch(err => { })
         if (!member.user.bot) {
-          let kl = sunucudb.kl[memberid] || []
+          let kl = guildDatabase.kl[memberid] || []
           kl.unshift({ type: "i", newName: isim, author: msg.author.id, timestamp: Date.now() })
-          sunucudb.kl[memberid] = kl
-          db.yazdosya(sunucudb, sunucuid)
+          guildDatabase.kl[memberid] = kl
+          db.yazdosya(guildDatabase, guildId)
         }
       }).catch(err => {
         if (err?.code == 50013) return hata(`<@${memberid}> adlı kişinin ismini düzenlemeye yetkim yetmiyor. Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`)
@@ -76,7 +76,7 @@ module.exports = {
       })
     } catch (e) {
       msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-      msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+      msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
       console.log(e)
     }
   }

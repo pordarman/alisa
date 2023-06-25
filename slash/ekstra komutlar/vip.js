@@ -12,7 +12,7 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
             let option = int.options.getSubcommandGroup(false)
             , intMember = int.member
@@ -26,18 +26,18 @@ module.exports = {
                         if (!intMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
                         const rol = int.options.getRole("rol", false)
                         const rolid = rol.id
-                        if (sunucudb.kayıt.vrol === rolid) return hata('Vip rolü zaten etiketlediğiniz rolle aynı')
+                        if (guildDatabase.kayıt.vrol === rolid) return hata('Vip rolü zaten etiketlediğiniz rolle aynı')
                         if (rol.managed) return hata(`Botların oluşturduğu rolleri başkalarına veremem`)
-                        if (rolid == sunucudb.kayıt.vyetkili) return hata(`Etiketlediğiniz rol bu sunucudaki vip yetkili rolü. Lütfen başka bir rol etiketleyiniz`)
+                        if (rolid == guildDatabase.kayıt.vyetkili) return hata(`Etiketlediğiniz rol bu sunucudaki vip yetkili rolü. Lütfen başka bir rol etiketleyiniz`)
                        
-                        sunucudb.kayıt.vrol = rolid
-                        db.yazdosya(sunucudb, sunucuid)
+                        guildDatabase.kayıt.vrol = rolid
+                        db.yazdosya(guildDatabase, guildId)
                         return hata(`Vip rolü başarıyla <@&${rolid}> olarak ayarlandı`, "b")
                     }
-                    if (!sunucudb.kayıt.vrol) return hata('Vip rolü zaten sıfırlanmış durumda')
+                    if (!guildDatabase.kayıt.vrol) return hata('Vip rolü zaten sıfırlanmış durumda')
                   
-                    delete sunucudb.kayıt.vrol
-                    db.yazdosya(sunucudb, sunucuid)
+                    delete guildDatabase.kayıt.vrol
+                    db.yazdosya(guildDatabase, guildId)
                     return hata('Vip rolü başarıyla sıfırlandı', "b")
                 }
                 case "yetkili": {
@@ -48,29 +48,29 @@ module.exports = {
                         if (!intMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
                         const rol = int.options.getRole("rol", false)
                         const rolid = rol.id
-                        if (sunucudb.kayıt.vyetkili === rolid) return hata('Vip yetkili rolü zaten etiketlediğiniz rolle aynı')
+                        if (guildDatabase.kayıt.vyetkili === rolid) return hata('Vip yetkili rolü zaten etiketlediğiniz rolle aynı')
                         if (rol.managed) return hata(`Botların oluşturduğu rolleri başkalarına veremem`)
-                        if (rolid == sunucudb.kayıt.vrol) return hata(`Etiketlediğiniz rol bu sunucudaki vip rolü. Lütfen başka bir rol etiketleyiniz`)
+                        if (rolid == guildDatabase.kayıt.vrol) return hata(`Etiketlediğiniz rol bu sunucudaki vip rolü. Lütfen başka bir rol etiketleyiniz`)
                       
-                        sunucudb.kayıt.vyetkili = rolid
-                        db.yazdosya(sunucudb, sunucuid)
+                        guildDatabase.kayıt.vyetkili = rolid
+                        db.yazdosya(guildDatabase, guildId)
                         return hata(`Vip yetkili rolü başarıyla <@&${rolid}> olarak ayarlandı`, "b")
                     }
-                    if (!sunucudb.kayıt.vyetkili) return hata('Vip yetkili rolü zaten sıfırlanmış durumda')
-                    delete sunucudb.kayıt.vyetkili
-                    db.yazdosya(sunucudb, sunucuid)
+                    if (!guildDatabase.kayıt.vyetkili) return hata('Vip yetkili rolü zaten sıfırlanmış durumda')
+                    delete guildDatabase.kayıt.vyetkili
+                    db.yazdosya(guildDatabase, guildId)
                     return hata('Vip yetkili rolü başarıyla sıfırlandı', "b")
                 }
 
                 default:
 
                 // Kontroller
-                    let kayıtyetkili = sunucudb.kayıt.vyetkili
-                    , prefix = sunucudb.prefix || ayarlar.prefix
+                    let kayıtyetkili = guildDatabase.kayıt.vyetkili
+                    , prefix = guildDatabase.prefix || ayarlar.prefix
                     if (kayıtyetkili) {
                         if (!intMember.roles.cache.has(kayıtyetkili) && !intMember.permissions.has('Administrator')) return hata(`<@&${kayıtyetkili}> rolüne **veya** Yönetici`, "yetki")
                     } else if (!intMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
-                    let viprol = sunucudb.kayıt.vrol
+                    let viprol = guildDatabase.kayıt.vrol
                     if (!viprol) return hata(`Bu sunucuda herhangi bir vip rolü __ayarlanmamış__${intMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${prefix}vip-rol ayarla @rol** yazabilirsiniz` : ""}`)
                     if (!guildMe.permissions.has('ManageRoles')) return hata("Rolleri Yönet", "yetkibot")
                     const kisi = int.options.getMember("üye", true)
@@ -88,7 +88,7 @@ module.exports = {
             }
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

@@ -9,7 +9,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
             // Kontroller
             if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
@@ -17,7 +17,7 @@ module.exports = {
             let kisi = guild.memberCount + 1
                 , sunucusayısı = kisi.toLocaleString().replace(".", ",")
                 , ao = new Date()
-                , yetkilirolid = sunucudb.kayıt.yetkili
+                , yetkilirolid = guildDatabase.kayıt.yetkili
                 , yetkilietiket = yetkilirolid ? '<@&' + yetkilirolid + '>' : "__**ROL AYARLI DEĞİL**__"
                 , kişi = msg.client.user
                 , güvenlik
@@ -29,11 +29,11 @@ module.exports = {
             let mid = kişi.id
             , components = []
             , dugme = new ActionRowBuilder()
-            if (sunucudb.kayıt.secenek) dugme.addComponents(new ButtonBuilder().setCustomId(`KAYIT_TESTÜYE`).setStyle(1).setEmoji(ayarlar.emoji.uye).setLabel("Üye olarak kayıt et"))
+            if (guildDatabase.kayıt.secenek) dugme.addComponents(new ButtonBuilder().setCustomId(`KAYIT_TESTÜYE`).setStyle(1).setEmoji(ayarlar.emoji.uye).setLabel("Üye olarak kayıt et"))
             else dugme.addComponents(new ButtonBuilder().setCustomId(`KAYIT_TESTKIZ`).setStyle(1).setEmoji(ayarlar.emoji.kiz).setLabel("Kız olarak kayıt et")).addComponents(new ButtonBuilder().setCustomId(`KAYIT_TESTERKEK`).setStyle(1).setEmoji(ayarlar.emoji.erkek).setLabel("Erkek olarak kayıt et"))
             dugme.addComponents(new ButtonBuilder().setCustomId(`KAYIT_TESTŞÜPHELİ`).setStyle(4).setLabel("Şüpheliye at").setEmoji("⛔")).addComponents(new ButtonBuilder().setCustomId(`KAYIT_TESTYENİDEN`).setStyle(3).setEmoji("🔁").setLabel("Yeniden kayıt et"))
             components.push(dugme, new ActionRowBuilder().addComponents(new ButtonBuilder().setCustomId(`KAYIT_TESTBOT`).setStyle(1).setLabel("Bot olarak kayıt et").setEmoji("🤖")))
-            var ozelgirismesajıvarmı = sunucudb.kayıt.özel
+            var ozelgirismesajıvarmı = guildDatabase.kayıt.özel
             if (ozelgirismesajıvarmı) {
                 var girişmesajı = ozelgirismesajıvarmı.yazı
                     .replace(/<sunucuAdı>/g, guild.name)
@@ -50,7 +50,7 @@ module.exports = {
                     .replace(/<emojiToplam>/g, msg.client.stringToEmojis(kisi))
                 if (ozelgirismesajıvarmı.embed) return msg.channel.send({ content: girişmesajı + "\n" + (ozelgirismesajıvarmı.im || ""), components: components, allowedMentions: { roles: false } }).catch(err => { })
                 var embedgiriş = new EmbedBuilder()
-                    .setTitle(`${sunucudb.isimler[mid] ? "Tekrar " : ""}Hoşgeldin ${kişi.username} ${ayarlar.emoji.selam} (FAKE)`)
+                    .setTitle(`${guildDatabase.isimler[mid] ? "Tekrar " : ""}Hoşgeldin ${kişi.username} ${ayarlar.emoji.selam} (FAKE)`)
                     .setDescription(girişmesajı)
                     .setColor('Random')
                     .setThumbnail(kişininfotografı)
@@ -59,7 +59,7 @@ module.exports = {
                     .setFooter({ text: 'Nasılsın bakalım ' + kişi.username + '?' })
             } else {
                 var embedgiriş = new EmbedBuilder()
-                    .setTitle(`${sunucudb.isimler[mid] ? "Tekrar " : ""}Hoşgeldin ${kişi.username} ${ayarlar.emoji.selam} (FAKE)`)
+                    .setTitle(`${guildDatabase.isimler[mid] ? "Tekrar " : ""}Hoşgeldin ${kişi.username} ${ayarlar.emoji.selam} (FAKE)`)
                     .setDescription(`**${ayarlar.emoji.cildir} \`${guild.name}\` adlı sunucumuza hoşgeldiniizz!!\n\n${ayarlar.emoji.woah} Seninle beraber tam olarak ${sunucusayısı} kişi olduukkk\n\n${ayarlar.emoji.icme} Yetkililer seni birazdan kayıt edecektir lütfen biraz sabredin\n\n> Hesabının kurulma tarihi ` + tarih + '\n> Hesap ' + güvenlik + '**')
                     .setColor('Random')
                     .setThumbnail(kişininfotografı)
@@ -68,10 +68,10 @@ module.exports = {
             }
             const mesajlar = ayarlar.guildMemberAdd
             var rasm = mesajlar[Math.floor(Math.random() * mesajlar.length)].replace("<m>", `<@${msg.client.user.id}>`)
-            return msg.channel.send({ embeds: [embedgiriş], content: `${sunucudb.kayıt.yetkili ? `<@&${sunucudb.kayıt.yetkili}>, ` : ""}${rasm}`, allowedMentions: { roles: false }, components: components }).catch(err => { })
+            return msg.channel.send({ embeds: [embedgiriş], content: `${guildDatabase.kayıt.yetkili ? `<@&${guildDatabase.kayıt.yetkili}>, ` : ""}${rasm}`, allowedMentions: { roles: false }, components: components }).catch(err => { })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

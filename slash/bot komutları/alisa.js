@@ -10,11 +10,11 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
             const seçenek = int.options.getString("seçenek", true)
             if (seçenek == "kim") {
-                const prefix = sunucudb.prefix || ayarlar.prefix
+                const prefix = guildDatabase.prefix || ayarlar.prefix
                 const pp = int.client.user.displayAvatarURL()
                 let toplam = Object.values(alisa.sunucular.ekleme)
                 const embed = new EmbedBuilder()
@@ -166,7 +166,7 @@ module.exports = {
                     int.reply({ embeds: [embed] }).catch(err => { })
                 }
             } else if (seçenek == "komut") {
-                const prefix = sunucudb.prefix || ayarlar.prefix
+                const prefix = guildDatabase.prefix || ayarlar.prefix
                 let toplam = 0
                 const obje = Object.entries(alisa.kullanımlar).sort((a, b) => (b[1].top + (b[1].buton || 0)) - (a[1].top + (a[1].buton || 0))).filter(a => {
                     const komut = int.client.commands.find(b => b.name == a[0])
@@ -190,7 +190,7 @@ module.exports = {
             } else return hata("Lütfen geçerli bir seçenek giriniz")
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

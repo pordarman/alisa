@@ -8,18 +8,18 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
             if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
 
-            let tagroldb = msg.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
+            let tagroldb = msg.client.tagrolDatabase(guildId, guildDatabase.kayıt.tag)
             if (args[0] === "sıfırla") {
                 if (!tagroldb.kanal) return hata("Tagrol kanalı zaten sıfırlanmış durumda")
                 delete tagroldb.kanal
                 hata('Tagrol kanalı başarıyla sıfırlanmıştır', "b")
-                db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
+                db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
                 return;
             }
             const kanal = msg.client.fetchChannel(args.join(" "), msg)
@@ -29,11 +29,11 @@ module.exports = {
         
             tagroldb.kanal = kanal.id
             hata('Tagrol kanalı başarıyla <#' + kanal.id + '> olarak ayarlandı', "b")
-            db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
+            db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
             return;
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

@@ -8,7 +8,7 @@ module.exports = {
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
     try {
 
       // Kontroller
@@ -17,7 +17,7 @@ module.exports = {
       
       const yazı = args.join(" ").toLocaleLowerCase()
       if ([ayarlar.prefix, "sıfırla"].includes(yazı)) {
-        delete sunucudb.prefix
+        delete guildDatabase.prefix
         const em = new EmbedBuilder()
           .setTitle(`Prefixiniz başarıyla "${ayarlar.prefix}" olarak değiştirildi`)
           .setDescription('• Yeni prefixiniz **${ayarlar.prefix}** oldu')
@@ -30,12 +30,12 @@ module.exports = {
           .setTimestamp()
           .setColor('Blue')
         msg.reply({ embeds: [em] }).catch(err => { })
-        db.yazdosya(sunucudb, sunucuid)
+        db.yazdosya(guildDatabase, guildId)
         return;
       }
       if (yazı.length > 5) return hata('Prefix uzunluğum 5\'ten uzun olamaz')
       if (prefix === yazı) return hata('Yazdığınız prefix zaten benim prefixim')
-      sunucudb.prefix = yazı
+      guildDatabase.prefix = yazı
       const e = new EmbedBuilder()
         .setTitle('Prefixiniz başarıyla "' + yazı + '" olarak değiştirildi')
         .setDescription('• Yeni prefixiniz **' + yazı + '** oldu')
@@ -48,11 +48,11 @@ module.exports = {
         .setTimestamp()
         .setColor('Blue')
       msg.reply({ embeds: [e] }).catch(err => { })
-      db.yazdosya(sunucudb, sunucuid)
+      db.yazdosya(guildDatabase, guildId)
       return;
     } catch (e) {
       msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-      msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+      msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
       console.log(e)
     }
   }

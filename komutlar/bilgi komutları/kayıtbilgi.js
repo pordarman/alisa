@@ -8,27 +8,27 @@ module.exports = {
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
     try {
 
       // Kontroller
-      let yetkilirolid = sunucudb.kayıt.yetkili
+      let yetkilirolid = guildDatabase.kayıt.yetkili
       if (yetkilirolid) {
         if (!msgMember.roles.cache.has(yetkilirolid) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkilirolid}> rolüne **veya** Yönetici`, "yetki")
       } else if (!msgMember.permissions.has('Administrator')) return hata('Yönetici', "yetki")
 
       let seçenek
         , yazıı
-        , özel = sunucudb.kayıt.özel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"
-        , gözel = sunucudb.kayıt.gözel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"
-        , botrolid = sunucudb.kayıt.bot
-        , kayıtsizrolid = sunucudb.kayıt.kayıtsız
-        , kayıtkanalid = sunucudb.kayıt.kanal
-        , logkanalid = sunucudb.kayıt.günlük
-        , logKanalid = sunucudb.kayıt.log
-        , tag = sunucudb.kayıt.tag, kayıttag = []
-        , kayıtsembol = sunucudb.kayıt.sembol
-        , kayıtotoisim = sunucudb.kayıt.isimler.giris
+        , özel = guildDatabase.kayıt.özel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"
+        , gözel = guildDatabase.kayıt.gözel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"
+        , botrolid = guildDatabase.kayıt.bot
+        , kayıtsizrolid = guildDatabase.kayıt.kayıtsız
+        , kayıtkanalid = guildDatabase.kayıt.kanal
+        , logkanalid = guildDatabase.kayıt.günlük
+        , logKanalid = guildDatabase.kayıt.log
+        , tag = guildDatabase.kayıt.tag, kayıttag = []
+        , kayıtsembol = guildDatabase.kayıt.sembol
+        , kayıtotoisim = guildDatabase.kayıt.isimler.giris
         , botrolü = botrolid ? botrolid.map(a => "<@&" + a + ">").join(" | ") : "Rol ayarlanmamış ❗"
         , discordlogo = guild.iconURL()
         , arol = kayıtsizrolid ? '<@&' + kayıtsizrolid + '>' : "Rol ayarlanmamış ❗"
@@ -36,32 +36,32 @@ module.exports = {
         , kayıt_kanal = kayıtkanalid ? "<#" + kayıtkanalid + '>' : "Kanal ayarlanmamış ❗"
         , kayıt_günlük = logkanalid ? '<#' + logkanalid + '>' : "Kanal ayarlanmamış ❗"
         , kayıt_log = logKanalid ? '<#' + logKanalid + '>' : "Kanal ayarlanmamış ❗"
-        , ayar = sunucudb.kayıt.ayar ? `Kayıt yapamazsınız ${ayarlar.emoji.kapali}` : `Kayıt yapabilirsiniz ${ayarlar.emoji.acik}`
-        , otoduzeltme = sunucudb.kayıt.otoduzeltme ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
-        , yaszorunlu = sunucudb.kayıt.yaszorunlu ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
-        , bototo = sunucudb.kayıt.bototo ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
+        , ayar = guildDatabase.kayıt.ayar ? `Kayıt yapamazsınız ${ayarlar.emoji.kapali}` : `Kayıt yapabilirsiniz ${ayarlar.emoji.acik}`
+        , otoduzeltme = guildDatabase.kayıt.otoduzeltme ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
+        , yaszorunlu = guildDatabase.kayıt.yaszorunlu ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
+        , bototo = guildDatabase.kayıt.bototo ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
         , sembol = kayıtsembol || "Sembol ayarlanmamış ❗"
         , otoisim = kayıtotoisim ? kayıtotoisim.replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/<isim>/g, msg.author.username) : "Ayarlanmamış ❗"
-      if (sunucudb.kayıt.secenek) {
-        let kayıtrolid = sunucudb.kayıt.normal
+      if (guildDatabase.kayıt.secenek) {
+        let kayıtrolid = guildDatabase.kayıt.normal
           , kayıtrolü = kayıtrolid ? kayıtrolid.map(a => "<@&" + a + ">").join(" | ") : "Rol ayarlanmamış ❗"
         seçenek = "Normal kayıt 👤"
         yazıı = `**• Üyelere verilecek olan rol(ler):**  ${kayıtrolü}`
       } else {
-        let kızrolid = sunucudb.kayıt.kız
-          , erkekrolid = sunucudb.kayıt.erkek
+        let kızrolid = guildDatabase.kayıt.kız
+          , erkekrolid = guildDatabase.kayıt.erkek
           , kız = kızrolid ? kızrolid.map(a => "<@&" + a + ">").join(" | ") : "Rol ayarlanmamış ❗"
           , erkek = erkekrolid ? erkekrolid.map(a => "<@&" + a + ">").join(" | ") : "Rol ayarlanmamış ❗"
         seçenek = "Cinsiyete göre kayıt 👫"
         yazıı = `**• Erkeklere verilecek olan rol(ler):**  ${erkek}\n**• Kızlara verilecek olan rol(ler):**  ${kız}`
       }
       if (tag) kayıttag.push(tag.slice(0, -1))
-      if (sunucudb.kayıt.dis) kayıttag.push(`#${sunucudb.kayıt.dis}`)
+      if (guildDatabase.kayıt.dis) kayıttag.push(`#${guildDatabase.kayıt.dis}`)
       let kayıtisim
-        , kayıtisimler = sunucudb.kayıt.isimler.kayıt
+        , kayıtisimler = guildDatabase.kayıt.isimler.kayıt
         , tagımız = kayıttag.join(" - ") || "Tag ayarlanmamış ❗"
-      if (kayıtisimler) kayıtisim = kayıtisimler.replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/<isim>/g, "Ali " + sunucudb.kayıt.sembol + "İhsan").replace(/<yaş>/g, "19")
-      else kayıtisim = `${tag || ""}Ali ${sunucudb.kayıt.sembol || ""}19`
+      if (kayıtisimler) kayıtisim = kayıtisimler.replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/<isim>/g, "Ali " + guildDatabase.kayıt.sembol + "İhsan").replace(/<yaş>/g, "19")
+      else kayıtisim = `${tag || ""}Ali ${guildDatabase.kayıt.sembol || ""}19`
       const embed = new EmbedBuilder()
         .setAuthor({ name: guild.name, iconURL: discordlogo })
         .setThumbnail(discordlogo)
@@ -104,7 +104,7 @@ module.exports = {
       msg.reply({ embeds: [embed] }).catch(err => { })
     } catch (e) {
       msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-      msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+      msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
       console.log(e)
     }
   }

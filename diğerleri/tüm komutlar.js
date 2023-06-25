@@ -1,7 +1,7 @@
 const { emoji, prefix: prefixayarlar } = require("../ayarlar.json")
 
-module.exports = (sunucudb, secenek) => {
-    let prefix = sunucudb.prefix || prefixayarlar
+module.exports = (guildDatabase, secenek) => {
+    let prefix = guildDatabase.prefix || prefixayarlar
         , tümKomutlarArray = [
             { type: "ekstra", content: `${emoji.ekstra} \`${prefix}afk\`:** Sunucuda AFK moduna giriş yaparsınız**` },
             { type: "kayıt", content: `${emoji.kayit} \`${prefix}al\`:** Kayıtsız rolünü ayarlarsınız**` },

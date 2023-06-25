@@ -9,20 +9,20 @@ module.exports = {
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
     try {
 
       // Kontroller
-      let yetkili = sunucudb.kayıt.yetkili
+      let yetkili = guildDatabase.kayıt.yetkili
       if (yetkili) {
         if (!msgMember.roles.cache.has(yetkili) && !msgMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
       } else if (!msgMember.permissions.has('Administrator')) return hata('Yönetici', "yetki")
-      if (sunucudb.kayıt.secenek) return hata('Bu komut sadece __**Cinsiyet**__ ile kayıt yapanlara özeldir')
-      if (sunucudb.kayıt.ayar) return hata(`Şu anda kayıt ayarım kapalı durumda bu yüzden hiçbir kayıt işlemlerini __yapamazsınız__${msgMember.permissions.has("Administrator") ? `\n\n• Eğer kayıt ayarımı açmak istiyorsanız **${prefix}ayar aç** yazabilirsiniz` : ""}`)
+      if (guildDatabase.kayıt.secenek) return hata('Bu komut sadece __**Cinsiyet**__ ile kayıt yapanlara özeldir')
+      if (guildDatabase.kayıt.ayar) return hata(`Şu anda kayıt ayarım kapalı durumda bu yüzden hiçbir kayıt işlemlerini __yapamazsınız__${msgMember.permissions.has("Administrator") ? `\n\n• Eğer kayıt ayarımı açmak istiyorsanız **${prefix}ayar aç** yazabilirsiniz` : ""}`)
       if (!guildMe.permissions.has('ManageRoles')) return hata("Rolleri Yönet", "yetkibot")
-      const kızroliddegistirsicin = sunucudb.kayıt.kız
+      const kızroliddegistirsicin = guildDatabase.kayıt.kız
       if (!kızroliddegistirsicin) return hata(`Bu sunucuda herhangi bir kız rolü __ayarlanmamış__${msgMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${prefix}kız-rol @rol** yazabilirsiniz` : ""}`)
-      const erkekroliddegistirsicin = sunucudb.kayıt.erkek
+      const erkekroliddegistirsicin = guildDatabase.kayıt.erkek
       if (!erkekroliddegistirsicin) return hata(`Bu sunucuda herhangi bir erkek rolü __ayarlanmamış__${msgMember.permissions.has('Administrator') ? `\n\n• Ayarlamak için **${prefix}erkek-rol @rol** yazabilirsiniz` : ""}`)
       const kişi = msg.mentions.members.first() || await msg.client.fetchMember(args[0], msg)
       if (!kişi) return hata(Time.isNull(kişi) ? "Görünen o ki etiketlediğiniz kişi sunucuda değil ya da başka bir şeyin ID'sini yazdınız :(" : "Lütfen bir kişiyi etiketleyiniz ya da ID\'sini giriniz")
@@ -57,11 +57,11 @@ module.exports = {
                 düğmeerkek.setStyle(3).setDisabled(true)
                 düğmekız.setStyle(2).setDisabled(true)
                 const düğme = new ActionRowBuilder().addComponents(düğmeerkek).addComponents(düğmekız)
-                let kl = sunucudb.kl[kişi.id] || []
+                let kl = guildDatabase.kl[kişi.id] || []
                 kl.unshift({ type: "d", c: true, author: msg.author.id, timestamp: Date.now() })
-                sunucudb.kl[kişi.id] = kl
+                guildDatabase.kl[kişi.id] = kl
                 a.edit({ content: `• ♻️ ${ayarlar.emoji.erkek} <@${kişi.id}> adlı kişiden kız rolünü alıp erkek rolünü verdim`, allowedMentions: { users: false, repliedUser: true }, components: [düğme] }).catch(err => { })
-                db.yazdosya(sunucudb, sunucuid)
+                db.yazdosya(guildDatabase, guildId)
                 return;
               }).catch(err => {
                 if (err?.code == 50013) return msg.reply(`• <@${memberid}> adlı kişinin rollerini düzenlemeye yetkim yetmiyor. Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`).catch(err => { })
@@ -73,11 +73,11 @@ module.exports = {
                 düğmeerkek.setStyle(2).setDisabled(true)
                 düğmekız.setStyle(3).setDisabled(true)
                 const düğme = new ActionRowBuilder().addComponents(düğmeerkek).addComponents(düğmekız)
-                let kl = sunucudb.kl[kişi.id] || []
+                let kl = guildDatabase.kl[kişi.id] || []
                 kl.unshift({ type: "d", c: false, author: msg.author.id, timestamp: Date.now() })
-                sunucudb.kl[kişi.id] = kl
+                guildDatabase.kl[kişi.id] = kl
                 a.edit({ content: `• ♻️ ${ayarlar.emoji.kiz} <@${kişi.id}> adlı kişiden erkek rolünü alıp kız rolünü verdim`, allowedMentions: { users: false, repliedUser: true }, components: [düğme] }).catch(err => { })
-                db.yazdosya(sunucudb, sunucuid)
+                db.yazdosya(guildDatabase, guildId)
                 return;
               }).catch(err => {
                 if (err?.code == 50013) return msg.reply(`• <@${memberid}> adlı kişinin rollerini düzenlemeye yetkim yetmiyor. Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`).catch(err => { })
@@ -95,11 +95,11 @@ module.exports = {
         })
       } else if (erkekrolvarmıkiside) {
         await kişi.edit({ roles: [...kızroliddegistirsicin, ...kişi.roles.cache.filter(a => ![...kızroliddegistirsicin, ...erkekroliddegistirsicin].includes(a.id)).map(a => a.id)] }).then(() => {
-          let kl = sunucudb.kl[kişi.id] || []
+          let kl = guildDatabase.kl[kişi.id] || []
           kl.unshift({ type: "d", c: false, author: msg.author.id, timestamp: Date.now() })
-          sunucudb.kl[kişi.id] = kl
+          guildDatabase.kl[kişi.id] = kl
           msg.reply({ content: `• ♻️ ${ayarlar.emoji.kiz} <@${kişi.id}> adlı kişiden erkek rolünü alıp kız rolünü verdim`, allowedMentions: { users: false, repliedUser: true } }).catch(err => { })
-          db.yazdosya(sunucudb, sunucuid)
+          db.yazdosya(guildDatabase, guildId)
           return;
         }).catch(err => {
           if (err?.code == 50013) return msg.reply(`• <@${memberid}> adlı kişinin rollerini düzenlemeye yetkim yetmiyor. Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`).catch(err => { })
@@ -108,11 +108,11 @@ module.exports = {
         })
       } else {
         await kişi.edit({ roles: [...erkekroliddegistirsicin, ...kişi.roles.cache.filter(a => ![...kızroliddegistirsicin, ...erkekroliddegistirsicin].includes(a.id)).map(a => a.id)] }).then(() => {
-          let kl = sunucudb.kl[kişi.id] || []
+          let kl = guildDatabase.kl[kişi.id] || []
           kl.unshift({ type: "d", c: true, author: msg.author.id, timestamp: Date.now() })
-          sunucudb.kl[kişi.id] = kl
+          guildDatabase.kl[kişi.id] = kl
           msg.reply({ content: `• ♻️ ${ayarlar.emoji.erkek} <@${kişi.id}> adlı kişiden kız rolünü alıp erkek rolünü verdim`, allowedMentions: { users: false, repliedUser: true } }).catch(err => { })
-          db.yazdosya(sunucudb, sunucuid)
+          db.yazdosya(guildDatabase, guildId)
           return;
         }).catch(err => {
           if (err?.code == 50013) return msg.reply(`• <@${memberid}> adlı kişinin rollerini düzenlemeye yetkim yetmiyor. Lütfen ${guildMe.roles.botRole?.toString() || guildMe.roles.highest?.toString()} adlı rolü üste çekiniz ve tekrar deneyiniz`).catch(err => { })
@@ -122,7 +122,7 @@ module.exports = {
       }
     } catch (e) {
       msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-      msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+      msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
       console.log(e)
     }
   }

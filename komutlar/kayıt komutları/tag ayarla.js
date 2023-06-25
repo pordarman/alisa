@@ -8,31 +8,31 @@ module.exports = {
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
     try {
 
       // Kontroller
       if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
 
       if (!args[0]) return hata(`Tag ayarlamak için **${prefix}tag-a \`tagınız\`**\n\n• Sıfırlamak için ise **${prefix}tag-a sıfırla** yazabilirsiniz`, "ne")
-      let tagroldb = msg.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
+      let tagroldb = msg.client.tagrolDatabase(guildId, guildDatabase.kayıt.tag)
       if (args[0] === "sıfırla") {
-        if (!sunucudb.kayıt.tag && !tagroldb.tag) return hata('Üyelere ekleyeceğim tag zaten sıfırlanmış durumda')
-        delete sunucudb.kayıt.tag
+        if (!guildDatabase.kayıt.tag && !tagroldb.tag) return hata('Üyelere ekleyeceğim tag zaten sıfırlanmış durumda')
+        delete guildDatabase.kayıt.tag
         delete tagroldb.tag
         hata('Üyelere ekleyeceğim tag sıfırlandı', "b")
-        db.yazdosya(sunucudb, sunucuid)
-        db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
+        db.yazdosya(guildDatabase, guildId)
+        db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
         return;
       }
       const argsseysi = args.join(' ')
       if (argsseysi.length > 10) return hata('Tag uzunluğunuz 10\'dan büyük olamaz')
       tagroldb.tag = argsseysi
-      db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
-      sunucudb.kayıt.tag = argsseysi + " "
-      let tag = sunucudb.kayıt.tag
-        , sembol = sunucudb.kayıt.sembol
-        , kayıtisim = sunucudb.kayıt.isimler.kayıt
+      db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
+      guildDatabase.kayıt.tag = argsseysi + " "
+      let tag = guildDatabase.kayıt.tag
+        , sembol = guildDatabase.kayıt.sembol
+        , kayıtisim = guildDatabase.kayıt.isimler.kayıt
         , ismi
         , sadeceisim = "Ali İhsan 19"
       if (kayıtisim) {
@@ -44,11 +44,11 @@ module.exports = {
         } else ismi = kayıtisim.replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/<isim>/g, (sembol ? sadeceisim.replace(/ /g, " " + sembol) : sadeceisim))
       } else ismi = `${tag || ""}${(sembol ? sadeceisim.replace(/ /g, " " + sembol) : sadeceisim)}`
       hata(`Üyelerin isimlerine ekleyeceğim tag başarıyla **${argsseysi}** olarak ayarlandı\n\n**Örnek**\n${ismi}`, "b")
-      db.yazdosya(sunucudb, sunucuid)
+      db.yazdosya(guildDatabase, guildId)
       return;
     } catch (e) {
       msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-      msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+      msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
       console.log(e)
     }
   }

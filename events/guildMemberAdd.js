@@ -11,19 +11,19 @@ module.exports = {
     async run(m) {
         try {
             let guildşeysi = m.guild
-                , sunucuid = guildşeysi.id
+                , guildId = guildşeysi.id
                 , botMu = m.user.bot
                 , ms = `<@${m.id}>`
-                , sunucudb = m.client.guildDatabase(sunucuid)
+                , guildDatabase = m.client.guildDatabase(guildId)
             if (!botMu) {
-                let kisi = sunucudb.kl[m.id] || []
+                let kisi = guildDatabase.kl[m.id] || []
                 kisi.unshift({ type: "add", timestamp: Date.now() })
-                sunucudb.kl[m.id] = kisi
-                db.yazdosya(sunucudb, sunucuid)
+                guildDatabase.kl[m.id] = kisi
+                db.yazdosya(guildDatabase, guildId)
             }
-            if (sunucudb.kayıt.ayar) return;
+            if (guildDatabase.kayıt.ayar) return;
             let mid = m.user.id
-                , kayıtkanal = sunucudb.kayıt.kanal
+                , kayıtkanal = guildDatabase.kayıt.kanal
             if (kayıtkanal) {
                 const chn = guildşeysi.channels.cache.get(kayıtkanal)
                 if (!chn) return;
@@ -33,29 +33,29 @@ module.exports = {
                     , hesaptarih = `<t:${(createdTimestamp / 1000).toFixed(0)}:F>`
                     , kisi = guildşeysi.memberCount
                     , sayısı = kisi.toLocaleString().replace(".", ",")
-                    , rolkontrolyetkilirolid = sunucudb.kayıt.yetkili
-                    , botkontrolvarmı = sunucudb.kayıt.bototo
+                    , rolkontrolyetkilirolid = guildDatabase.kayıt.yetkili
+                    , botkontrolvarmı = guildDatabase.kayıt.bototo
                     , embedlar = []
-                    , kayıtsızrolalid = sunucudb.kayıt.kayıtsız
+                    , kayıtsızrolalid = guildDatabase.kayıt.kayıtsız
                     , memberEdit = {}
-                    , jailRole = sunucudb.jail.rol
-                    , jailGuild = db.bul(sunucuid, "jail", "diğerleri")
+                    , jailRole = guildDatabase.jail.rol
+                    , jailGuild = db.bul(guildId, "jail", "diğerleri")
                 if (jailRole && jailGuild[mid]) memberEdit.roles = [jailRole]
                 else if (kayıtsızrolalid && !(botkontrolvarmı && botMu)) memberEdit.roles = [kayıtsızrolalid, ...m.roles.cache.filter(a => a.id != kayıtsızrolalid).map(a => a.id)]
                 if (!botMu) {
-                    let kontroltag = sunucudb.kayıt.tag
-                        , girişisim = sunucudb.kayıt.isimler.giris
+                    let kontroltag = guildDatabase.kayıt.tag
+                        , girişisim = guildDatabase.kayıt.isimler.giris
                         , isim
                         , dugme = new ActionRowBuilder()
                         , güvenlik
-                        , otos = sunucudb.kayıt.otos
-                        , otog = sunucudb.kayıt.otogun
+                        , otos = guildDatabase.kayıt.otos
+                        , otog = guildDatabase.kayıt.otogun
                     if (createdTimestamp > (ao - 1209600000)) güvenlik = `Güvensiz ${ayarlar.emoji.guvensiz}`
                     else if (createdTimestamp > (ao - 2592000000)) güvenlik = `Şüpheli ${ayarlar.emoji.supheli}`
                     else güvenlik = `Güvenli ${ayarlar.emoji.guvenli}`
                     let hesapGuvenliMi = otog ? createdTimestamp > (ao - otog * 86400000) : (güvenlik !== `Güvenli ${ayarlar.emoji.guvenli}`)
                     if (hesapGuvenliMi && otos) {
-                        let rols = sunucudb.kayıt.otosrol
+                        let rols = guildDatabase.kayıt.otosrol
                         if (rols) {
                             let mesaj
                             if (otog) mesaj = `kişinin hesabı **${Time.duration({ ms: m.user.createdTimestamp, toNow: true, skipZeros: true })}** içinde açıldığı`
@@ -74,7 +74,7 @@ module.exports = {
                         } else embedlar.push(new EmbedBuilder().setColor("Blue").setTimestamp().setTitle("Bilgilendirme").setDescription(`• ${ms} adlı kişinin hesabı şüpheli fakat bu sunucuda herhangi bir __şüpheli rolü__ ayarlanmadığı için onu şüpheliye atamadım!`))
                     }
                     async function giris() {
-                        let ozelgirismesajıvarmı = sunucudb.kayıt.özel
+                        let ozelgirismesajıvarmı = guildDatabase.kayıt.özel
                             , embedgiriş
                             , mesajlar = ayarlar.guildMemberAdd
                         if (girişisim) isim = girişisim.replace(/<tag>/g, (kontroltag ? kontroltag.slice(0, -1) : "")).replace(/<isim>/g, m.user.username).slice(0, 32)
@@ -88,13 +88,13 @@ module.exports = {
                             if (m.roles.highest.position > guildşeysi.members.me.roles.highest.position) hatanınSebepleri.push(`• Gelen kişinin rolünün sırası benim rolümün sırasından yüksek!`)
                             embedlar.push(new EmbedBuilder().setColor("Red").setTimestamp().setTitle("Hata").setDescription(`• ${ms} adlı kişinin rollerini ve ismini düzenlerken bir hata ile karşılaşıldı! Lütfen bana **Yönetici** yetkisi verildiğinden ve rolümün üstte olduğunuzdan emin olunuz`).addFields({ name: "SEBEPLERİ", value: (hatanınSebepleri.join("\n") || "• " + err) }))
                         })
-                        if (sunucudb.kayıt.secenek) dugme.addComponents(new ButtonBuilder().setCustomId("üye" + mid).setStyle(1).setEmoji(ayarlar.emoji.uye).setLabel("Üye olarak kayıt et"))
+                        if (guildDatabase.kayıt.secenek) dugme.addComponents(new ButtonBuilder().setCustomId("üye" + mid).setStyle(1).setEmoji(ayarlar.emoji.uye).setLabel("Üye olarak kayıt et"))
                         else dugme.addComponents(new ButtonBuilder().setCustomId("kız" + mid).setStyle(1).setEmoji(ayarlar.emoji.kiz).setLabel("Kız olarak kayıt et")).addComponents(new ButtonBuilder().setCustomId("erkek" + mid).setStyle(1).setEmoji(ayarlar.emoji.erkek).setLabel("Erkek olarak kayıt et"))
-                        let isimleri = sunucudb.isimler[mid]
+                        let isimleri = guildDatabase.isimler[mid]
                             , tekrar = ""
                         if (isimleri) {
                             tekrar = "Tekrar "
-                            if (!(isimleri[0].c == ayarlar.emoji.uye && !sunucudb.kayıt.secenek)) dugme.addComponents(new ButtonBuilder().setCustomId("yeniden" + mid).setStyle(3).setEmoji("🔁").setLabel("Yeniden kayıt et"))
+                            if (!(isimleri[0].c == ayarlar.emoji.uye && !guildDatabase.kayıt.secenek)) dugme.addComponents(new ButtonBuilder().setCustomId("yeniden" + mid).setStyle(3).setEmoji("🔁").setLabel("Yeniden kayıt et"))
                         }
                         if (hesapGuvenliMi) dugme.addComponents(new ButtonBuilder().setCustomId("şüpheli" + mid).setStyle(4).setLabel("Şüpheliye at").setEmoji("⛔"))
                         if (ozelgirismesajıvarmı) {
@@ -120,7 +120,7 @@ module.exports = {
                                 .setThumbnail(kişininfotografı)
                                 .setFooter({ text: 'Nasılsın bakalım ' + m.user.username + '?' })
                                 .setImage(ozelgirismesajıvarmı.im)
-                        } else embedgiriş = new EmbedBuilder().setColor("Random").setThumbnail(kişininfotografı).setDescription(`**${ayarlar.emoji.cildir} \`${guildşeysi.name}\` adlı sunucumuza hoşgeldiniizz!!\n\n${ayarlar.emoji.woah} Seninle beraber tam olarak ${sayısı} kişi olduukkk\n\n${ayarlar.emoji.icme} Yetkililer seni birazdan kayıt edecektir lütfen biraz sabredin\n\n> Hesabın ${hesaptarih} tarihinde kurulmuş\n> Hesap ${güvenlik}**`).setTitle(`${sunucudb.isimler[mid] ? "Tekrar " : ""}Hoşgeldin ${m.user.username} ${ayarlar.emoji.selam}`).setFooter({ text: 'Nasılsın bakalım ' + m.user.username + '?' }).setTimestamp()
+                        } else embedgiriş = new EmbedBuilder().setColor("Random").setThumbnail(kişininfotografı).setDescription(`**${ayarlar.emoji.cildir} \`${guildşeysi.name}\` adlı sunucumuza hoşgeldiniizz!!\n\n${ayarlar.emoji.woah} Seninle beraber tam olarak ${sayısı} kişi olduukkk\n\n${ayarlar.emoji.icme} Yetkililer seni birazdan kayıt edecektir lütfen biraz sabredin\n\n> Hesabın ${hesaptarih} tarihinde kurulmuş\n> Hesap ${güvenlik}**`).setTitle(`${guildDatabase.isimler[mid] ? "Tekrar " : ""}Hoşgeldin ${m.user.username} ${ayarlar.emoji.selam}`).setFooter({ text: 'Nasılsın bakalım ' + m.user.username + '?' }).setTimestamp()
                         embedlar.push(embedgiriş)
                         return chn?.send({ embeds: embedlar, content: `${rolkontrolyetkilirolid ? `<@&${rolkontrolyetkilirolid}>, ` : ""}${mesajlar[Math.floor(Math.random() * mesajlar.length)].replace("<m>", `<@${mid}>`)}`, components: [dugme] }).catch(err => { })
                     }
@@ -129,7 +129,7 @@ module.exports = {
                 function giriş(embedlarburdangeliyor = []) {
                     let dugmebot = new ButtonBuilder().setCustomId("bot" + mid).setStyle(1).setLabel("Bot olarak kayıt et").setEmoji("🤖")
                         , dugme = new ActionRowBuilder().addComponents(dugmebot)
-                        , ozelgirismesajıvarmı = sunucudb.kayıt.özel
+                        , ozelgirismesajıvarmı = guildDatabase.kayıt.özel
                         , girisembed
                     if (ozelgirismesajıvarmı) {
                         let rolkontrol = rolkontrolyetkilirolid ? "<@&" + rolkontrolyetkilirolid + ">" : "__**ROL AYARLI DEĞİL**__"
@@ -167,11 +167,11 @@ module.exports = {
                 }
                 if (botkontrolvarmı) {
                     let embedlar = []
-                        , botrolid = sunucudb.kayıt.bot
+                        , botrolid = guildDatabase.kayıt.bot
                     if (botrolid) {
                         (async () => {
-                            let tag = sunucudb.kayıt.tag
-                                , kayıtisim = sunucudb.kayıt.isimler.kayıtbot
+                            let tag = guildDatabase.kayıt.tag
+                                , kayıtisim = guildDatabase.kayıt.isimler.kayıtbot
                                 , ismi
                                 , sadeceisim = m.user.username
                             if (kayıtisim) ismi = kayıtisim.replace(/<tag>/g, (tag ? tag.slice(0, -1) : "")).replace(/<isim>/g, sadeceisim)
@@ -182,8 +182,8 @@ module.exports = {
                                     , date2 = (date / 1000).toFixed(0)
                                     , zaman = `<t:${date2}:F>`
                                     , verilecekRolString = botrolid.map(a => "<@&" + a + ">").join(", ")
-                                    , toplamherkes = db.topla(sunucuid, 1, "kayıt toplam herkes", "diğerleri")
-                                    , benvarmı = sunucudb.kayıtkisiler[m.client.user.id] || { toplam: 0 }
+                                    , toplamherkes = db.topla(guildId, 1, "kayıt toplam herkes", "diğerleri")
+                                    , benvarmı = guildDatabase.kayıtkisiler[m.client.user.id] || { toplam: 0 }
                                 if (toplamherkes % 1000 == 0) alisa.kayıtsayı[toplamherkes.toString()] = date
                                 benvarmı.toplam += 1
                                 var kayıtsayısı = benvarmı.toplam
@@ -207,11 +207,11 @@ module.exports = {
                                     .setColor('#034aa2')
                                     .setTimestamp()
                                 chn?.send({ embeds: [embed] }).catch(err => { })
-                                let logKanali = sunucudb.kayıt.log
-                                sunucudb.son.unshift({ c: "🤖", s: m.client.user.id, k: mid, z: date2 })
+                                let logKanali = guildDatabase.kayıt.log
+                                guildDatabase.son.unshift({ c: "🤖", s: m.client.user.id, k: mid, z: date2 })
                                 if (logKanali) {
                                     const yapılanSeyler = [
-                                        `**• Sunucuda toplam ${sunucudb.son.length.toLocaleString().replace(/\./g, ",")} kişi kayıt edildi!**\n`,
+                                        `**• Sunucuda toplam ${guildDatabase.son.length.toLocaleString().replace(/\./g, ",")} kişi kayıt edildi!**\n`,
                                         `🧰 **KAYIT EDEN YETKİLİ**`,
                                         `**• Adı:**  <@${m.client.user.id}> - ${m.client.user.tag}`,
                                         `**• Kayıt sayısı:**  ${kayıtsayısı}`,
@@ -237,12 +237,12 @@ module.exports = {
                                 benvarmı.son = obje
                                 if (!benvarmı.ilk) benvarmı.ilk = obje
                                 const isimler = { c: "🤖", n: ismi, r: verilecekRolString, s: m.client.user.id, z: date2 }
-                                let kontrolbulisimler = sunucudb.isimler[mid]
+                                let kontrolbulisimler = guildDatabase.isimler[mid]
                                 if (kontrolbulisimler) kontrolbulisimler.unshift(isimler)
-                                else sunucudb.isimler[mid] = [isimler]
-                                sunucudb.kayıtkisiler[m.client.user.id] = benvarmı
+                                else guildDatabase.isimler[mid] = [isimler]
+                                guildDatabase.kayıtkisiler[m.client.user.id] = benvarmı
                                 db.yazdosya(alisa, "alisa", "diğerleri")
-                                db.yazdosya(sunucudb, sunucuid)
+                                db.yazdosya(guildDatabase, guildId)
                             }).catch(err => {
                                 let hatanınSebepleri = []
                                 if (!guildşeysi.members.me.permissions.has("ManageRoles")) hatanınSebepleri.push("• Benim **Rolleri Yönet** yetkim yok!")

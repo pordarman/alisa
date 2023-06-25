@@ -76,23 +76,22 @@ const formats = {
  */
 
 const search = (input) => {
-    const s = input.search(/[1-9]/)
-    if (s == -1) return 0
-    else return s
+    const index = input.search(/[1-9]/);
+    return index == -1 ? 0 : index
 }
 
 
 class Time {
     constructor() { }
-    
-    
+
+
     /**
      * Time modülünün versiyonu
      * @returns {String}
      */
-    
+
     get version() {
-    return "1.0.3"
+        return "1.0.3"
     }
 
 
@@ -708,7 +707,8 @@ class Time {
      */
 
     christmasCountdown(durationWithoutMsObject = {}) {
-        let thisDate = new Date(), thisYear = thisDate.getFullYear()
+        let thisDate = new Date(), 
+        thisYear = thisDate.getFullYear()
         if (thisDate.getMonth() == 11) {
             if (thisDate.getDay() == 25) return `Bugün noel 🎅`
             else if (thisDate.getDay() > 25) thisYear += 1
@@ -727,7 +727,5 @@ class Time {
     }
 
 }
-
-Time.prototype.toString = function () { return "[object Time]" }
 
 module.exports = new Time()

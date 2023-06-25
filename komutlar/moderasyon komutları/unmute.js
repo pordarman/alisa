@@ -9,11 +9,11 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
-            let muteYetkili = sunucudb.kayıt.mutey
+            let muteYetkili = guildDatabase.kayıt.mutey
             if (muteYetkili) {
                 if (!msgMember.roles.cache.has(muteYetkili) && !msgMember.permissions.has('ModerateMembers')) return hata(`<@&${muteYetkili}> rolüne **veya** Üyelere zaman aşımı uygula`, "yetki")
             } else if (!msgMember.permissions.has('ModerateMembers')) return hata("Üyelere zaman aşımı uygula", "yetki")
@@ -26,7 +26,7 @@ module.exports = {
             
             // Üyenin susturmasını kaldırma
             await member.timeout(null, `Mutesini kaldıran yetkili: ${msg.author.tag}`).then(() => {
-                let modLog = sunucudb.kayıt.modl
+                let modLog = guildDatabase.kayıt.modl
                 if (modLog) {
                     let date = (Date.now() / 1000).toFixed(0)
                         , kişininfotografı = member.displayAvatarURL()
@@ -47,14 +47,14 @@ module.exports = {
                         .setTimestamp()
                     guild.channels.cache.get(modLog)?.send({ embeds: [embed] }).catch(err => { })
                 }
-                let sunucumute = db.bul(sunucuid, "mute", "diğerleri") || {}
+                let sunucumute = db.bul(guildId, "mute", "diğerleri") || {}
                 delete sunucumute[member.id]
-                let kl = sunucudb.kl[member.id] || []
+                let kl = guildDatabase.kl[member.id] || []
                 kl.unshift({ type: "unmute", author: msg.author.id, timestamp: Date.now() })
-                sunucudb.kl[member.id] = kl
+                guildDatabase.kl[member.id] = kl
                 msg.reply({ content: `• <@${member.id}> adlı kişinin susturulması başarıyla kaldırıldı!`, allowedMentions: { users: [member.id], repliedUser: true } }).catch(err => { })
-                db.yazdosya(sunucudb, sunucuid)
-                db.yaz(sunucuid, sunucumute, "mute", "diğerleri")
+                db.yazdosya(guildDatabase, guildId)
+                db.yaz(guildId, sunucumute, "mute", "diğerleri")
                 return;
             }).catch(err => {
                 console.log(err)
@@ -62,7 +62,7 @@ module.exports = {
             })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

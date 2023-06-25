@@ -6,7 +6,7 @@ module.exports = {
     /**
        * @param {import("../../typedef").exportsRunButtons} param0 
        */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
             
 
@@ -14,7 +14,7 @@ module.exports = {
             const id = int.customId.replace(this.name, "")
             if (int.user.id != id) return int.reply({ embeds: [new EmbedBuilder().setDescription(`${int.isButton() ? `<:${int.component.emoji.name}:${int.component.emoji.id}> Butonunu` : ` ${ayarlar.emoji.np} Menüyü`} yalnızca yazan kişi (<@${id}>) kullanabilir`).setColor("DarkRed")], ephemeral: true }).catch(err => { })
          
-            let [array, baslik] = int.client.allCommands(sunucudb, "p")
+            let [array, baslik] = int.client.allCommands(guildDatabase, "p")
                 , düğmesağ = new ButtonBuilder()
                     .setStyle(1)
                     .setEmoji(ayarlar.emoji.sagok)
@@ -51,7 +51,7 @@ module.exports = {
             int.update({ embeds: [embed], components: [düğme, int.message.components[2] || int.message.components[1]] }).catch(err => { })
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true)
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

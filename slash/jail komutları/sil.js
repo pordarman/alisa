@@ -10,11 +10,11 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
 
             // Kontroller
-            let yetkili = sunucudb.jail.yetkili
+            let yetkili = guildDatabase.jail.yetkili
                 , intMember = int.member
             if (yetkili) {
                 if (!intMember.roles.cache.has(yetkili) && !intMember.permissions.has('Administrator')) return hata(`<@&${yetkili}> rolüne **veya** Yönetici`, "yetki")
@@ -22,12 +22,12 @@ module.exports = {
             const member = int.options.getMember("üye", true)
             if (member.user.bot) return hata(`Botların jail bilgilerini silemezsin şapşik şey seni :)`)
             if (member.id == int.user.id) return hata(`Kendi jail bilgini silemezsin şapşik şey seni :)`)
-            const den = sunucudb.jail.kisi[member.id]
+            const den = guildDatabase.jail.kisi[member.id]
             if (!den) return hata(`Etiketlediğiniz kişi daha önceden hiç jail'e atılmamış oley 🎉`)
            
-            delete sunucudb.jail.kisi[member.id]
+            delete guildDatabase.jail.kisi[member.id]
             int.reply({ content: `• <@${member.id}> kişisinin jail bilgileri <@${int.user.id}> tarafından silindi`, allowedMentions: { users: false, repliedUser: true } }).catch(err => { })
-            let log = sunucudb.jail.log
+            let log = guildDatabase.jail.log
             if (log) {
                 let date = Date.now()
                     , zaman = `<t:${(date / 1000).toFixed(0)}:F> - <t:${(date / 1000).toFixed(0)}:R>`
@@ -49,10 +49,10 @@ module.exports = {
                         .setTimestamp()
                 guild.channels.cache.get(log)?.send({ embeds: [embed] }).catch(err => { })
             }
-            db.yazdosya(sunucudb, sunucuid)
+            db.yazdosya(guildDatabase, guildId)
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

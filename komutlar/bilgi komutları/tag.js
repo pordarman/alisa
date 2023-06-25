@@ -8,10 +8,10 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
             let tag = []
-            , tagrol = sunucudb.kayıt
+            , tagrol = guildDatabase.kayıt
             if (tagrol.tag) tag.push(tagrol.tag.slice(0, -1))
             if (tagrol.dis) tag.push(`#${tagrol.dis}`)
 			tag = tag.join(" - ")
@@ -20,7 +20,7 @@ module.exports = {
             if (msgMember.permissions.has('Administrator')) return msg.reply({ content: `Sunucuda tag ayarlı değil. Ayarlamak için **${prefix}tag-a** \`tagınız\` yazabilirsiniz` }).then(a => setTimeout(() => a.delete().catch(err => { }), 15 * 1000)).catch(err => { })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

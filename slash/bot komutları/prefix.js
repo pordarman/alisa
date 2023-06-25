@@ -10,16 +10,16 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
 
             // Kontroller
             if (!int.member.permissions.has('Administrator')) return hata("Yönetici", "yetki")
             
             let yazı = int.options.getString("prefix")
-                , prefix = sunucudb.prefix || ayarlar.prefix
+                , prefix = guildDatabase.prefix || ayarlar.prefix
             if (yazı == ayarlar.prefix) {
-                delete sunucudb.prefix
+                delete guildDatabase.prefix
                 const em = new EmbedBuilder()
                     .setTitle(`Prefixiniz başarıyla "${ayarlar.prefix}" olarak değiştirildi`)
                     .setDescription('• Yeni prefixiniz **.** oldu')
@@ -32,11 +32,11 @@ module.exports = {
                     .setTimestamp()
                     .setColor('Blue')
                 int.reply({ embeds: [em] }).catch(err => { })
-                db.yazdosya(sunucudb, sunucuid)
+                db.yazdosya(guildDatabase, guildId)
                 return;
             }
             if (prefix === yazı) return hata('Yazdığınız prefix zaten benim prefixim')
-            sunucudb.prefix = yazı
+            guildDatabase.prefix = yazı
             const e = new EmbedBuilder()
                 .setTitle('Prefixiniz başarıyla "' + yazı + '" olarak değiştirildi')
                 .setDescription('• Yeni prefixiniz **' + yazı + '** oldu')
@@ -49,11 +49,11 @@ module.exports = {
                 .setTimestamp()
                 .setColor('Blue')
             int.reply({ embeds: [e] }).catch(err => { })
-            db.yazdosya(sunucudb, sunucuid)
+            db.yazdosya(guildDatabase, guildId)
             return;
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

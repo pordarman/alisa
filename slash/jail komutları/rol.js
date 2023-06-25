@@ -11,7 +11,7 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
 
             // Kontroller
@@ -20,24 +20,24 @@ module.exports = {
             if (int.options.getSubcommand(false) == "kanal") {
                 let rol = int.options.getRole("rol", true)
                 const rolid = rol.id
-                if (sunucudb.jail.rol === rolid) return hata('Jail rolü zaten etiketlediğiniz rolle aynı')
+                if (guildDatabase.jail.rol === rolid) return hata('Jail rolü zaten etiketlediğiniz rolle aynı')
                 if (rol.managed) return hata(`Botların oluşturduğu rolleri başkalarına veremem`)
-                if (rolid == sunucudb.jail.yetkili) return hata(`Etiketlediğiniz rol bu sunucudaki jail yetkili rolü. Lütfen başka bir rol etiketleyiniz`)
+                if (rolid == guildDatabase.jail.yetkili) return hata(`Etiketlediğiniz rol bu sunucudaki jail yetkili rolü. Lütfen başka bir rol etiketleyiniz`)
                
-                sunucudb.jail.rol = rolid
+                guildDatabase.jail.rol = rolid
                 hata('Bundan sonra jail\'e atılanlara <@&' + rolid + '> adlı rol verilecek', "b")
-                db.yazdosya(sunucudb, sunucuid)
+                db.yazdosya(guildDatabase, guildId)
                 return;
             }
-            if (!sunucudb.jail.rol) return hata('Jail rolü zaten sıfırlanmış durumda')
+            if (!guildDatabase.jail.rol) return hata('Jail rolü zaten sıfırlanmış durumda')
           
-            delete sunucudb.jail.rol
+            delete guildDatabase.jail.rol
             hata('Jail rolü başarıyla sıfırlandı', "b")
-            db.yazdosya(sunucudb, sunucuid)
+            db.yazdosya(guildDatabase, guildId)
             return;
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

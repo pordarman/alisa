@@ -9,15 +9,15 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
     */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
 
             // Kontroller
             if (!int.member.permissions.has('Administrator')) return hata("Yönetici", "yetki")
-            if (db.bul(sunucuid, "kur", "diğerleri")) return hata("**Kayıt kur işlemi devam ederken tekrar kayıt kur işlemini başlatamazsın!!**").catch(err => { })
+            if (db.bul(guildId, "kur", "diğerleri")) return hata("**Kayıt kur işlemi devam ederken tekrar kayıt kur işlemini başlatamazsın!!**").catch(err => { })
             if (!int.guild.members.me.permissions.has('Administrator')) return hata(`Yönetici`, "yetkibot")
 
-            let yazılacaksunucudb = { isimler: {} }
+            let yazılacakguildDatabase = { isimler: {} }
                 , filter = m => m.author.id === int.user.id
                 , sure = 0
                 , channel = int.channel
@@ -68,7 +68,7 @@ module.exports = {
             function süre(func, yazı, mesajId, funcMsg) {
                 sure += 1
                 if (sure == maxError) {
-                    db.sil(sunucuid, "kur", "diğerleri")
+                    db.sil(guildId, "kur", "diğerleri")
                     mesajlar(m.i, funcMsg).catch(() => { })
                 } else {
                     mesajlar(m.mdy(maxError - sure) + yazı, funcMsg).catch(() => { })
@@ -76,40 +76,40 @@ module.exports = {
                 }
             }
             async function son(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 11, date: Date.now() }, "kur", "diğerleri")
-                sunucudb.kayıt = { ...sunucudb.kayıt, ...yazılacaksunucudb };
-                ["günlük", "log", "bot", "tag", "sembol", "secenek"].filter(a => !yazılacaksunucudb[a]).forEach(id => delete sunucudb.kayıt[id])
-                if (!yazılacaksunucudb.isimler.giris) delete sunucudb.kayıt.isimler.giris
-                if (yazılacaksunucudb.secenek) {
-                    delete sunucudb.kayıt.erkek
-                    delete sunucudb.kayıt.kız
-                    int.client.secenek.add(sunucuid)
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 11, date: Date.now() }, "kur", "diğerleri")
+                guildDatabase.kayıt = { ...guildDatabase.kayıt, ...yazılacakguildDatabase };
+                ["günlük", "log", "bot", "tag", "sembol", "secenek"].filter(a => !yazılacakguildDatabase[a]).forEach(id => delete guildDatabase.kayıt[id])
+                if (!yazılacakguildDatabase.isimler.giris) delete guildDatabase.kayıt.isimler.giris
+                if (yazılacakguildDatabase.secenek) {
+                    delete guildDatabase.kayıt.erkek
+                    delete guildDatabase.kayıt.kız
+                    int.client.secenek.add(guildId)
                 } else {
-                    delete sunucudb.kayıt.normal
-                    int.client.secenek.delete(sunucuid)
+                    delete guildDatabase.kayıt.normal
+                    int.client.secenek.delete(guildId)
                 }
-                let tagroldb = int.client.tagrolDatabase(sunucuid)
-                    , özel = sunucudb.kayıt.özel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"
-                    , gözel = sunucudb.kayıt.gözel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"
+                let tagroldb = int.client.tagrolDatabase(guildId)
+                    , özel = guildDatabase.kayıt.özel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"
+                    , gözel = guildDatabase.kayıt.gözel ? `Ayarlanmış ${ayarlar.emoji.p}` : "Ayarlanmamış ❗"
                     , discordlogo = guild.iconURL()
-                    , ayar = sunucudb.kayıt.ayar ? `Kayıt yapamazsınız ${ayarlar.emoji.kapali}` : `Kayıt yapabilirsiniz ${ayarlar.emoji.acik}`
-                    , bototo = sunucudb.kayıt.bototo ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
-                    , otoduzeltme = sunucudb.kayıt.otoduzeltme ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
-                    , yaszorunlu = sunucudb.kayıt.yaszorunlu ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
+                    , ayar = guildDatabase.kayıt.ayar ? `Kayıt yapamazsınız ${ayarlar.emoji.kapali}` : `Kayıt yapabilirsiniz ${ayarlar.emoji.acik}`
+                    , bototo = guildDatabase.kayıt.bototo ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
+                    , otoduzeltme = guildDatabase.kayıt.otoduzeltme ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
+                    , yaszorunlu = guildDatabase.kayıt.yaszorunlu ? `Açık ${ayarlar.emoji.acik}` : `Kapalı ${ayarlar.emoji.kapali}`
                     , seçenek
                     , yazıı
                     , kayıtisim
-                    , kayıtisimler = sunucudb.kayıt.isimler.kayıt
-                tagroldb.tag = yazılacaksunucudb.tag?.slice(0, -1)
-                if (yazılacaksunucudb.secenek) {
+                    , kayıtisimler = guildDatabase.kayıt.isimler.kayıt
+                tagroldb.tag = yazılacakguildDatabase.tag?.slice(0, -1)
+                if (yazılacakguildDatabase.secenek) {
                     seçenek = "Normal kayıt 👤"
-                    yazıı = `**• Üyelere verilecek olan rol(ler):**  ${yazılacaksunucudb.normal.map(a => "<@&" + a + ">").join(" | ")}`
+                    yazıı = `**• Üyelere verilecek olan rol(ler):**  ${yazılacakguildDatabase.normal.map(a => "<@&" + a + ">").join(" | ")}`
                 } else {
                     seçenek = "Cinsiyete göre kayıt 👫"
-                    yazıı = `**• Erkeklere verilecek olan rol(ler):**  ${yazılacaksunucudb.erkek.map(a => "<@&" + a + ">").join(" | ")}\n**• Kızlara verilecek olan rol(ler):**  ${yazılacaksunucudb.kız.map(a => "<@&" + a + ">").join(" | ")}`
+                    yazıı = `**• Erkeklere verilecek olan rol(ler):**  ${yazılacakguildDatabase.erkek.map(a => "<@&" + a + ">").join(" | ")}\n**• Kızlara verilecek olan rol(ler):**  ${yazılacakguildDatabase.kız.map(a => "<@&" + a + ">").join(" | ")}`
                 }
-                if (kayıtisimler) kayıtisim = kayıtisimler.replace(/<tag>/g, tagroldb.tag || "").replace(/<isim>/g, "Ali " + (yazılacaksunucudb.sembol || "") + "İhsan").replace(/<yaş>/g, "19")
-                else kayıtisim = `${yazılacaksunucudb.tag || ""}Ali ${yazılacaksunucudb.sembol || ""}19`
+                if (kayıtisimler) kayıtisim = kayıtisimler.replace(/<tag>/g, tagroldb.tag || "").replace(/<isim>/g, "Ali " + (yazılacakguildDatabase.sembol || "") + "İhsan").replace(/<yaş>/g, "19")
+                else kayıtisim = `${yazılacakguildDatabase.tag || ""}Ali ${yazılacakguildDatabase.sembol || ""}19`
                 const embed = new EmbedBuilder()
                     .setAuthor({ name: guild.name, iconURL: discordlogo })
                     .setThumbnail(discordlogo)
@@ -119,63 +119,63 @@ module.exports = {
                             name: `${ayarlar.emoji.rol} ROLLER`,
                             value: [
                                 yazıı,
-                                `**• Botlara verilecek olan rol(ler):**  ${yazılacaksunucudb.bot?.map(a => "<@&" + a + ">")?.join(" | ") || "Rol ayarlanmamış ❗"}`,
-                                `**• Üyeleri kayıt eden yetkili:**  <@&${yazılacaksunucudb.yetkili}>`,
-                                `**• Üyeleri kayıt ettikten sonra alınacak rol:**  <@&${yazılacaksunucudb.kayıtsız}>`
+                                `**• Botlara verilecek olan rol(ler):**  ${yazılacakguildDatabase.bot?.map(a => "<@&" + a + ">")?.join(" | ") || "Rol ayarlanmamış ❗"}`,
+                                `**• Üyeleri kayıt eden yetkili:**  <@&${yazılacakguildDatabase.yetkili}>`,
+                                `**• Üyeleri kayıt ettikten sonra alınacak rol:**  <@&${yazılacakguildDatabase.kayıtsız}>`
                             ].join("\n")
                         },
                         {
                             name: `${ayarlar.emoji.kanal} KANALLAR`,
                             value: [
-                                `**• Kayıt kanalı:**  <#${yazılacaksunucudb.kanal}>`,
-                                `**• Kayıt günlük kanalı:**  ${yazılacaksunucudb.günlük ? `<#${yazılacaksunucudb.günlük}>` : "Kanal ayarlanmamış ❗"}`,
-                                `**• Kayıt log kanalı:**  ${yazılacaksunucudb.log ? `<#${yazılacaksunucudb.log}>` : "Kanal ayarlanmamış ❗"}`
+                                `**• Kayıt kanalı:**  <#${yazılacakguildDatabase.kanal}>`,
+                                `**• Kayıt günlük kanalı:**  ${yazılacakguildDatabase.günlük ? `<#${yazılacakguildDatabase.günlük}>` : "Kanal ayarlanmamış ❗"}`,
+                                `**• Kayıt log kanalı:**  ${yazılacakguildDatabase.log ? `<#${yazılacakguildDatabase.log}>` : "Kanal ayarlanmamış ❗"}`
                             ].join("\n")
                         },
                         {
                             name: '✏️ DİĞERLERİ',
                             value: [
-                                `**• Sunucuya özel tag:**  ${yazılacaksunucudb.tag || "Tag ayarlanmamış ❗"}`,
-                                `**• İsimlerin arasına koyulacak sembol:**  ${yazılacaksunucudb.sembol || "Sembol ayarlanmamış ❗"}`,
+                                `**• Sunucuya özel tag:**  ${yazılacakguildDatabase.tag || "Tag ayarlanmamış ❗"}`,
+                                `**• İsimlerin arasına koyulacak sembol:**  ${yazılacakguildDatabase.sembol || "Sembol ayarlanmamış ❗"}`,
                                 `**• Botları otomatik kayıt etme:**  ${bototo}`,
                                 `**• İsimleri otomatik düzeltme:**  ${otoduzeltme}`,
                                 `**• Yaş zorunluluğu:**  ${yaszorunlu}`,
                                 `**• Özelleştirilmiş mesaj:**  ${özel}`,
                                 `**• Özelleştirilmiş günlük mesajı:**  ${gözel}`,
-                                `**• Oto isim:**  ${yazılacaksunucudb.isimler.giris ? yazılacaksunucudb.isimler.giris.replace(/<tag>/g, tagroldb.tag || "").replace(/<isim>/g, int.user.username) : "Ayarlanmamış ❗"}`,
+                                `**• Oto isim:**  ${yazılacakguildDatabase.isimler.giris ? yazılacakguildDatabase.isimler.giris.replace(/<tag>/g, tagroldb.tag || "").replace(/<isim>/g, int.user.username) : "Ayarlanmamış ❗"}`,
                                 `\n**Birisini kayıt ettikten sonra şöyle gözükecek**\n└> ${kayıtisim}`
                             ].join("\n")
                         })
                     .setColor('Blue')
                     .setFooter({ text: `${int.client.user.username} Kayıt sistemi`, iconURL: int.client.user.displayAvatarURL() })
                     .setTimestamp()
-                funcMsg.reply({ content: `• Kayıt sistemini test etmek için **${sunucudb.prefix || ayarlar.prefix}test** yazabilirsiniz!`, embeds: [embed] }).catch(() => { })
-                db.yazdosya(sunucudb, sunucuid)
-                db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
-                db.sil(sunucuid, "kur", "diğerleri")
+                funcMsg.reply({ content: `• Kayıt sistemini test etmek için **${guildDatabase.prefix || ayarlar.prefix}test** yazabilirsiniz!`, embeds: [embed] }).catch(() => { })
+                db.yazdosya(guildDatabase, guildId)
+                db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
+                db.sil(guildId, "kur", "diğerleri")
             }
             async function otoisim(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 10, date: Date.now() }, "kur", "diğerleri")
-                let tag = yazılacaksunucudb.tag
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 10, date: Date.now() }, "kur", "diğerleri")
+                let tag = yazılacakguildDatabase.tag
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "geri":
                             let sisim
-                                , tag = yazılacaksunucudb.tag
-                            if (sunucudb.kayıt.isimler.kayıt) sisim = sunucudb.kayıt.isimler.kayıt.replace(/<tag>/g, tag || "").replace(/<isim>/g, "Ali | İhsan").replace(/<yaş>/, "19")
+                                , tag = yazılacakguildDatabase.tag
+                            if (guildDatabase.kayıt.isimler.kayıt) sisim = guildDatabase.kayıt.isimler.kayıt.replace(/<tag>/g, tag || "").replace(/<isim>/g, "Ali | İhsan").replace(/<yaş>/, "19")
                             else sisim = `${tag || ""}Ali | 19`
                             mesajlar(m.sembol(sisim), mesaj)
                             return await sembol(mesaj.id, mesaj)
                         case "geç":
-                            delete sunucudb.kayıt.isimler.giris
+                            delete guildDatabase.kayıt.isimler.giris
                             return await son(mesaj.id, mesaj)
                         default:
-                            yazılacaksunucudb.isimler.giris = mesaj.content
+                            yazılacakguildDatabase.isimler.giris = mesaj.content
                             return await son(mesaj.id, mesaj)
                     }
                 }).catch(err => {
@@ -183,79 +183,79 @@ module.exports = {
                 })
             }
             async function sembol(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 9, date: Date.now() }, "kur", "diğerleri")
-                let tagg = yazılacaksunucudb.tag
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 9, date: Date.now() }, "kur", "diğerleri")
+                let tagg = yazılacakguildDatabase.tag
                     , isim
-                if (sunucudb.kayıt.isimler.kayıt) isim = sunucudb.kayıt.isimler.kayıt.replace(/<tag>/g, (tagg ? tagg.slice(0, -1) : "")).replace(/<isim>/g, "Ali | İhsan").replace(/<yaş>/, "19")
+                if (guildDatabase.kayıt.isimler.kayıt) isim = guildDatabase.kayıt.isimler.kayıt.replace(/<tag>/g, (tagg ? tagg.slice(0, -1) : "")).replace(/<isim>/g, "Ali | İhsan").replace(/<yaş>/, "19")
                 else isim = `${tagg || ""}Ali | 19`
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "geri":
                             mesajlar(m.tag("♫ Ali 19"), mesaj)
                             return await tag(mesajId, mesaj)
                         case "geç":
-                            delete yazılacaksunucudb.sembol
+                            delete yazılacakguildDatabase.sembol
                             mesajlar(m.oto(`${tagg || ""}Kayıtsız`), mesaj)
                             return await otoisim(mesaj.id, mesaj)
                     }
                     if (mesaj.content.length > 3) return süre(sembol, m.sg, mesajId, mesaj)
                     else if (mesaj.content.length) {
-                        yazılacaksunucudb.sembol = mesaj.content + " "
+                        yazılacakguildDatabase.sembol = mesaj.content + " "
                         mesajlar(m.oto(`${tagg || ""}Kayıtsız`), mesaj)
                         return await otoisim(mesaj.id, mesaj)
                     } else return süre(sembol, m.sembol(isim), mesajId, mesaj)
                 }).catch(() => süre(sembol, m.sembol(isim), mesajId, funcMsg))
             }
             async function tag(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 8, date: Date.now() }, "kur", "diğerleri")
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 8, date: Date.now() }, "kur", "diğerleri")
                 let isim
-                if (sunucudb.kayıt.isimler.kayıt) isim = sunucudb.kayıt.isimler.kayıt.replace(/<tag>/g, "♫").replace(/<isim>/g, "Ali İhsan").replace(/<yaş>/, "19")
+                if (guildDatabase.kayıt.isimler.kayıt) isim = guildDatabase.kayıt.isimler.kayıt.replace(/<tag>/g, "♫").replace(/<isim>/g, "Ali İhsan").replace(/<yaş>/, "19")
                 else isim = `"♫" Ali | 19`
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "geri":
                             mesajlar(m.bot, mesaj)
                             return await bot(mesajId, mesaj)
                         case "geç":
-                            delete yazılacaksunucudb.tag
+                            delete yazılacakguildDatabase.tag
                             let sisim
-                            if (sunucudb.kayıt.isimler.kayıt) sisim = sunucudb.kayıt.isimler.kayıt.replace(/<tag>/g, "").replace(/<isim>/g, "Ali | İhsan").replace(/<yaş>/, "19")
+                            if (guildDatabase.kayıt.isimler.kayıt) sisim = guildDatabase.kayıt.isimler.kayıt.replace(/<tag>/g, "").replace(/<isim>/g, "Ali | İhsan").replace(/<yaş>/, "19")
                             else sisim = `Ali | 19`
                             mesajlar(m.sembol(sisim), mesaj)
                             return await sembol(mesaj.id, mesaj)
                     }
                     if (mesaj.content.length > 10) return süre(tag, m.th, mesajId, mesaj)
                     else if (mesaj.content.length) {
-                        yazılacaksunucudb.tag = mesaj.content + " "
+                        yazılacakguildDatabase.tag = mesaj.content + " "
                         let sisim
-                        if (sunucudb.kayıt.isimler.kayıt) sisim = sunucudb.kayıt.isimler.kayıt.replace(/<tag>/g, mesaj.content).replace(/<isim>/g, "Ali | İhsan").replace(/<yaş>/, "19")
-                        else sisim = `${yazılacaksunucudb.tag}Ali | 19`
+                        if (guildDatabase.kayıt.isimler.kayıt) sisim = guildDatabase.kayıt.isimler.kayıt.replace(/<tag>/g, mesaj.content).replace(/<isim>/g, "Ali | İhsan").replace(/<yaş>/, "19")
+                        else sisim = `${yazılacakguildDatabase.tag}Ali | 19`
                         mesajlar(m.sembol(sisim), mesaj)
                         return await sembol(mesaj.id, mesaj)
                     } else return süre(tag, m.tag(isim), mesajId, mesaj)
                 }).catch(() => süre(tag, m.tag(isim), mesajId, funcMsg))
             }
             async function bot(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 7, date: Date.now() }, "kur", "diğerleri")
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 7, date: Date.now() }, "kur", "diğerleri")
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "geri":
-                            if (yazılacaksunucudb.secenek) {
+                            if (yazılacakguildDatabase.secenek) {
                                 mesajlar(m.u, mesaj)
                                 return await normal(mesajId, mesaj)
                             } else {
@@ -263,38 +263,38 @@ module.exports = {
                                 return await erkek(mesajId, mesaj)
                             }
                         case "geç":
-                            delete yazılacaksunucudb.bot
+                            delete yazılacakguildDatabase.bot
                             mesajlar(m.tag("♫ Ali 19"), mesaj)
                             return await tag(mesajId, mesaj)
                     }
                     let rol = m.rolBulMulti(mesaj)
                     if (rol.some(a => a.managed == true)) return süre(bot, m.brd, mesajId, mesaj)
-                    if (rol.some(a => a.id == yazılacaksunucudb.kayıtsız)) return süre(bot, m.kuv, mesajId, mesaj)
-                    if (rol.some(a => a.id == yazılacaksunucudb.yetkili)) return süre(bot, m.ukedyr, mesajId, mesaj)
-                    let erkekrolvar = rol.filter(a => yazılacaksunucudb.erkek?.includes(a.id))
+                    if (rol.some(a => a.id == yazılacakguildDatabase.kayıtsız)) return süre(bot, m.kuv, mesajId, mesaj)
+                    if (rol.some(a => a.id == yazılacakguildDatabase.yetkili)) return süre(bot, m.ukedyr, mesajId, mesaj)
+                    let erkekrolvar = rol.filter(a => yazılacakguildDatabase.erkek?.includes(a.id))
                     if (erkekrolvar.size) return süre(bot, m.evr(erkekrolvar.map(a => a.id)), mesajId, mesaj)
-                    let kızrolvar = rol.filter(a => yazılacaksunucudb.kız?.includes(a.id))
+                    let kızrolvar = rol.filter(a => yazılacakguildDatabase.kız?.includes(a.id))
                     if (kızrolvar.size) return süre(bot, m.kvr(kızrolvar.map(a => a.id)), mesajId, mesaj)
-                    let uyerolvar = rol.filter(a => yazılacaksunucudb.normal?.includes(a.id))
+                    let uyerolvar = rol.filter(a => yazılacakguildDatabase.normal?.includes(a.id))
                     if (uyerolvar.size) return süre(bot, m.uvr(uyerolvar.map(a => a.id)), mesajId, mesaj)
                     if (rol.size > 5) return süre(bot, m.fr, mesajId, mesaj)
                     let yuksekroluyarı = rol.filter(a => a.position >= mesaj.guild.members.me.roles.highest.position)
                     if (yuksekroluyarı.size) return süre(bot, m.bry(rol.map(a => a.id), mesaj), mesajId, mesaj)
                     if (rol.size) {
-                        yazılacaksunucudb.bot = rol.map(a => a.id)
+                        yazılacakguildDatabase.bot = rol.map(a => a.id)
                         mesajlar(m.tag("♫ Ali 19"), mesaj)
                         return await tag(mesajId, mesaj)
                     } else return süre(bot, m.bot, mesajId, mesaj)
                 }).catch(err => süre(bot, m.bot, mesajId, funcMsg))
             }
             async function erkek(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 6, date: Date.now() }, "kur", "diğerleri")
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 6, date: Date.now() }, "kur", "diğerleri")
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "geri":
                             mesajlar(m.kiz, mesaj)
@@ -302,26 +302,26 @@ module.exports = {
                     }
                     let rol = m.rolBulMulti(mesaj)
                     if (rol.some(a => a.managed == true)) return süre(erkek, m.brd, mesajId, mesaj)
-                    if (rol.some(a => a.id == yazılacaksunucudb.kayıtsız)) return süre(erkek, m.kuv, mesajId, mesaj)
-                    if (rol.some(a => a.id == yazılacaksunucudb.yetkili)) return süre(erkek, m.ukedyr, mesajId, mesaj)
+                    if (rol.some(a => a.id == yazılacakguildDatabase.kayıtsız)) return süre(erkek, m.kuv, mesajId, mesaj)
+                    if (rol.some(a => a.id == yazılacakguildDatabase.yetkili)) return süre(erkek, m.ukedyr, mesajId, mesaj)
                     if (rol.size > 5) return süre(erkek, m.fr, mesajId, mesaj)
                     let yuksekroluyarı = rol.filter(a => a.position >= mesaj.guild.members.me.roles.highest.position)
                     if (yuksekroluyarı.size) return süre(erkek, m.bry(rol.map(a => a.id), mesaj), mesajId, mesaj)
                     if (rol.size) {
-                        yazılacaksunucudb.erkek = rol.map(a => a.id)
+                        yazılacakguildDatabase.erkek = rol.map(a => a.id)
                         mesajlar(m.bot, mesaj)
                         return await bot(mesajId, mesaj)
                     } else return süre(erkek, m.erkek, mesajId, mesaj)
                 }).catch(() => süre(erkek, m.erkek, mesajId, funcMsg))
             }
             async function kız(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 5, date: Date.now() }, "kur", "diğerleri")
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 5, date: Date.now() }, "kur", "diğerleri")
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "geri":
                             mesajlar(m.s, mesaj)
@@ -329,26 +329,26 @@ module.exports = {
                     }
                     let rol = m.rolBulMulti(mesaj)
                     if (rol.some(a => a.managed == true)) return süre(normal, m.brd, mesajId, mesaj)
-                    if (rol.some(a => a.id == yazılacaksunucudb.kayıtsız)) return süre(kız, m.kuv, mesajId, mesaj)
-                    if (rol.some(a => a.id == yazılacaksunucudb.yetkili)) return süre(kız, m.ukedyr, mesajId, mesaj)
+                    if (rol.some(a => a.id == yazılacakguildDatabase.kayıtsız)) return süre(kız, m.kuv, mesajId, mesaj)
+                    if (rol.some(a => a.id == yazılacakguildDatabase.yetkili)) return süre(kız, m.ukedyr, mesajId, mesaj)
                     if (rol.size > 5) return süre(kız, m.fr, mesajId, mesaj)
                     let yuksekroluyarı = rol.filter(a => a.position >= mesaj.guild.members.me.roles.highest.position)
                     if (yuksekroluyarı.size) return süre(kız, m.bry(rol.map(a => a.id), mesaj), mesajId, mesaj)
                     if (rol.size) {
-                        yazılacaksunucudb.kız = rol.map(a => a.id)
+                        yazılacakguildDatabase.kız = rol.map(a => a.id)
                         mesajlar(m.erkek, mesaj)
                         return await erkek(mesajId, mesaj)
                     } else return süre(kız, m.kiz, mesajId, mesaj)
                 }).catch(err => süre(kız, m.kiz, mesajId, funcMsg))
             }
             async function normal(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 50, date: Date.now() }, "kur", "diğerleri")
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 50, date: Date.now() }, "kur", "diğerleri")
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "geri":
                             mesajlar(m.s, mesaj)
@@ -356,37 +356,37 @@ module.exports = {
                     }
                     let rol = m.rolBulMulti(mesaj)
                     if (rol.some(a => a.managed == true)) return süre(normal, m.brd, mesajId, mesaj)
-                    if (rol.some(a => a.id == yazılacaksunucudb.kayıtsız)) return süre(normal, m.rbk, mesajId, mesaj)
-                    if (rol.some(a => a.id == yazılacaksunucudb.yetkili)) return süre(normal, m.rby, mesajId, mesaj)
+                    if (rol.some(a => a.id == yazılacakguildDatabase.kayıtsız)) return süre(normal, m.rbk, mesajId, mesaj)
+                    if (rol.some(a => a.id == yazılacakguildDatabase.yetkili)) return süre(normal, m.rby, mesajId, mesaj)
                     if (rol.size > 5) return süre(normal, m.fr, mesajId, mesaj)
                     let yuksekroluyarı = rol.filter(a => a.position >= mesaj.guild.members.me.roles.highest.position)
                     if (yuksekroluyarı.size) return süre(normal, m.bry(rol.map(a => a.id), mesaj), mesajId, mesaj)
                     if (rol.size) {
-                        yazılacaksunucudb.normal = rol.map(a => a.id)
+                        yazılacakguildDatabase.normal = rol.map(a => a.id)
                         mesajlar(m.bot, mesaj)
                         return await bot(mesajId, mesaj)
                     } else return süre(normal, m.u, mesajId, mesaj)
                 }).catch(() => süre(normal, m.u, mesajId, funcMsg))
             }
             async function seçenek(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 4, date: Date.now() }, "kur", "diğerleri")
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 4, date: Date.now() }, "kur", "diğerleri")
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "cinsiyet":
                         case "cin":
                         case "c":
-                            delete yazılacaksunucudb.secenek
+                            delete yazılacakguildDatabase.secenek
                             mesajlar(m.kiz, mesaj)
                             return await kız(mesajId, mesaj)
                         case "normal":
                         case "nor":
                         case "n":
-                            yazılacaksunucudb.secenek = true
+                            yazılacakguildDatabase.secenek = true
                             mesajlar(m.u, mesaj)
                             return await normal(mesajId, mesaj)
                         case "geri":
@@ -398,13 +398,13 @@ module.exports = {
                 }).catch(() => süre(seçenek, m.s, mesajId, funcMsg))
             }
             async function alınacak(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 3, date: Date.now() }, "kur", "diğerleri")
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 3, date: Date.now() }, "kur", "diğerleri")
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "geri":
                             mesajlar(m.y, mesaj)
@@ -412,23 +412,23 @@ module.exports = {
                     }
                     let rol = m.rolBul(mesaj)
                     if (rol.managed) return süre(alınacak, m.brd, mesajId, mesaj)
-                    else if (rol.id == yazılacaksunucudb.yetkili) return süre(alınacak, m.ukedyr, mesajId, mesaj)
+                    else if (rol.id == yazılacakguildDatabase.yetkili) return süre(alınacak, m.ukedyr, mesajId, mesaj)
                     else if (rol.position >= mesaj.guild.members.me.roles.highest.position) return süre(alınacak, m.ry(rol.id, mesaj), mesajId, mesaj)
                     else if (rol) {
-                        yazılacaksunucudb.kayıtsız = rol.id
+                        yazılacakguildDatabase.kayıtsız = rol.id
                         mesajlar(m.s, mesaj)
                         return await seçenek(mesajId, mesaj)
                     } else return süre(alınacak, m.kyt, mesajId, mesaj)
                 }).catch(() => süre(alınacak, m.kyt, mesajId, funcMsg))
             }
             async function yetkili(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 2, date: Date.now() }, "kur", "diğerleri")
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 2, date: Date.now() }, "kur", "diğerleri")
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "geri":
                             mesajlar(m.l, mesaj)
@@ -437,23 +437,23 @@ module.exports = {
                     let rol = m.rolBul(mesaj)
                     if (rol.managed) return süre(yetkili, m.brd, mesajId, mesaj)
                     else if (rol) {
-                        yazılacaksunucudb.yetkili = rol.id
+                        yazılacakguildDatabase.yetkili = rol.id
                         mesajlar(m.kyt, mesaj)
                         return await alınacak(mesajId, mesaj)
                     } else return süre(yetkili, m.y, mesajId, mesaj)
                 }).catch(() => süre(yetkili, m.y, mesajId, funcMsg))
             }
             async function log(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 111, date: Date.now() }, "kur", "diğerleri")
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 111, date: Date.now() }, "kur", "diğerleri")
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "geç":
-                            delete yazılacaksunucudb.log
+                            delete yazılacakguildDatabase.log
                             mesajlar(m.y, mesaj)
                             return await yetkili(mesajId, mesaj)
                         case "geri":
@@ -463,23 +463,23 @@ module.exports = {
                     let kanal = m.kanalBul(mesaj)
                     if (kanal.type !== 0) return süre(log, m.kd, mesajId, mesaj)
                     else if (kanal) {
-                        yazılacaksunucudb.log = kanal.id
+                        yazılacakguildDatabase.log = kanal.id
                         mesajlar(m.y, mesaj)
                         return await yetkili(mesajId, mesaj)
                     } else return süre(log, m.l, mesajId, mesaj)
                 }).catch(() => süre(log, m.l, mesajId, funcMsg))
             }
             async function günlük(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: mesajId, idler: yazılacaksunucudb, f: 1, date: Date.now() }, "kur", "diğerleri")
+                db.yaz(guildId, { channelId: int.channelId, messageId: mesajId, idler: yazılacakguildDatabase, f: 1, date: Date.now() }, "kur", "diğerleri")
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "geç":
-                            delete yazılacaksunucudb.günlük
+                            delete yazılacakguildDatabase.günlük
                             mesajlar(m.y, mesaj)
                             return await yetkili(mesajId, mesaj)
                         case "geri":
@@ -489,20 +489,20 @@ module.exports = {
                     let kanal = m.kanalBul(mesaj)
                     if (kanal.type !== 0) return süre(günlük, m.kd, mesajId, mesaj)
                     else if (kanal) {
-                        yazılacaksunucudb.günlük = kanal.id
+                        yazılacakguildDatabase.günlük = kanal.id
                         mesajlar(m.l, mesaj)
                         return await log(mesajId, mesaj)
                     } else return süre(günlük, m.g, mesajId, mesaj)
                 }).catch(err => süre(günlük, m.g, mesajId, funcMsg))
             }
             async function kayıtkanal(mesajId, funcMsg) {
-                db.yaz(sunucuid, { channelId: int.channelId, messageId: (mesajId || int.id), idler: yazılacaksunucudb, f: 150, date: Date.now() }, "kur", "diğerleri")
+                db.yaz(guildId, { channelId: int.channelId, messageId: (mesajId || int.id), idler: yazılacakguildDatabase, f: 150, date: Date.now() }, "kur", "diğerleri")
                 await channel?.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(async a => {
                     const mesaj = a.first()
                     switch (mesaj.content.toLocaleLowerCase()) {
                         case "kapat":
                         case "iptal":
-                            db.sil(sunucuid, "kur", "diğerleri")
+                            db.sil(guildId, "kur", "diğerleri")
                             return mesajlar(m.i, mesaj)
                         case "geri":
                             mesajlar(`• B-ben bunu nasıl yapabileceğimi b-bilmiyorum...\n${m.k}`, mesaj)
@@ -511,7 +511,7 @@ module.exports = {
                     let kanal = m.kanalBul(mesaj)
                     if (kanal.type !== 0) return süre(kayıtkanal, m.kd, int.id, mesaj)
                     else if (kanal) {
-                        yazılacaksunucudb.kanal = kanal.id
+                        yazılacakguildDatabase.kanal = kanal.id
                         mesajlar(m.g, mesaj)
                         return await günlük(int.id, mesaj)
                     } else return süre(kayıtkanal, m.k, int.id, mesaj)
@@ -521,7 +521,7 @@ module.exports = {
             kayıtkanal()
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

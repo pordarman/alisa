@@ -9,11 +9,11 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
-            let kickYetkili = sunucudb.kayıt.kicky
+            let kickYetkili = guildDatabase.kayıt.kicky
             if (kickYetkili) {
                 if (!msgMember.roles.cache.has(kickYetkili) && !msgMember.permissions.has('KickMembers')) return hata(`<@&${kickYetkili}> rolüne **veya** Üyeleri At`, "yetki")
             } else if (!msgMember.permissions.has('KickMembers')) return hata("Üyeleri At", "yetki")
@@ -31,15 +31,15 @@ module.exports = {
             
             // Üyeyi sunucudan atma
             await member.kick(`Yasaklayan: ${msg.author.tag} | Sebebi: ${sebep || "Sebep belirtilmemiş"}`).then(() => {
-                let modLog = sunucudb.kayıt.modl
+                let modLog = guildDatabase.kayıt.modl
                 , cezaVarMı
                 if (!member.user.bot) {
-                    cezaVarMı = sunucudb.sc.sayı
-                    let kl = sunucudb.kl[memberid] || []
-                    kl.unshift({ type: "kick", author: msg.author.id, timestamp: Date.now(), reason: sebep, number: sunucudb.sc.sayı })
-                    sunucudb.kl[memberid] = kl
-                    sunucudb.sc.sayı += 1
-                    db.yazdosya(sunucudb, sunucuid)
+                    cezaVarMı = guildDatabase.sc.sayı
+                    let kl = guildDatabase.kl[memberid] || []
+                    kl.unshift({ type: "kick", author: msg.author.id, timestamp: Date.now(), reason: sebep, number: guildDatabase.sc.sayı })
+                    guildDatabase.kl[memberid] = kl
+                    guildDatabase.sc.sayı += 1
+                    db.yazdosya(guildDatabase, guildId)
                 }
                 msg.reply({ content: `${ayarlar.emoji.p} **${member.user.tag} - (${memberid})** başarıyla sunucudan atıldı!${cezaVarMı ? ` **Ceza numarası:** \`#${cezaVarMı}\`` : ""}` }).catch(err => { })
                 if (modLog) {
@@ -67,7 +67,7 @@ module.exports = {
             }).catch(err => msg.reply({ content: 'Iıııı şey.. Bir hata oluştu da daha sonra tekrar dener misin?\n```js\n' + err + "```" }).catch(err => { }))
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

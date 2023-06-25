@@ -9,7 +9,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
             let shards = await msg.client.shard.broadcastEval(c => {
                 return { id: c.shard.ids[0], guildSize: c.guilds.cache.size.toLocaleString().replace(/\./g, ","), channelsSize: c.channels.cache.size.toLocaleString().replace(/\./g, ","), userSize: c.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0).toLocaleString().replace(/\./g, ","), ping: c.ws.ping, uptime: c.uptime }

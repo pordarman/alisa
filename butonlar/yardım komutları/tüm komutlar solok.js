@@ -6,7 +6,7 @@ module.exports = {
     /**
        * @param {import("../../typedef").exportsRunButtons} param0 
        */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
             
             // Kontroller
@@ -23,7 +23,7 @@ module.exports = {
                 else a.data.disabled = false
                 dugme.addComponents(a)
             })
-            let [array, baslik] = int.client.allCommands(sunucudb, int.customId.match(/(?<=\d)\D+/)[0])
+            let [array, baslik] = int.client.allCommands(guildDatabase, int.customId.match(/(?<=\d)\D+/)[0])
                 , embed = new EmbedBuilder()
                     .setAuthor({ name: int.client.user.tag, iconURL: int.client.user.displayAvatarURL() })
                     .setTitle(baslik)
@@ -34,7 +34,7 @@ module.exports = {
             int.update({ embeds: [embed], components: [dugme, int.message.components[2] || int.message.components[1]] }).catch(err => { })
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true)
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

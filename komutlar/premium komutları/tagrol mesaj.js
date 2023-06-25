@@ -9,18 +9,18 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunCommands} param0
     */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, sonradan, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, sonradan, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
             if (!msgMember.permissions.has("Administrator")) return hata("Yönetici", "yetki")
 
-            let tagroldb = msg.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
+            let tagroldb = msg.client.tagrolDatabase(guildId, guildDatabase.kayıt.tag)
             async function yazmesaje() {
-                db.yaz(sunucuid, { channelId: msg.channelId, messageId: msg.id, authorId: msg.author.id, date: Date.now(), f: "mesaje" }, "tagrol mesaj", "diğerleri")
+                db.yaz(guildId, { channelId: msg.channelId, messageId: msg.id, authorId: msg.author.id, date: Date.now(), f: "mesaje" }, "tagrol mesaj", "diğerleri")
                 var filter = m => m.author.id === msg.author.id
                 await msg.channel?.awaitMessages({ filter: filter, max: 1, time: 1000 * 60 * 8 }).then(a => {
-                    db.sil(sunucuid, "tagrol mesaj", "diğerleri")
+                    db.sil(guildId, "tagrol mesaj", "diğerleri")
                     let ms = a.first()
                     if (ms.content === 'iptal') return msg.reply({ content: "İşlem iptal edilmiştir" }).catch(() => { })
                     if (ms.content.toLocaleLowerCase() === 'sıfırla') {
@@ -28,7 +28,7 @@ module.exports = {
                         delete tagroldb.mesaje
                         msg.reply({ content: `${ayarlar.emoji.p} Özelleştirilmiş tag mesajı başarıyla sıfırlandı\n\n**Şöyle gözükecek**` }).catch(() => { })
                         msg.channel.send({ content: `• <@${msg.author.id}> adlı üye tagımızı **( ${taglar} )** aldı! Ona hoşgeldin diyelim! 🎉` })
-                        db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
+                        db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
                         return;
                     }
                     if (ms.content.length > 1500) return ms.reply({ content: 'Karakter sayısı çok fazla lütfen karakter sayınızı **1500**\'ün altında tutmaya çalışın' }).catch(() => { })
@@ -45,7 +45,7 @@ module.exports = {
                             .replace(/<üyeTag>/g, msg.author.tag)
                             .replace(/<rol>/g, tagroldb.rol ? "<@&" + tagroldb.rol + ">" : "__**ROL AYARLI DEĞİL**__")
                         msg.channel.send({ content: atılacakMesajEkleme })
-                        db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
+                        db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
                         return;
                     } else ms.reply({ content: "Keşke bir yazı yazsaydın be" }).catch(() => { })
                 }).catch(err => {
@@ -53,10 +53,10 @@ module.exports = {
                 })
             }
             async function yazmesajk() {
-                db.yaz(sunucuid, { channelId: msg.channelId, messageId: msg.id, authorId: msg.author.id, date: Date.now(), f: "mesajk" }, "tagrol mesaj", "diğerleri")
+                db.yaz(guildId, { channelId: msg.channelId, messageId: msg.id, authorId: msg.author.id, date: Date.now(), f: "mesajk" }, "tagrol mesaj", "diğerleri")
                 var filter = m => m.author.id === msg.author.id
                 await msg.channel?.awaitMessages({ filter: filter, max: 1, time: 1000 * 60 * 8 }).then(a => {
-                    db.sil(sunucuid, "tagrol mesaj", "diğerleri")
+                    db.sil(guildId, "tagrol mesaj", "diğerleri")
                     let ms = a.first()
                     if (ms.content === 'iptal') return msg.reply({ content: "İşlem iptal edilmiştir" }).catch(() => { })
                     if (ms.content.toLocaleLowerCase() === 'sıfırla') {
@@ -64,7 +64,7 @@ module.exports = {
                         delete tagroldb.mesajk
                         msg.reply({ content: `${ayarlar.emoji.p} Özelleştirilmiş tag mesajı başarıyla sıfırlandı\n\n**Şöyle gözükecek**` }).catch(() => { })
                         msg.channel.send({ content: `• <@${msg.author.id}> adlı üye tagımızı **( ${taglar} )** bıraktı... :(` })
-                        db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
+                        db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
                         return;
                     }
                     if (ms.content.length > 1500) return ms.reply({ content: 'Karakter sayısı çok fazla lütfen karakter sayınızı **1500**\'ün altında tutmaya çalışın' }).catch(() => { })
@@ -81,7 +81,7 @@ module.exports = {
                             .replace(/<üyeTag>/g, msg.author.tag)
                             .replace(/<rol>/g, tagroldb.rol ? "<@&" + tagroldb.rol + ">" : "__**ROL AYARLI DEĞİL**__")
                         msg.channel.send({ content: atılacakMesajEkleme })
-                        db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
+                        db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
                         return;
                     } else ms.reply({ content: "Keşke bir yazı yazsaydın be" }).catch(() => { })
                 }).catch(err => {
@@ -90,17 +90,17 @@ module.exports = {
                 })
             }
             async function yazdmesaje() {
-                db.yaz(sunucuid, { channelId: msg.channelId, messageId: msg.id, authorId: msg.author.id, date: Date.now(), f: "dmesaje" }, "tagrol mesaj", "diğerleri")
+                db.yaz(guildId, { channelId: msg.channelId, messageId: msg.id, authorId: msg.author.id, date: Date.now(), f: "dmesaje" }, "tagrol mesaj", "diğerleri")
                 var filter = m => m.author.id === msg.author.id
                 await msg.channel?.awaitMessages({ filter: filter, max: 1, time: 1000 * 60 * 8 }).then(a => {
-                    db.sil(sunucuid, "tagrol mesaj", "diğerleri")
+                    db.sil(guildId, "tagrol mesaj", "diğerleri")
                     let ms = a.first()
                     if (ms.content === 'iptal') return msg.reply({ content: "İşlem iptal edilmiştir" }).catch(() => { })
                     if (ms.content.toLocaleLowerCase() === 'sıfırla') {
                         if (!tagroldb.dmesaje) return msg.reply({ content: "Birisi tag alınca dm'den atacağım mesaj zaten sıfırlanmış durumda" }).catch(() => { })
                         delete tagroldb.dmesaje
                         msg.reply({ content: `${ayarlar.emoji.p} Özelleştirilmiş dm\'den yazacağım tag mesajı başarıyla sıfırlandı! Artık birisi tag'ımızı alınca ona özelden yazmayacağım` }).catch(() => { })
-                        db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
+                        db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
                         return;
                     }
                     if (ms.content.length) {
@@ -114,7 +114,7 @@ module.exports = {
                             .replace(/<üyeI[dD]>/g, msg.author.id)
                             .replace(/<üyeTag>/g, msg.author.tag)
                         msg.channel.send({ content: atılacakMesajEkleme })
-                        db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
+                        db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
                         return;
                     } else ms.reply({ content: "Keşke bir yazı yazsaydın be" }).catch(() => { })
                 }).catch(err => {
@@ -123,17 +123,17 @@ module.exports = {
                 })
             }
             async function yazdmesajk() {
-                db.yaz(sunucuid, { channelId: msg.channelId, messageId: msg.id, authorId: msg.author.id, date: Date.now(), f: "dmesajk" }, "tagrol mesaj", "diğerleri")
+                db.yaz(guildId, { channelId: msg.channelId, messageId: msg.id, authorId: msg.author.id, date: Date.now(), f: "dmesajk" }, "tagrol mesaj", "diğerleri")
                 var filter = m => m.author.id === msg.author.id
                 await msg.channel?.awaitMessages({ filter: filter, max: 1, time: 1000 * 60 * 8 }).then(a => {
-                    db.sil(sunucuid, "tagrol mesaj", "diğerleri")
+                    db.sil(guildId, "tagrol mesaj", "diğerleri")
                     let ms = a.first()
                     if (ms.content === 'iptal') return msg.reply({ content: "İşlem iptal edilmiştir" }).catch(() => { })
                     if (ms.content.toLocaleLowerCase() === 'sıfırla') {
                         if (!tagroldb.dmesajk) return msg.reply({ content: "Birisi tag bırakınca dm'den atacağım mesaj zaten sıfırlanmış durumda" }).catch(() => { })
                         delete tagroldb.dmesajk
                         msg.reply({ content: `${ayarlar.emoji.p} Özelleştirilmiş dm\'den yazacağım tag mesajı başarıyla sıfırlandı! Artık birisi tag'ımızı bırakınca ona özelden yazmayacağım` }).catch(() => { })
-                        db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
+                        db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
                         return;
                     }
                     if (ms.content.length) {
@@ -147,7 +147,7 @@ module.exports = {
                             .replace(/<üyeI[dD]>/g, msg.author.id)
                             .replace(/<üyeTag>/g, msg.author.tag)
                         msg.channel.send({ content: atılacakMesajEkleme })
-                        db.yaz(sunucuid, tagroldb, "tag rol", "diğerleri")
+                        db.yaz(guildId, tagroldb, "tag rol", "diğerleri")
                         return;
                     } else ms.reply({ content: "Keşke bir yazı yazsaydın be" }).catch(() => { })
                 }).catch(err => {
@@ -229,7 +229,7 @@ module.exports = {
             return hata(`Birisi tag alınca atacağım mesajı özelleştirmek için **${prefix}tagrol-mesaj +**\nBirisi tag alınca ona dm'den atacağım mesajı özelleştirmek için **${prefix}tagrol-mesaj dm +**\n\nBirisi tagı bırakınca atacağım mesajı özelleştirmek için **${prefix}tagrol-mesaj -**\nBirisi tagı bırakınca dm'den atacağım mesajı özelleştirmek için **${prefix}tagrol-mesaj dm -** yazabilirsiniz`, "ne")
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

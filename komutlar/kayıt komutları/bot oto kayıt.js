@@ -8,7 +8,7 @@ module.exports = {
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
     try {
       // Kontroller
       if (!msgMember.permissions.has('Administrator')) return hata("Yönetici", "yetki")
@@ -17,25 +17,25 @@ module.exports = {
         case "aç":
         case "açık":
         case "aktif":
-          if (sunucudb.kayıt.bototo) return hata('Bot oto kayıt ayarım zaten __**açık**__ durumda')
-          sunucudb.kayıt.bototo = true
+          if (guildDatabase.kayıt.bototo) return hata('Bot oto kayıt ayarım zaten __**açık**__ durumda')
+          guildDatabase.kayıt.bototo = true
           hata('Bot oto kayıt ayarım başarıyla açıldı bundan sonra botları otomatik olarak kayıt edeceğim', "b")
-          db.yazdosya(sunucudb, sunucuid)
+          db.yazdosya(guildDatabase, guildId)
           return;
         case "kapat":
         case "kapalı":
         case "deaktif":
-          if (!sunucudb.kayıt.bototo) return hata('Bot oto kayıt ayarım zaten __**kapalı**__ durumda')
-          delete sunucudb.kayıt.bototo
+          if (!guildDatabase.kayıt.bototo) return hata('Bot oto kayıt ayarım zaten __**kapalı**__ durumda')
+          delete guildDatabase.kayıt.bototo
           hata('Bot oto kayıt ayarım başarıyla kapatıldı bundan sonra botları otomatik olarak kayıt etmeyeceğim', "b")
-          db.yazdosya(sunucudb, sunucuid)
+          db.yazdosya(guildDatabase, guildId)
           return;
         default:
           return hata(`Botları otomatik olarak kayıt etmek için **${prefix}bototo aç**\n\n• Kapatmak için ise **${prefix}bototo kapat** yazabilirsiniz`, "ne")
       }
     } catch (e) {
       msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-      msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+      msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
       console.log(e)
     }
   }

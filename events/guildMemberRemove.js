@@ -9,12 +9,12 @@ module.exports = {
      */
     async run(m) {
         if (!m.user.bot) {
-            let sunucuid = m.guild.id
-                , sunucudb = m.client.guildDatabase(sunucuid)
-                , kisi = sunucudb.kl[m.id] || []
+            let guildId = m.guild.id
+                , guildDatabase = m.client.guildDatabase(guildId)
+                , kisi = guildDatabase.kl[m.id] || []
             kisi.unshift({ type: "remove", timestamp: Date.now() })
-            sunucudb.kl[m.id] = kisi
-            db.yazdosya(sunucudb, sunucuid)
+            guildDatabase.kl[m.id] = kisi
+            db.yazdosya(guildDatabase, guildId)
         }
     }
 }

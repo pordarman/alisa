@@ -11,11 +11,11 @@ module.exports = {
    * @param {ChatInputCommandInteraction} int  
    * @param {Function} hata 
    */
-  async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+  async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
     try {
-      let tagroldb = int.client.tagrolDatabase(sunucuid, sunucudb.kayıt.tag)
-        , tag = tagroldb.tag || (sunucudb.kayıt.tag ? sunucudb.kayıt.tag.slice(0, -1) : undefined)
-        , dis = tagroldb.dis || sunucudb.kayıt.dis
+      let tagroldb = int.client.tagrolDatabase(guildId, guildDatabase.kayıt.tag)
+        , tag = tagroldb.tag || (guildDatabase.kayıt.tag ? guildDatabase.kayıt.tag.slice(0, -1) : undefined)
+        , dis = tagroldb.dis || guildDatabase.kayıt.dis
 
       // Kontroller
       if (!tag && !dis) return hata("Şeyyy.. Bu sunucuda herhangi bir tag ayarlı değil :(")
@@ -108,7 +108,7 @@ module.exports = {
       }).catch(err => { })
     } catch (e) {
       hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-      int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+      int.client.error(module.id.split("\\").slice(5).join("\\"), e)
       console.log(e)
     }
   }

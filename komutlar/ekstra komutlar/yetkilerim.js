@@ -8,7 +8,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
             const member = msg.mentions.members.first() || await msg.client.fetchMember(args[0], msg) || msgMember
             const p = ayarlar.emoji.p
@@ -48,7 +48,7 @@ module.exports = {
             msg.reply({ embeds: [embed.addFields({ name: 'SUNUCU İZİNLERİ', value: `**${hasFunction("CreateInstantInvite")}\n\n${hasFunction("ManageGuild")}\n\n${hasFunction("ManageRoles")}\n\n${hasFunction("ManageChannels")}\n\n${hasFunction("ManageEmojisAndStickers")}\n\n${hasFunction("ManageEvents")}\n\n${hasFunction("ManageNicknames")}\n\n${hasFunction("ManageWebhooks")}\n\n${hasFunction("ViewAuditLog")}\n\n${hasFunction("ViewGuildInsights")}**`, inline: true }, { name: 'KANAL İZİNLERİ', value: `**${hasFunction("AttachFiles")}\n\n${hasFunction("EmbedLinks")}\n\n${hasFunction("ReadMessageHistory")}\n\n${hasFunction("MentionEveryone")}\n\n${hasFunction("SendTTSMessages")}\n\n${hasFunction("ManageMessages")}\n\n${hasFunction("CreatePublicThreads")}\n\n${hasFunction("ManageThreads")}**`, inline: true }, { name: 'KİŞİ İZİNLERİ', value: `**${hasFunction("ChangeNickname")}\n\n${hasFunction("MoveMembers")}\n\n${hasFunction("MuteMembers")}\n\n${hasFunction("DeafenMembers")}\n\n${hasFunction("ModerateMembers")}\n\n${hasFunction("KickMembers")}\n\n${hasFunction("BanMembers")}**`, inline: true })] }).catch(err => { })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

@@ -8,7 +8,7 @@ module.exports = {
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-  async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+  async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
     try {
       let pp = msg.author.displayAvatarURL()
         , id = msg.author.id
@@ -110,7 +110,7 @@ module.exports = {
         , dugme = new ActionRowBuilder().addComponents(dugmeTumKomutlar).addComponents(dugmeBotKomutlari).addComponents(dugmeKayitKomutlari).addComponents(dugmeTagrolKomutlari).addComponents(dugmeModerasyonKomutlari)
         , dugme3 = new ActionRowBuilder().addComponents(dugmeJailKomutlari).addComponents(dugmeBilgiKomutlari).addComponents(dugmeEkstraKomutlar).addComponents(dugmePremiumKomutlari)
         , dugme2 = new ActionRowBuilder().addComponents(selectMenu)
-        , [commands] = msg.client.allCommands(sunucudb)
+        , [commands] = msg.client.allCommands(guildDatabase)
         , embed = new EmbedBuilder()
           .setAuthor({ name: msg.client.user.username, iconURL: msg.client.user.displayAvatarURL() })
           .setDescription(`**${ayarlar.emoji.tum} Tüm komutlar (${commands.length})\n\n${ayarlar.emoji.bot} Botun ana komutları (${commands.filter(a => a.type == "bot").length})\n${ayarlar.emoji.kayit} Botun kayıt komutları (${commands.filter(a => a.type == "kayıt").length})\n${ayarlar.emoji.tagrol} Botun tagrol komutları (${commands.filter(a => a.type == "tagrol").length})\n${ayarlar.emoji.mod} Botun moderasyon komutları (${commands.filter(a => a.type == "mod").length})\n${ayarlar.emoji.jail} Botun jail komutları (${commands.filter(a => a.type == "jail").length})\n${ayarlar.emoji.bilgi} Botun bilgi komutları (${commands.filter(a => a.type == "bilgi").length})\n${ayarlar.emoji.ekstra} Botun ekstra komutları (${commands.filter(a => a.type == "ekstra").length})\n\n${ayarlar.emoji.pre} Botun premium komutları (${commands.filter(a => a.type == "pre").length})\n\n🚀 Bağlantılarım\n[ [Beni davet et](${ayarlar.davet}) | [Oy ver](https://top.gg/bot/${msg.client.user.id}/vote) | [Destek sunucum](${ayarlar.discord}) ]**`)
@@ -120,7 +120,7 @@ module.exports = {
       msg.reply({ embeds: [embed], components: [dugme, dugme3, dugme2] }).catch(err => { console.log(err) })
     } catch (e) {
       msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-      msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+      msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
       console.log(e)
     }
   }

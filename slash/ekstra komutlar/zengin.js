@@ -10,7 +10,7 @@ module.exports = {
     /**
      * @param {import("../../typedef").exportsRunSlash} param0 
      */
-    async run({ int, sunucudb, alisa, hata, sunucuid, guild }) {
+    async run({ int, guildDatabase, alisa, hata, guildId, guild }) {
         try {
 
             // Kontroller
@@ -21,8 +21,8 @@ module.exports = {
             if (member.id === guild.ownerId) return hata(`Sunucu sahibinin ismini değiştiremem :(`)
             if (member.roles.highest.position >= guildMe.roles.highest.position) return hata(`Sizin rolünüzün sırası benim rolümün sırasından yüksek olduğu için sizin isminizi değiştiremem`)
             
-            let tag = sunucudb.kayıt.tag
-            , kayıtisim = sunucudb.kayıt.isimler.kayıt
+            let tag = guildDatabase.kayıt.tag
+            , kayıtisim = guildDatabase.kayıt.isimler.kayıt
             , isim
             , yeniisim = int.options.getString("isim", true)
             if (kayıtisim) {
@@ -42,7 +42,7 @@ module.exports = {
             })
         } catch (e) {
             hata(`**‼️ <@${int.user.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`, true).catch(err => { })
-            int.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            int.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

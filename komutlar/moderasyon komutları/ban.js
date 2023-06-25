@@ -9,11 +9,11 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
-            let banYetkili = sunucudb.kayıt.bany
+            let banYetkili = guildDatabase.kayıt.bany
             if (banYetkili) {
                 if (!msgMember.roles.cache.has(banYetkili) && !msgMember.permissions.has('BanMembers')) return hata(`<@&${banYetkili}> rolüne **veya** Üyeleri Yasakla`, "yetki")
             } else if (!msgMember.permissions.has('BanMembers')) return hata("Üyeleri Yasakla", "yetki")
@@ -32,15 +32,15 @@ module.exports = {
 
                 // Üyeyi sunucudan banlama
                 return await guild.members.ban(memberid, { reason: `Yasaklayan: ${msg.author.tag} | Sebebi: ${sebep || "Sebep belirtilmemiş"}` }).then(user => {
-                    let modLog = sunucudb.kayıt.modl
+                    let modLog = guildDatabase.kayıt.modl
                         , cezaVarMı
                     if (!banlanacakuye.bot) {
-                        cezaVarMı = sunucudb.sc.sayı
-                        let kl = sunucudb.kl[memberid] || []
-                        kl.unshift({ type: "ban", author: msg.author.id, timestamp: Date.now(), number: sunucudb.sc.sayı })
-                        sunucudb.kl[memberid] = kl
-                        sunucudb.sc.sayı += 1
-                        db.yazdosya(sunucudb, sunucuid)
+                        cezaVarMı = guildDatabase.sc.sayı
+                        let kl = guildDatabase.kl[memberid] || []
+                        kl.unshift({ type: "ban", author: msg.author.id, timestamp: Date.now(), number: guildDatabase.sc.sayı })
+                        guildDatabase.kl[memberid] = kl
+                        guildDatabase.sc.sayı += 1
+                        db.yazdosya(guildDatabase, guildId)
                     }
                     msg.reply({ content: `${ayarlar.emoji.p} **${banlanacakuye.user.tag} - (${memberid})** başarıyla sunucudan yasaklandı!${cezaVarMı ? ` **Ceza numarası:** \`#${cezaVarMı}\`` : ""}` }).catch(err => { })
                     if (modLog) {
@@ -83,15 +83,15 @@ module.exports = {
 
             // Üyeyi sunucuda olmadan banlama
             await guild.members.ban(memberid, { reason: `Yasaklayan: ${msg.author.tag} | Sebebi: ${sebep || "Sebep belirtilmemiş"}` }).then(user => {
-                let modLog = sunucudb.kayıt.modl
+                let modLog = guildDatabase.kayıt.modl
                     , cezaVarMı
                 if (!banlanacakuye.bot) {
-                    cezaVarMı = sunucudb.sc.sayı
-                    let kl = sunucudb.kl[memberid] || []
-                    kl.unshift({ type: "ban", author: msg.author.id, timestamp: Date.now(), reason: sebep, number: sunucudb.sc.sayı })
-                    sunucudb.kl[memberid] = kl
-                    sunucudb.sc.sayı += 1
-                    db.yazdosya(sunucudb, sunucuid)
+                    cezaVarMı = guildDatabase.sc.sayı
+                    let kl = guildDatabase.kl[memberid] || []
+                    kl.unshift({ type: "ban", author: msg.author.id, timestamp: Date.now(), reason: sebep, number: guildDatabase.sc.sayı })
+                    guildDatabase.kl[memberid] = kl
+                    guildDatabase.sc.sayı += 1
+                    db.yazdosya(guildDatabase, guildId)
                 }
                 msg.reply({ content: `${ayarlar.emoji.p} **${banlanacakuye.tag} - (${memberid})** başarıyla sunucudan yasaklandı!${!member ? " - *( Bu kişi sunucuda değildi )*" : ""}${cezaVarMı ? ` **Ceza numarası:** \`#${cezaVarMı}\`` : ""}` }).catch(err => { })
                 if (modLog) {
@@ -119,7 +119,7 @@ module.exports = {
             }).catch(err => msg.reply({ content: 'Iıııı şey.. Bir hata oluştu da daha sonra tekrar dener misin?\n```js\n' + err + "```" }).catch(err => { }))
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }

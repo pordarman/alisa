@@ -8,7 +8,7 @@ module.exports = {
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
-    async run({ sunucudb, pre, alisa, msg, args, sunucuid, prefix, hata, guild, msgMember, guildMe }) {
+    async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
         try {
 
             // Kontroller
@@ -25,12 +25,12 @@ module.exports = {
             await msg.channel.awaitMessages({ filter: filter, max: 1, time: 45000 }).then(a => {
                 const m = a.first()
                 if (m.content.toLocaleLowerCase() === "evet") {
-                    const tagrol = msg.client.tagrolDatabase(sunucuid)
-                    tagrol = { kisi: {}, tag: sunucudb.kayıt.tag?.slice(0, -1) }
-                    delete sunucudb.kayıt.dis
+                    const tagrol = msg.client.tagrolDatabase(guildId)
+                    tagrol = { kisi: {}, tag: guildDatabase.kayıt.tag?.slice(0, -1) }
+                    delete guildDatabase.kayıt.dis
                     m.reply({ content: "Başarıyla bu sunucudaki tagrol bilgilerinizi sıfırladım" }).catch(() => { })
-                    db.yaz(sunucuid, tagrol, "tag rol", "diğerleri")
-                    db.yazdosya(sunucudb, sunucuid)
+                    db.yaz(guildId, tagrol, "tag rol", "diğerleri")
+                    db.yazdosya(guildDatabase, guildId)
                     return;
                 } else m.reply({ content: "İşlem iptal edilmiştir" }).catch(err => { })
             }).catch(() => {
@@ -38,7 +38,7 @@ module.exports = {
             })
         } catch (e) {
             msg.reply(`**‼️ <@${msg.author.id}> Komutta bir hata oluştu lütfen daha sonra tekrar deneyiniz!**`).catch(err => { })
-            msg.client.hata(module.id.split("\\").slice(5).join("\\"), e)
+            msg.client.error(module.id.split("\\").slice(5).join("\\"), e)
             console.log(e)
         }
     }
