@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
     name: "yetkili",
-    aliases: "yetkili",
+    aliases: ["yetkili"],
     pre: true,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 

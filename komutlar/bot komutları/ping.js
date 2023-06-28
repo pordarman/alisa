@@ -4,7 +4,7 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "ping",
-  aliases: "ping",
+  aliases: ["ping"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */

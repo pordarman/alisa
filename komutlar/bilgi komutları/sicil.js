@@ -4,7 +4,7 @@ const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
     name: "sicil",
-    aliases: "sicil",
+    aliases: ["sicil"],
     cooldown: 10,
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 

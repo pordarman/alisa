@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
   name: "sid",
-  aliases: "sid",
+  aliases: ["sid"],
   owner: true,
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 

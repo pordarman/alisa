@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
-    aliases: "unmute",
+    aliases: ["unmute"],
     name: "unmute",
     cooldown: 3,
     /**

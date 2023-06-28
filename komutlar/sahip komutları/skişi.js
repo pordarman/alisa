@@ -2,7 +2,7 @@ const { Message, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilde
 const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
-    aliases: "skişi",
+    aliases: [$1],
     name: "sahip kişi",
     owner: true,
     /**

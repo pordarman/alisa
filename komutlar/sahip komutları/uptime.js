@@ -4,7 +4,7 @@ const ayarlar = require("../../ayarlar.json")
 const Time = require("../../modüller/time")
 module.exports = {
     owner: true,
-    aliases: "uptime",
+    aliases: ["uptime"],
     name: "uptime",
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 

@@ -3,7 +3,7 @@ const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
   name: "reload",
-  aliases: "r",
+  aliases: ["r"],
   owner: true,
   /**
    * 

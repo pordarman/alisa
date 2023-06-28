@@ -417,8 +417,7 @@ readdirSync(`${__dirname}\\events`).forEach((file) => {
   client.on(event.name, (...args) => event.run(...args));
 });
 
-let komutIsmiVarMiYokMu = db.bul("kullanımlar", "alisa", "diğerleri"),
-  obje = { Ç: "C", Ğ: "G", Ö: "O", Ş: "S", Ü: "U" };
+let komutIsmiVarMiYokMu = db.bul("kullanımlar", "alisa", "diğerleri");
 readdirSync(`${__dirname}\\komutlar`).forEach((klasorAdları) => {
   readdirSync(`${__dirname}\\komutlar\\${klasorAdları}`).forEach((file) => {
     const command = require(`${__dirname}\\komutlar\\${klasorAdları}\\${file}`);
@@ -430,17 +429,26 @@ readdirSync(`${__dirname}\\komutlar`).forEach((klasorAdları) => {
         command.pre = true;
         break;
     }
-    if (!Array.isArray(command.aliases)) command.aliases = [command.aliases];
-    command.aliases.forEach((a, i) =>
-      command.aliases.unshift(
-        command.aliases[i + i]
-          .toLocaleUpperCase()
-          .replace(/[ÇĞÖÜŞ]/g, (e) => obje[e])
-          .toLocaleLowerCase()
-      )
-    );
-    command.aliases = [...new Set(command.aliases)];
-    command.aliases.forEach((x) => client.commands.set(x, command));
+    let commandNames = new Set(command.aliases),
+      turkishToEnglishObject = {
+        "ç": "c",
+        "ı": "i",
+        "ğ": "g",
+        "ö": "o",
+        "ş": "s",
+        "ü": "u",
+        " ": "_"
+      }
+    command.aliases.forEach((commandName) => {
+      commandNames.add(
+        commandName.replace(/[ çşığüö]/gi, char => turkishToEnglishObject[char])
+      );
+    });
+
+    commandNames.forEach((commandName) => {
+      client.commands.set(commandName, command);
+    });
+
   });
 });
 db.yaz("kullanımlar", komutIsmiVarMiYokMu, "alisa", "diğerleri");

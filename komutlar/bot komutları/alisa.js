@@ -2,7 +2,7 @@ const { Message, ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilde
 const db = require("../../modüller/database")
 const ayarlar = require("../../ayarlar.json")
 module.exports = {
-    aliases: "alisa",
+    aliases: ["alisa"],
     cooldown: 10,
     name: "alisa",
     /**
