@@ -31,7 +31,7 @@ module.exports = {
                 if (!kodVarMı) return hata(`**${kod}** koduna karşılık gelen premium kodunu bulamadım!\n\n• Eğer premium satın aldıysanız ve aktif edemiyorsanız __[destek sunucuma](${ayarlar.discord})__ gelip yetkililerden destek alabilirsiniz`)
                 if (kodVarMı[1].author != msg.author.id) return hata(`Bu premium kodunu yalnızca satın alan kişi (<@${kodVarMı[1].author}>) kullanabilir`)
                 if (kodVarMı[1].isUse) return hata(`**${kod}** koduna karşılık gelen premium kodunda zaten bir sunucu ( ${(await msg.client.getGuild(kodVarMı[0]))?.name || kodVarMı[0]} ) bulunuyor${kodVarMı[1].isDemo ? "" : `\n\n• Eğer premiumunuzu başka bir sunucuya aktarmak için **${prefix}pre değiştir** yazarak premiumunuzu başka bir sunucuya aktarabilirsiniz`}`)
-                let guildId = args[2] || guildId
+                let guildId = args[2] || guild.id
                 if (dosya[guildId]) return hata(`Şeyyy... ${await msg.client.getGuildNameOrId(guildId)} sunucuda zaten bir premium bulunuyor şapşik şey seni :(`)
                 if (kodVarMı[1].isDemo) {
                     if (kodVarMı[1].guild == guildId) {
