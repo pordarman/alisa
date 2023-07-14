@@ -58,9 +58,9 @@ client.buttonCooldown = new Collection();
 /*
  * Slash komutlarını burada tutuyoruz
  */
-client.slash = new Collection([
-  ["commands", []]
-]);
+client.slash = new Collection();
+
+client.slash.commands = [];
 
 /*
  * Sunucunun verisini çeker
