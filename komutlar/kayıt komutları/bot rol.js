@@ -4,7 +4,7 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
   cooldown: 5,
   name: "bot rol",
-  aliases: "bot-rol",
+  aliases: ["bot-rol"],
   /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */

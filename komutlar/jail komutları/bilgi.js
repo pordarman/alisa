@@ -5,7 +5,7 @@ const Time = require("../../modüller/time")
 module.exports = {
     cooldown: 30,
     name: "jail bilgi",
-    aliases: "jail-bilgi",
+    aliases: ["jail-bilgi"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */

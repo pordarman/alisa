@@ -4,7 +4,7 @@ const ayarlar = require("../../ayarlar.json")
 module.exports = {
     cooldown: 5,
     name: "jail rol",
-    aliases: "jail-rol",
+    aliases: ["jail-rol"],
     /**
    * @param {import("../../typedef").exportsRunCommands} param0 
    */

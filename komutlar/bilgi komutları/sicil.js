@@ -10,7 +10,7 @@ module.exports = {
    * @param {import("../../typedef").exportsRunCommands} param0 
    */
     async run({ guildDatabase, pre, alisa, msg, args, guildId, prefix, hata, guild, msgMember, guildMe }) {
-        try {            
+        try {
 
             // Kontroller
             if (!msgMember.permissions.has('Administrator')) return hata('Yönetici', "yetki")
@@ -18,7 +18,7 @@ module.exports = {
             if (!kisi) return hata(Time.isNull(kisi) ? "Görünen o ki başka bir şeyin ID'sini yazdınız :( Lütfen geçerli bir kişi ID'si giriniz" : "Lütfen bir kişiyi etiketleyiniz ya da ID\'sini giriniz")
             let kisiLog = guildDatabase.kl[kisi.id]?.filter(a => ["j", "mute", "ban", "kick"].includes(a.type) || (a.type == "tj" && a.c))
             if (!kisiLog) return hata("Etiketlediğiniz kişinin herhangi bir sicili bulunmuyor")
-            
+
             let type = (input) => {
                 switch (input.type) {
                     case "j":
