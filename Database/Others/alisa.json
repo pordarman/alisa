@@ -1,0 +1,30 @@
+{
+    "commandUses": {},
+    "usersCommandUses": {},
+    "guildsCommandUses": {},
+    "blacklistUsers": {},
+    "blacklistGuilds": {},
+    "commandHelpers": {
+        "features": {
+            "tr": {
+                "newCodes": [],
+                "newFeatures": [],
+                "fixes": []
+            },
+            "en": {
+                "newCodes": [],
+                "newFeatures": [],
+                "fixes": []
+            }
+        }
+    },
+    "guildAddRemove": {
+        "add": {},
+        "remove": {}
+    },
+    "suggestions": {},
+    "registersCount": {
+        "nowTotal": 0
+    },
+    "guildsCount": {}
+}

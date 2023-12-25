@@ -1,34 +1,98 @@
-require("./modüller/database").yaz("lastUptime", Date.now(), "alisa", "diğerleri");
-const { ShardingManager, WebhookClient, EmbedBuilder } = require('discord.js');
-let { token, p, shard: totalShards, webhook: url } = require("./ayarlar.json")
-    , kullanıcıAdı = "Botun kullanıcı adı"
-    , wb
-if (url) try { wb = new WebhookClient({ url }) } catch (e) { }
+"use strict";
 
-const manager = new ShardingManager('./main.js', { token, respawn: true, totalShards });
+// Botun kaç milisaniyede başlatıldığını göstermek için database'ye şu anki zamanı kaydediyoruz
+const database = require("./Helpers/Database");
+const alisaFile = database.getFile("alisa", "other");
+alisaFile.lastUptimeTimestamp = Date.now();
+database.writeFile(alisaFile, "alisa", "other");
 
-manager.on('shardCreate', shard => {
-    console.log(`[SHARD] #${shard.id} ID'li shard başarıyla başlatıldı`)
-    if (wb) {
-        shard.on("disconnect", () => {
-            wb.send({ embeds: [new EmbedBuilder().setDescription(`**<:cevrimdisi:864276829794992138> \`#${shard.id}\` - ID'li shardın bağlantısı koptu, yeniden başlatılmayı deniyor**`).setColor("Red")] })
+const {
+    ShardingManager,
+    EmbedBuilder
+} = require("discord.js");
+const {
+    token,
+    EMOJIS: {
+        yes: yesEmoji,
+        offline: offlineEmoji,
+        idle: idleEmoji
+    },
+    shardCount,
+} = require("./settings.json");
+const Util = require("./Helpers/Util");
+
+const webhook = Util.webhooks.shard;
+
+const manager = new ShardingManager("./index.js", {
+    token,
+    respawn: true,
+    totalShards: shardCount,
+});
+
+manager.on("shardCreate", shard => {
+    console.log(`[SHARD] #${shard.id} ID'li shard başarıyla başlatıldı`);
+
+    // Eğer shardlarda bir değişiklik olursa (bağlantısı koparsa, yeniden bağlanmayı denerse vs.) bunu shard log kanalına yaz
+    shard.on("disconnect", () => {
+        const embed = new EmbedBuilder()
+            .setDescription(`**${offlineEmoji} \`#${shard.id}\` - ID'li shardın bağlantısı koptu, yeniden başlatılmayı deniyor**`)
+            .setColor("Red");
+
+        webhook.send({
+            embeds: [
+                embed
+            ]
         })
-        shard.on("reconnecting", () => {
-            wb.send({ embeds: [new EmbedBuilder().setDescription(`**<:cevrimici:864276829808099408> \`#${shard.id}\` - ID'li shard yeniden başlatılıyor**`).setColor("Green")] })
+    });
+
+    shard.on("ready", async () => {
+        const embed = new EmbedBuilder()
+            .setDescription(`**${idleEmoji} \`#${shard.id}\` - ID'li shard başarıyla başlatıldı**`)
+            .setColor("Yellow");
+
+        webhook.send({
+            embeds: [
+                embed
+            ]
         })
-        shard.on("ready", async () => {
-            wb.send({ embeds: [new EmbedBuilder().setDescription(`**<:bosta:864276829539926037> \`#${shard.id}\` - ID'li shard başarıyla başlatıldı**`).setColor("Yellow")] })
+    });
+
+    shard.on("death", () => {
+        const embed = new EmbedBuilder()
+            .setDescription(`**${offlineEmoji} \`#${shard.id}\` - ID'li shardın bağlantısı koptu, yeniden başlatılmayı deniyor**`)
+            .setColor("Red");
+
+        webhook.send({
+            embeds: [
+                embed
+            ]
         })
-        shard.on("death", () => {
-            wb.send({ embeds: [new EmbedBuilder().setDescription(`**<:cevrimdisi:864276829794992138> \`#${shard.id}\` - ID'li shardın bağlantısı koptu, yeniden başlatılmayı deniyor**`).setColor("Red")] })
+    });
+
+    shard.on("error", (err) => {
+        const embed = new EmbedBuilder()
+            .setDescription(
+                `**‼️ \`#${shard.id}\` - ID'li shard'a bir hata oluştu\n\n` +
+                `• ${err}**`
+            )
+            .setColor("DarkRed");
+
+        webhook.send({
+            embeds: [
+                embed
+            ]
         })
-        shard.on("error", (err) => {
-            wb.send({ embeds: [new EmbedBuilder().setDescription(`**‼️ \`#${shard.id}\` - ID'li shard'a bir hata oluştu\n\n• ${err}**`).setColor("Red")] })
-        })
-    }
+    });
 })
 
 manager.spawn().then(() => {
-    if (wb) wb.send({ embeds: [new EmbedBuilder().setDescription(`**${p} Bütün shard'lar başarıyla başlatıldı ve kullanıma hazır**`).setColor("DarkPurple")] })
-    console.log(`[READY] ${kullanıcıAdı} giriş yaptı!`)
-})
+    const embed = new EmbedBuilder()
+        .setDescription(`**${yesEmoji} Bütün shard'lar başarıyla başlatıldı ve kullanıma hazır**`)
+        .setColor("DarkPurple");
+
+    webhook.send({
+        embeds: [
+            embed
+        ]
+    })
+});

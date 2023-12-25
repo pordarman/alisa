@@ -1,0 +1,129 @@
+{
+  "buttonCommandTR" : {
+    "prefix" : "buttonCommandTR",
+    "description": "Buton komutları için gereken verileri yazar",
+    "body" : [
+      "\"use strict\";",
+      "const database = require(\"../../../../Helpers/Database\");"
+      "const Util = require(\"../../../../Helpers/Util\");",
+     "",
+     "module.exports = {",
+     "    name: \"\", // Butonun ismi",
+     "    cooldown: 3, // Butonun bekleme süresi",
+     "    description: \"\", // Butonun açıklaması",
+     "    care: false, // Butonun bakım modunda olup olmadığını ayarlar",
+     "    ownerOnly: false, // Butonun sadece sahiplere özel olup olmadığını ayarlar",
+     "    premium: false, // Butonun sadece premium kullanıcılara özel olup olmadığını ayarlar",
+     "",
+     "    /**",
+     "     * Parametrelerdeki isimlerin ne olduklarını tanımlar",
+     "     * @param {import(\"../../../../typedef\").exportsRunButtons} params ",
+     "     */",
+     "    async execute({",
+     "        alisa,",
+     "        guildDatabase,",
+     "        int,",
+     "        customId,",
+     "        guild,",
+     "        guildId,",
+     "        authorId,",
+     "        errorEmbed,",
+     "        language",
+     "    }) {",
+     "       ",
+     "    },",
+     "};"
+    ]
+  },
+  "slashCommandTR": {
+    "prefix": "slashCommandTR",
+    "body": [
+      "\"use strict\";",
+      "const {",
+      "    SlashCommandBuilder",
+      "} = require(\"discord.js\");",
+      "const Util = require(\"../../../../Helpers/Util\");",
+      "",
+      "module.exports = {",
+      "    name: \"\", // Komutun ismi",
+      "    data: new SlashCommandBuilder(), // Komutun nasıl çalışacağını ayarlama",
+      "",
+      "    /**",
+      "     * Parametrelerdeki isimlerin ne olduklarını tanımlar",
+      "     * @param {import(\"../../../../typedef\").exportsRunSlash} params ",
+      "     */",
+      "    async execute({",
+      "        int,",
+      "        authorId,",
+      "        errorEmbed,",
+      "        language",
+      "    }) {",
+      "       ",
+      "    }",
+      "}"
+    ],
+    "description": "Slash komutları için gereken verileri yazar"
+  },
+  "prefixCommandTR": {
+    "prefix": "prefixCommandTR",
+    "body": [
+      "\"use strict\";",
+      "const database = require(\"../../../../Helpers/Database\");",
+      "const Util = require(\"../../../../Helpers/Util\");",
+      "",
+      "module.exports = {",
+      "    name: \"\", // Komutun ismi",
+      "    id: \"\", // Komutun ID'si",
+      "    cooldown: 3, // Komutun bekleme süresi",
+      "    aliases: [ // Komutun diğer çağırma isimleri",
+      "",
+      "    ],",
+      "    description: \"\", // Komutun açıklaması",
+      "    category: \"\", // Komutun kategorisi (yardım menüsü için)",
+      "    usage: \"\", // Komutun kullanım şekli",
+      "    care: false, // Komutun bakım modunda olup olmadığını ayarlar",
+      "    ownerOnly: false, // Komutun sadece sahiplere özel olup olmadığını ayarlar",
+      "    premium: false, // Komutun sadece premium kullanıcılara özel olup olmadığını ayarlar",
+      "    addHelpCommand: true, // Komutun yardım komuta eklenip eklenmeyeceğini ayarlar",
+      "",
+      "  /**",
+      "   * Parametrelerdeki isimlerin ne olduklarını tanımlar",
+      "   * @param {import(\"../../../../typedef\").exportsRunCommands} params ",
+      "   */",
+      "  async execute({",
+      "    alisa,",
+      "    guildDatabase,",
+      "    msg,",
+      "    msgMember,",
+      "    guildMe,",
+      "    guildId,",
+      "    guild,",
+      "    authorId,",
+      "    args,",
+      "    prefix,",
+      "    errorEmbed,",
+      "    language",
+      "  }) {",
+      "     ",
+      "  },",
+      "};"
+    ],
+    "description": "Prefix komutları için gereken verileri yazar"
+  },
+  // Place your Alisa workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+  // Placeholders with the same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"scope": "javascript,typescript",
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log('$1');",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // }
+}
