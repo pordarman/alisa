@@ -13,7 +13,6 @@ module.exports = {
    * @param {Message} msg
    */
   async execute(msg) {
-    const startedTimestamp = Date.now();
 
     // Eğer mesajın sahibi null ise veya botsa hiçbir şey yapma
     if (!msg.author || msg.author.bot) return;

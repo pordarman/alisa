@@ -120,8 +120,8 @@ module.exports = {
 
                         // Eğer kanal bulunduysa
                         const channel = client.channels.cache.get(idOrName) || client.channels.cache.find(
-                            (channel) => channel.name === idOrName ||
-                                channel.name.replace(/ +/, " ").toLocaleLowerCase(language) == idOrName.toLocaleLowerCase(language) // Eğer kanalın isminin bir kısmını yazmışsa bile sunucuyu döndür
+                            (channel) => channel.name && (channel.name === idOrName ||
+                                channel.name.replace(/ +/, " ").toLocaleLowerCase(language) == idOrName.toLocaleLowerCase(language)) // Eğer kanalın isminin bir kısmını yazmışsa bile sunucuyu döndür
                         );
                         if (channel) {
                             const allMembers = await Util.getMembers(channel);

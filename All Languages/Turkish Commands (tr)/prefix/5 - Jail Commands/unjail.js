@@ -157,7 +157,7 @@ module.exports = {
                             .setThumbnail(memberAvatar)
                             .setColor("#b90ebf")
                             .setFooter({
-                                text: `Alisa Log sistemi`,
+                                text: `${msg.client.user.username} Log sistemi`,
                                 iconURL: msg.client.user.displayAvatarURL()
                             })
                             .setTimestamp()

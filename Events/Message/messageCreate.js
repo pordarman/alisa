@@ -24,8 +24,7 @@ module.exports = {
    */
   async execute(msg) {
     try {
-      const startedTimestamp = Date.now();
-msg.member.roles.botRole
+
       // Eğer kullanıcı bir bot ise mesajını görmezden gel
       if (msg.author.bot) return;
 

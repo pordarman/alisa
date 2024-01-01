@@ -307,7 +307,7 @@ module.exports = {
                     )
                     .setThumbnail(memberAvatar)
                     .setFooter({
-                        text: "Alisa Kayıt sistemi",
+                        text: `${int.client.user.username} Kayıt sistemi`,
                         iconURL: clientAvatar
                     })
                     .setColor(`#${colors[type]}`)
@@ -462,7 +462,7 @@ module.exports = {
                             .setThumbnail(memberAvatar)
                             .setColor(`#${colors[type]}`)
                             .setFooter({
-                                text: `Alisa Log sistemi`,
+                                text: `${int.client.user.username} Log sistemi`,
                                 iconURL: clientAvatar
                             })
                             .setTimestamp()

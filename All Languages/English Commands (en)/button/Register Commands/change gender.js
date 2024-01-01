@@ -277,7 +277,7 @@ module.exports = {
             waitComponents.on("end", () => {
                 // Eğer mesaj silinmişse hiçbir şey yapma
                 if (
-                    !msg.channel.messages.cache.has(waitMessage.id)
+                    !int.channel.messages.cache.has(waitMessage.id)
                 ) return;
 
                 // Butonları deaktif et

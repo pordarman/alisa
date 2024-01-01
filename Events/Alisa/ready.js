@@ -441,7 +441,7 @@ module.exports = {
 
                   // Mesajı güncelle
                   await message.edit(
-                     `${EMOJIS.yes} **Botün bütün shardları başarıyla yeniden başlatıldı!**`
+                     `${EMOJIS.yes} **Botun bütün shardları başarıyla yeniden başlatıldı!**`
                   );
  
                },

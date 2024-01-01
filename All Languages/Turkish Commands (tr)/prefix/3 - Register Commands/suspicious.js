@@ -53,7 +53,7 @@ module.exports = {
         // Eğer botta "Rolleri Yönet" yetkisi yoksa
         if (!guildMe.permissions.has("ManageRoles")) return errorEmbed("Rolleri Yönet", "botPermissionError");
 
-        const member = await Util.fetchMemberForce(int, args[0]);
+        const member = await Util.fetchMemberForce(msg, args[0]);
 
         // Eğer kişi sunucuda değilse
         if (!member) return errorEmbed(

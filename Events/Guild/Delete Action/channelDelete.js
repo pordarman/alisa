@@ -16,7 +16,6 @@ module.exports = {
      */
     async execute(channel) {
         try {
-            const startedTimestamp = Date.now();
 
             const { guild } = channel;
 

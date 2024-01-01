@@ -19,7 +19,6 @@ module.exports = {
      */
     async execute(int) {
         try {
-            const startedTimestamp = Date.now();
 
             const authorId = int.user.id;
             const {

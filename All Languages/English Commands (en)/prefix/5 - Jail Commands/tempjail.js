@@ -273,7 +273,7 @@ module.exports = {
                             .setThumbnail(memberAvatar)
                             .setColor("#b90ebf")
                             .setFooter({
-                                text: `Alisa Log system`,
+                                text: `${msg.client.user.username} Log system`,
                                 iconURL: msg.client.user.displayAvatarURL()
                             })
                             .setTimestamp()
@@ -361,7 +361,7 @@ module.exports = {
                                         .setThumbnail(memberAvatar)
                                         .setColor("#b90ebf")
                                         .setFooter({
-                                            text: `Alisa Log system`,
+                                            text: `${msg.client.user.username} Log system`,
                                             iconURL: msg.client.user.displayAvatarURL()
                                         })
                                         .setTimestamp()

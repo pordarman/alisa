@@ -6,7 +6,11 @@ const {
 } = require("discord.js");
 const database = require("../../Helpers/Database");
 const {
-    } = require("../../settings.json");
+    supportGuildId,
+    channelIds: {
+        guildCreate: guildCreateChannelId
+    }
+} = require("../../settings.json");
 const {
     guildCreate
 } = require("../../messages.json");
@@ -22,6 +26,7 @@ module.exports = {
      */
     async execute(guild) {
         try {
+
             const alisaFile = database.getFile("alisa", "other");
 
             const guildId = guild.id;
@@ -85,10 +90,8 @@ module.exports = {
                     )
                     .setColor("Blue")
                     .setTimestamp();
-                logConsole("EMBED")
 
                 messageEmbeds.push(embed);
-                logConsole("PUSH EMBED")
             }
 
             // Sunucu sayısını kontrol et ve eğer sunucu sayısı 100'ün kayıtsa database'te kaydet
@@ -100,7 +103,6 @@ module.exports = {
             if (guildCount % 100 == 0 && !alisaFile.guildsCount[guildCount]) alisaFile.guildsCount[guildCount] = joinedTimestamp;
 
             database.writeFile(alisaFile, "alisa", "other");
-            logConsole("WRITE FILE")
 
             // Eğer sunucunun kayıt şekli "Normal kayıt" ise önbelleğe bunu kaydet 
             if (guildDatabase.register.type == "normal") guild.client.registerOptions.add(guildId);

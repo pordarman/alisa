@@ -37,7 +37,6 @@ module.exports = {
      */
     async execute(member) {
         try {
-            const startedTimestamp = Date.now();
 
             const {
                 guild,
@@ -897,7 +896,7 @@ module.exports = {
                                     .setThumbnail(memberAvatar)
                                     .setColor(colors.bot)
                                     .setFooter({
-                                        text: `Alisa ${registerEmbed.footer}`,
+                                        text: `${msg.client.user.username} ${registerEmbed.footer}`,
                                         iconURL: member.client.user.displayAvatarURL()
                                     })
                                     .setTimestamp()
@@ -945,7 +944,7 @@ module.exports = {
                                             .setThumbnail(memberAvatar)
                                             .setColor("#b90ebf")
                                             .setFooter({
-                                                text: `Alisa ${logEmbed.footer}`,
+                                                text: `${msg.client.user.username} ${logEmbed.footer}`,
                                                 iconURL: guildMe.displayAvatarURL()
                                             })
                                             .setTimestamp()

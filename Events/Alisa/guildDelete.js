@@ -23,7 +23,6 @@ module.exports = {
      */
     async execute(guild) {
         try {
-            const startedTimestamp = Date.now();
 
             const alisaFile = database.getFile("alisa", "other");
 

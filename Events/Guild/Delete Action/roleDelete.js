@@ -15,7 +15,6 @@ module.exports = {
      */
     async execute(role) {
         try {
-            const startedTimestamp = Date.now();
 
             // Eğer silinen rol bir bot rolüyse hiçbir şey döndürme
             if (role.managed) return;

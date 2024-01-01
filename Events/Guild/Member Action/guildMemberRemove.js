@@ -14,7 +14,6 @@ module.exports = {
      */
     async execute(member) {
         try {
-            const startedTimestamp = Date.now();
 
             const NOW_TIME = Date.now();
             const guildId = member.guild.id;

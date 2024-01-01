@@ -716,11 +716,11 @@ module.exports = {
 
                 const embed = new EmbedBuilder()
                     .setAuthor({
-                        name: `${username} kimdir?`,
+                        name: `${username} who?`,
                         iconURL: clientAvatar
                     })
                     .setDescription(
-                        `• ${username} Created as a sweet bot on **<t:${Math.round(msg.client.user.createdTimestamp / 1000)}:F>**\n\n` +
+                        `• ${username} created as a sweet bot on **<t:${Math.round(msg.client.user.createdTimestamp / 1000)}:F>**\n\n` +
                         `• ${username} was actually created as a helper for my first public bot, but later I realized that I enjoyed dealing with this bot more and closed my first bot\n\n` +
                         `• I bring a different feature or optimization to the bot almost every day so that the bot never loses its speed\n\n` +
                         `• In addition, thanks to your suggestions, we are bringing many new and advanced features to the bot, and many of the bot's commands came thanks to your suggestions. **(${prefix}voice command, jail system, etc.)**\n\n` +
