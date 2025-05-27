@@ -1,0 +1,67 @@
+"use strict";
+const Register = require("../../../Helpers/Functions/Register.js");
+
+module.exports = {
+    name: { // Komutun ismi
+        tr: "kayıt",
+        en: "member"
+    },
+    id: "kayıt", // Komutun ID'si
+    cooldown: 2, // Komutun bekleme süresi
+    aliases: { // Komutun diğer çağırma isimleri
+        tr: [
+            "kayıt",
+            "üyekayıt",
+            "üye"
+        ],
+        en: [
+            "member",
+            "memberregister",
+            "register",
+        ]
+    },
+    description: { // Komutun açıklaması
+        tr: "Kullanıcıyı üye olarak kaydeder",
+        en: "Registers the person as a member"
+    },
+    category: { // Komutun kategorisi (yardım menüsü için)
+        tr: "Kayıt komutları",
+        en: "Register commands"
+    },
+    usage: { // Komutun kullanım şekli
+        tr: "<px>kayıt <@kişi veya Kişi ID'si> <Yeni ismi>",
+        en: "<px>member <@user or User ID> <New name>"
+    },
+    care: false, // Komutun bakım modunda olup olmadığını ayarlar
+    ownerOnly: false, // Komutun sadece sahiplere özel olup olmadığını ayarlar
+    premium: false, // Komutun sadece premium kullanıcılara özel olup olmadığını ayarlar
+    addHelpCommand: true, // Komutun yardım komuta eklenip eklenmeyeceğini ayarlar
+
+    /**
+     * Parametrelerdeki isimlerin ne olduklarını tanımlar
+     * @param {import("../../../Typedef").ExportsRunCommands} params 
+     */
+    async execute({
+        alisa,
+        msg,
+        guildDatabase,
+        guildMe,
+        guild,
+        msgMember,
+        language,
+        errorEmbed,
+        args
+    }) {
+        return new Register({
+            msgOrInt: msg,
+            guildDatabase,
+            guild,
+            msgMember,
+            guildMe,
+            language,
+            registerType: "member",
+            alisa,
+            errorEmbed
+        }).checkControlsAndRegister(args);
+    },
+};

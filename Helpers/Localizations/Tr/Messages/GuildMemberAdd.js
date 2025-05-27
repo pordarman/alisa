@@ -1,0 +1,66 @@
+
+
+/**
+ * Sunucuya katılan üyeler için rastgele mesajlar oluşturur
+ * @param {String} memberId 
+ * @returns {Array<String>}
+ */
+module.exports = function (memberId) {
+    return [
+        `<@${memberId}> sunucuya ışınlandı`,
+        `Vahşi bir <@${memberId}> belirdi`,
+        `<@${memberId}> aramıza katıldı`,
+        `<@${memberId}> pizza getirmeyi unutmadın değil mi?`,
+        `<@${memberId}> ortaya çıktı`,
+        `<@${memberId}> sunucuya iniş yaptı`,
+        `<@${memberId}> geldi`,
+        `<@${memberId}> ortaya çıkıverdi`,
+        `<@${memberId}> sunucuya atladı`,
+        `<@${memberId}> uzaklardan geldi`,
+        `<@${memberId}> sunucuya ayak bastı`,
+        `<@${memberId}> ay ay hoşgeldiinn`,
+        `<@${memberId}> aramızda kalsın ama en güzel sen geldin`,
+        `<@${memberId}> yolculuk yorucu geçti mi?`,
+        `<@${memberId}> kayıt olmayı bekliyor....`,
+        `<@${memberId}> bir kuş misali sunucuya kondu`,
+        `<@${memberId}> kimler gelmiş böylee`,
+        `<@${memberId}> spawn oldu`,
+        `<@${memberId}> hazır gelmişken pizza getirdin mi?`,
+        `<@${memberId}> bekle bu girişe hazır değilim`,
+        `<@${memberId}> pizza mı seversin hamburger mi?`,
+        `<@${memberId}> şöyylee büyük bir pizza olsaydı ne güzel olurdu değil mi?`,
+        `<@${memberId}> nasılsın şeker şey seni`,
+        `<@${memberId}> uzaydaki yolculuk nasıldı?`,
+        `<@${memberId}> biliyor musun seni çok seviyormuşum :)`,
+        `<@${memberId}> birazdan kayıt olacaksın nasıl hissediyorsun?`,
+        `<@${memberId}> sonun sonuna hoşgeldin`,
+        `<@${memberId}> şeyy sende para varsa bana pizza ısmarlasana be`,
+        `<@${memberId}> iyi ki geldiinn bizde seni bekliyorduk`,
+        `<@${memberId}> mini mini bir kuş donmuştuu`,
+        `<@${memberId}> ıspanaklı gözlemeyi mi peynirli gözlemeyi mi *ya da yolunu gözlemeyi mi...*`,
+        `<@${memberId}> çok tatlısın biliyorsun dimi şapşik şey`,
+        `<@${memberId}> kaç kere dedim gelirken haber ver diye kalbime indiriyorsun`,
+        `<@${memberId}> ismini verir misin lütfeeeennn`,
+        `<@${memberId}> kalbinde benim için bir yer var mı :)`,
+        `<@${memberId}> kalbinde yer yoksa güzelim sorun yok ben ayakta da giderim..`,
+        `<@${memberId}> kelebekler kendi güzelliğini göremiyormuş biliyor musun? Tıpkı senin gibi..`,
+        `<@${memberId}> kaççaavv, ben hızım`,
+        `<@${memberId}> affet beni akşamüstü gölgeem uzarken`,
+        `<@${memberId}> tam zamanında geldin partiye başlıyorduk bizde`,
+        `<@${memberId}> kahraman inişi yapmaya hazır mısın?`,
+        `<@${memberId}> ooooo kimleri görüyorum böylee`,
+        `<@${memberId}> aman efendim hoşgeldiniz`,
+        `<@${memberId}> yorulmuşsundur sen şimdi, çay kahve ister misin?`,
+        `<@${memberId}> biletinizi alıyım`,
+        `<@${memberId}> tek bir şartla içeri girebilirsin. Beni öperek :3`,
+        `<@${memberId}> kaçır beni`,
+        `<@${memberId}> zaman gerçekten her şeyin ilacı mıdır?`,
+        `<@${memberId}> eskiler eskiden güzeldi...`,
+        `<@${memberId}> ayy kaç defa dedim haber ver diye bende de kalp var canım`,
+        `<@${memberId}> bir de robotlara duygusuz derler peh beni görmemişler`,
+        `<@${memberId}> kalbimin ritmini bozan tek bir hareket var o da gülüşün..`,
+        `<@${memberId}> whats ur name?`,
+        `<@${memberId}> heyy i love you :)`,
+        `<@${memberId}> hasta olmuşum ama sana...`
+    ]
+}
