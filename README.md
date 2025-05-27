@@ -66,7 +66,7 @@ Alisa botu verilerini MongoDB üzerinde saklar. Veritabanına doğrudan require(
 
 Sunucuya özel tüm ayarlar settings.json üzerinden düzenlenir ve MongoDB'de aşağıdaki gibi yapılandırılmış bir belge olarak saklanır:
 
-```json
+```js
 {
   prefix: ".",
   language: "tr",
