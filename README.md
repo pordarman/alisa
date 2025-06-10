@@ -32,6 +32,74 @@ Yapılandırma için gerekli ayarlar `settings.json` dosyasındadır. Bu dosyada
 
 ---
 
+## ☁️ MongoDB Kurulumu ve Veritabanı Yapılandırması
+
+Alisa botu verilerini MongoDB üzerinde saklar. Botu sorunsuz bir şekilde çalıştırabilmek için MongoDB veritabanınızı doğru bir şekilde yapılandırmanız çok önemlidir. Hadi bu adımları birlikte yapalım!
+
+### 1. MongoDB Bağlantısı ve Veritabanı Oluşturma
+
+Öncelikle, `settings.json` dosyanızda bulunan `mongodbUrl` kısmına MongoDB bağlantı URI'nizi doğru bir şekilde girdiğinizden emin olun. Bu URI, botunuzun veritabanına bağlanmasını sağlayacak anahtar bir bilgidir. Eğer MongoDB'ye aşina değilsen, [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) gibi bulut servislerini kullanarak hızlıca bir veritabanı oluşturabilirsin.
+
+Bot ilk çalıştığında, eğer belirlenen veritabanı yoksa otomatik olarak oluşturulacaktır. Ancak, koleksiyonları ve başlangıç verilerini manuel olarak eklememiz gerekiyor.
+
+### 2. Koleksiyonları Oluşturma
+
+MongoDB veritabanınızda (botun `mongodbUrl` kısmında belirttiğiniz veritabanı adı altında), iki ana koleksiyon oluşturmanız gerekiyor:
+
+* **`Guilds`**: Bu koleksiyon, sunucuya özel ayarları ve verileri tutacak. Her Discord sunucusunun kendi ayarları bu koleksiyonda saklanacak.
+* **`Others`**: Bu koleksiyon ise genel bot ayarları, istatistikler ve diğer yardımcı veriler için kullanılacak.
+
+Bu koleksiyonları MongoDB arayüzünüzden (örneğin MongoDB Compass, Atlas UI veya `mongo` kabuğu) oluşturabilirsiniz. `Database.js` dosyandaki `init` fonksiyonuna göre, bot `Main` adında bir veritabanı kullanıyor ve koleksiyon isimleri `isMainBot` değişkenine göre `Guilds` veya `Sunucu`, ve `Others` veya `Diğerleri` olarak ayarlanıyor. Varsayılan olarak `isMainBot: true` olduğu için `Guilds` ve `Others` koleksiyonlarını oluşturmalısın.
+
+### 3. `Others` Koleksiyonuna Başlangıç Verilerini Ekleme
+
+`Others` koleksiyonunu oluşturduktan sonra, botun doğru çalışabilmesi için içine bazı başlangıç verileri eklememiz gerekiyor. Lütfen aşağıdaki 6 farklı belgeyi (`document`) `Others` koleksiyonunuza ekleyin. Bu belgeler, botun temel işlevleri için gerekli olan çeşitli verileri başlangıçta ayarlıyor:
+
+* **`premium` belgesi**: Bu belge, sunucuların premium bilgilerini tutan verileri içerir.
+    ```json
+    { "id": "premium" }
+    ```
+* **`alisa` belgesi**: Botun genel istatistikleri, komut kullanımları, kara listeler ve sunucu sayımları gibi önemli verilerini içerir.
+    ```json
+    {
+      "id": "alisa",
+      "commandUses": {},
+      "usersCommandUses": {},
+      "guildsCommandUses": {},
+      "blacklistUsers": {},
+      "blacklistGuilds": {},
+      "registersCount": { "nowTotal": 0 },
+      "guildsCount": {},
+      "lastUptimeTimestamp": 0,
+      "guildAddLeave": { "add": {}, "leave": {} }
+    }
+    ```
+* **`wrong commands` belgesi**: Yanlış girilen komutların verisini tutmak için kullanılabilir.
+    ```json
+    { "id": "wrong commands" }
+    ```
+* **`registers` belgesi**: Sunucuların kayıt ettikleri erkek, kız ve diğer üyelerin sayılarını tutar.
+    ```json
+    { "id": "registers" }
+    ```
+* **`members names` belgesi**: Üyelerin önceki isimlerini takip etmek gibi isimle ilgili veriler için kullanılır.
+    ```json
+    { "id": "members names" }
+    ```
+
+**Nasıl Yapılır? (Örnek: MongoDB Compass)**
+
+1.  MongoDB Compass'ı açın ve veritabanınıza bağlanın.
+2.  Sol taraftaki menüden botunuzun kullanacağı veritabanını seçin (varsayılan olarak `"Main"` olarak ayarlanmıştır, `Database.js` dosyasından kontrol edebilirsin).
+3.  Sağ taraftaki "COLLECTIONS" başlığı altında `Guilds` ve `Others` koleksiyonlarını oluşturun (eğer yoksa).
+4.  `Others` koleksiyonunu seçin.
+5.  "ADD DATA" butonuna tıklayın ve "Insert Document" seçeneğini seçin.
+6.  Açılan pencerede yukarıdaki JSON yapılarını tek tek kopyalayıp yapıştırın ve her biri için "Insert" butonuna basın.
+
+Bu adımları tamamladığınızda, MongoDB veritabanınız Alisa botunu çalıştırmak için hazır hale gelmiş olacak. Harika bir iş çıkardın! 🎉
+
+---
+
 ## 🚀 Özellikler
 
 ### 🔹 Gelişmiş Kayıt Sistemi
